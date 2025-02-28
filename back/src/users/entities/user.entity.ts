@@ -3,17 +3,20 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  PrimaryGeneratedColumn, Unique,
+  PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
-@Entity()
+@Entity({ name: 'users' })
 @Unique(['username'])
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
   name: string;
+  @Column()
+  role: string;
   @Column()
   username: string;
   @Column()

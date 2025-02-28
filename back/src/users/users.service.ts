@@ -62,6 +62,63 @@ export class UsersService {
     const sanitizedUser = plainToInstance(User, user);
     return { accessToken, sanitizedUser };
   }
+  async migracion() {
+    await this.usersRepository.query('TRUNCATE TABLE users;');
+
+    const hashedPassword = bcrypt.hashSync('123456', 10);
+
+    const users = [
+      {
+        name: 'ING. ADIMER PAUL CHAMBI AJATA',
+        username: 'Adimer',
+        role: 'Administrador',
+      },
+      {
+        name: 'MVZ. ROGER PAUL HUARACHI TITO',
+        username: 'Roger',
+        role: 'Administrador',
+      },
+      {
+        name: 'LIC. MARLENE CANAVIRI JORGE',
+        username: 'Marlene',
+        role: 'Administrador',
+      },
+      {
+        name: 'LIC. PAMELA ELIZABETH CUEVAS VARGAS',
+        username: 'Pamela',
+        role: 'Administrador',
+      },
+      {
+        name: 'MVZ. LUZ NAYRA CONDORI PITA',
+        username: 'Luz',
+        role: 'Administrador',
+      },
+      {
+        name: 'MVZ. ADALID ARTURO HUAYLLAS LOPEZ',
+        username: 'Adalid',
+        role: 'Administrador',
+      },
+      {
+        name: 'TVZ. REBECA CATALINA LOPEZ MENDIZABAL',
+        username: 'Rebeca',
+        role: 'Administrador',
+      },
+      {
+        name: 'TVZ. JUDITH CINTIA FLORES CHOQUE',
+        username: 'Judith',
+        role: 'Administrador',
+      },
+    ];
+
+    // Insertar usuarios en la base de datos
+    await this.usersRepository.save(
+      users.map((user) => ({
+        ...user,
+        password: hashedPassword,
+      })),
+    );
+    return users;
+  }
 
   findAll() {
     return `This action returns all users`;
