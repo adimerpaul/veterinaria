@@ -11,12 +11,16 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { plainToInstance } from 'class-transformer';
-
+import { Producto } from '../productos/entities/producto.entity';
+import { join } from 'path';
+import { readFileSync } from 'fs';
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    @InjectRepository(Producto)
+    private productosRepository: Repository<Producto>,
     private jwtService: JwtService,
   ) {}
   async create(createUserDto: CreateUserDto) {
@@ -117,6 +121,21 @@ export class UsersService {
         password: hashedPassword,
       })),
     );
+
+    await this.productosRepository.query('TRUNCATE TABLE productos;');
+    const basePath = __dirname.includes('dist')
+      ? join(__dirname, '..', '..', 'src', 'users') // Para producción (dentro de dist)
+      : join(__dirname, 'users'); // Para desarrollo
+
+    const sqlPath = join(basePath, 'productos_202502280621.sql');
+
+    try {
+      const sqlScript = readFileSync(sqlPath, 'utf8');
+      await this.productosRepository.query(sqlScript);
+      console.log('Migración de productos completada.');
+    } catch (error) {
+      console.error('Error al leer el archivo SQL:', error.message);
+    }
     return users;
   }
 
