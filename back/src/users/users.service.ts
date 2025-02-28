@@ -1,4 +1,4 @@
-import {Injectable, UnauthorizedException} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UsersService {
@@ -44,7 +45,8 @@ export class UsersService {
       sub: user.id,
     };
     const accessToken = this.jwtService.sign(payload);
-    return { accessToken, user };
+    const sanitizedUser = plainToInstance(User, user);
+    return { accessToken, sanitizedUser };
   }
 
   findAll() {
