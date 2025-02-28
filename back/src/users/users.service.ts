@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -15,13 +19,23 @@ export class UsersService {
     private usersRepository: Repository<User>,
     private jwtService: JwtService,
   ) {}
-  async create(body) {
-    const hashedPassword = await bcrypt.hash(body.password, 10);
+  async create(createUserDto: CreateUserDto) {
+    const existingUser = await this.usersRepository.findOne({
+      where: {
+        username: createUserDto.username,
+      },
+    });
+    if (existingUser) {
+      throw new ConflictException('Usuario ya existe');
+    }
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     const user = this.usersRepository.create({
-      ...body,
+      ...createUserDto,
       password: hashedPassword,
     });
-    return this.usersRepository.save(user);
+    this.usersRepository.save(user);
+    const sanitizedUser = plainToInstance(User, user);
+    return sanitizedUser;
   }
 
   async login(body) {
