@@ -62,9 +62,12 @@ export class UsersService {
       username: user.username,
       sub: user.id,
     };
-    const accessToken = this.jwtService.sign(payload);
-    const sanitizedUser = plainToInstance(User, user);
-    return { accessToken, sanitizedUser };
+    const token = this.jwtService.sign(payload);
+    const userPayload = plainToInstance(User, user);
+    return { token, user: userPayload };
+  }
+  async me() {
+
   }
   async migracion() {
     await this.usersRepository.query('TRUNCATE TABLE users;');

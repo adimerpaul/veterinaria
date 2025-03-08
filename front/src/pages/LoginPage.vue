@@ -63,7 +63,7 @@
                 <div class="col-12 col-md-2"></div>
                 <div class="col-12 col-md-8 text-subtitle q-pt-lg">
                   <q-separator />
-                  Copyright © {{ new Date().getFullYear() }} Providencia. Todos los derechos reservados.
+                  Copyright © {{ new Date().getFullYear() }} Clinica veterinaria. Todos los derechos reservados.
                 </div>
                 <div class="col-12 col-md-2"></div>
               </div>
@@ -86,14 +86,14 @@ onMounted(() => {
 })
 function login() {
   loading.value = true
-  proxy.$axios.post('/login', {username: username.value, password: password.value})
+  proxy.$axios.post('/users/login', {username: username.value, password: password.value})
     .then(res => {
       const user = res.data.user
       const token = res.data.token
       proxy.$axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
       proxy.$store.isLogged = true
       proxy.$store.user = user
-      localStorage.setItem('tokenProvidencia', token)
+      localStorage.setItem('tokenClinica', token)
       proxy.$alert.success('Bienvenido ' + user.name)
       proxy.$router.push('/')
     })
