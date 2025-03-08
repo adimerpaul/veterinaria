@@ -161,11 +161,38 @@ export class UsersService {
     return `This action returns a #${id} user`;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, body) {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new UnauthorizedException('Usuario no encontrado');
+    }
+    user.name = body.name;
+    user.role = body.role;
+    user.username = body.username;
+    await this.usersRepository.save(user);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new UnauthorizedException('Usuario no encontrado');
+    }
+    await this.usersRepository.remove(user);
+  }
+  async updatePassword(id: number, body) {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new UnauthorizedException('Usuario no encontrado');
+    }
+    // const isPasswordCorrect = await bcrypt.compare(
+    //   body.oldPassword,
+    //   user.password,
+    // );
+    // if (!isPasswordCorrect) {
+    //   throw new UnauthorizedException('Contraseña incorrecta');
+    // }
+    const hashedPassword = await bcrypt.hash(body.newPassword, 10);
+    user.password = hashedPassword;
+    await this.usersRepository.save(user);
   }
 }

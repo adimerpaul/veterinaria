@@ -6,7 +6,9 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards, Req,
+  UseGuards,
+  Req,
+  Put,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -42,18 +44,27 @@ export class UsersController {
     return this.usersService.me(req);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);
   }
 
-  @Patch(':id')
+  @UseGuards(AuthGuard('jwt'))
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Put('updatePassword/:id')
+  updatePassword(@Param('id') id: string, @Req() req: Request, @Body() body) {
+    return this.usersService.updatePassword(+id, body);
   }
 }
