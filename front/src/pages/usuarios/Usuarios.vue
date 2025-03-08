@@ -77,7 +77,7 @@
       <q-card>
         <q-card-section class="q-pb-none row items-center">
           <div>
-            {{ actionPeriodo }} user
+            {{ actionUser }} user
           </div>
           <q-space />
           <q-btn icon="close" flat round dense @click="userDialog = false" />
@@ -140,7 +140,7 @@ export default {
       user: {},
       userDialog: false,
       loading: false,
-      actionPeriodo: '',
+      actionUser: '',
       gestiones: [],
       filter: '',
       roles: ['Admin', 'Vendedor'],
@@ -189,11 +189,12 @@ export default {
         cargo: '',
         role: 'Vendedor',
       }
-      this.actionPeriodo = 'Nuevo'
+      this.actionUser = 'Nuevo'
       this.userDialog = true
     },
     usersGet() {
       this.loading = true
+      this.users = []
       this.$axios.get('users').then(res => {
         this.users = res.data
       }).catch(error => {
@@ -215,9 +216,10 @@ export default {
     userPost() {
       this.loading = true
       this.$axios.post('users', this.user).then(res => {
-        this.usersGet()
         this.userDialog = false
-        this.$alert.success('Periodo creado')
+        this.$alert.success('User creado')
+        // this.usersGet()
+        this.users.push(res.data)
       }).catch(error => {
         this.$alert.error(error.response.data.message)
       }).finally(() => {
@@ -229,7 +231,7 @@ export default {
       this.$axios.put('users/' + this.user.id, this.user).then(res => {
         this.usersGet()
         this.userDialog = false
-        this.$alert.success('Periodo actualizado')
+        this.$alert.success('User actualizado')
       }).catch(error => {
         this.$alert.error(error.response.data.message)
       }).finally(() => {
@@ -247,9 +249,11 @@ export default {
       this.user = { ...user }
       this.$alert.dialogPrompt('Nueva contraseña', 'Ingrese la nueva contraseña', 'password')
         .onOk(password => {
-          this.$axios.put('updatePassword/' + user.id, { password }).then(res => {
+          this.$axios.put('users/updatePassword/' + user.id, {
+            newPassword: password
+          }).then(res => {
             this.usersGet()
-            this.$alert.success('Contraseña actualizada')
+            this.$alert.success('Contraseña actualizada de ' + user.username)
           }).catch(error => {
             this.$alert.error(error.response.data.message)
           })
@@ -257,7 +261,7 @@ export default {
     },
     userEdit(user) {
       this.user = { ...user }
-      this.actionPeriodo = 'Editar'
+      this.actionUser = 'Editar'
       this.userDialog = true
     },
     userDelete(id) {
@@ -266,7 +270,7 @@ export default {
           this.loading = true
           this.$axios.delete('users/' + id).then(res => {
             this.usersGet()
-            this.$alert.success('Periodo eliminado')
+            this.$alert.success('User eliminado')
           }).catch(error => {
             this.$alert.error(error.response.data.message)
           }).finally(() => {
