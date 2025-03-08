@@ -2,17 +2,17 @@
   <q-page class="q-pa-md">
     <q-card flat bordered>
       <q-card-section>
-        <q-form @submit.prevent="productosGet">
+        <q-form>
           <div class="row">
             <div class="col-8 col-md-3">
-              <q-input v-model="filter" label="Buscar" outlined dense clearable>
+              <q-input v-model="filter" label="Buscar" outlined dense clearable @update:modelValue="productosFilter">
                 <template v-slot:prepend>
                   <q-icon name="search" />
                 </template>
               </q-input>
             </div>
             <div class="col-4 col-md-2 flex flex-center">
-              <q-btn color="primary" label="Buscar" type="submit" no-caps icon="search" :loading="loading" />
+<!--              <q-btn color="primary" label="Buscar" type="submit" no-caps icon="search" :loading="loading" />-->
             </div>
             <div class="col-12 col-md-7 text-right">
               <q-btn color="positive" label="Nuevo" @click="productoNew" no-caps icon="add_circle_outline" :loading="loading" />
@@ -38,10 +38,10 @@
           <thead class="bg-black text-white">
           <tr>
             <td>Opciones</td>
-            <td>Medicamento</td>
-            <td>Forma Farmacéutica</td>
-            <td>Concentración</td>
-            <td>Precio</td>
+            <td>Codigo</td>
+            <td>Nombre</td>
+            <td>Precio Compra</td>
+            <td>Precio Venta</td>
             <td>Stock</td>
           </tr>
           </thead>
@@ -59,14 +59,29 @@
                 </q-list>
               </q-btn-dropdown>
             </td>
-            <td>{{ producto.medicamento }}</td>
-            <td>{{ producto.forma_farmaceutica }}</td>
-            <td>{{ producto.concentracion }}</td>
-            <td>{{ producto.precio }}</td>
+            <td>{{ producto.codigo }}</td>
+            <td>{{ producto.nombre }}</td>
+            <td>{{ producto.precioCompra }}</td>
+            <td>{{ producto.precioVenta }}</td>
             <td>{{ producto.stock }}</td>
           </tr>
           </tbody>
         </q-markup-table>
+<!--        <pre>{{ productos }}</pre>-->
+<!--        {-->
+<!--        "id": 592,-->
+<!--        "codigo": "taphepa",-->
+<!--        "nombre": "Tapon de Heparina",-->
+<!--        "presentacion": "unidad",-->
+<!--        "contenido": "",-->
+<!--        "precioCompra": "1.20",-->
+<!--        "precioVenta": "5.00",-->
+<!--        "stock": 1,-->
+<!--        "activo": true,-->
+<!--        "createdAt": "2025-02-28T10:21:37.873Z",-->
+<!--        "updatedAt": "2025-02-28T10:21:37.873Z",-->
+<!--        "deletedAt": null-->
+<!--        }-->
       </q-card-section>
     </q-card>
     <q-dialog v-model="productoDialog" persistent position="right" maximized>
@@ -80,12 +95,11 @@
         </q-card-section>
         <q-card-section>
           <q-form @submit.prevent="producto.id ? productoPut() : productoPost()">
-            <q-input v-model="producto.medicamento" label="Medicamento" dense outlined :rules="[val => !!val || 'Campo requerido']"  hint=""/>
-<!--            <q-input v-model="producto.forma_farmaceutica" label="Forma Farmacéutica" dense outlined :rules="[val => !!val || 'Campo requerido']"  hint=""/>-->
-            <q-select v-model="producto.forma_farmaceutica" label="Forma Farmacéutica" dense outlined :rules="[val => !!val || 'Campo requerido']"  :options="formas_farmaceutica"  hint=""/>
-            <q-input v-model="producto.concentracion" label="Concentración" dense outlined  hint=""/>
-            <q-input v-model="producto.precio" label="Precio" dense outlined type="number"  hint=""/>
-            <q-input v-model="producto.stock" label="Stock" dense outlined type="number"  hint=""/>
+            <q-input v-model="producto.codigo" label="Codigo" outlined dense />
+            <q-input v-model="producto.nombre" label="Nombre" outlined dense />
+            <q-input v-model="producto.precioCompra" label="Precio Compra" outlined dense type="number" step="0.01" />
+            <q-input v-model="producto.precioVenta" label="Precio Venta" outlined dense type="number" step="0.01" />
+            <q-input v-model="producto.stock" label="Stock" outlined dense type="number" />
 
             <div class="text-right">
               <q-btn color="negative" label="Cancelar" @click="productoDialog = false" no-caps :loading="loading" />
@@ -104,6 +118,7 @@ export default {
   data() {
     return {
       productos: [],
+      productosAll: [],
       producto: {},
       productoDialog: false,
       loading: false,
@@ -188,6 +203,15 @@ export default {
     this.productosGet();
   },
   methods: {
+    productosFilter() {
+      if (this.filter) {
+        this.productos = this.productosAll.filter(producto => {
+          return producto.nombre.toLowerCase().includes(this.filter.toLowerCase());
+        });
+      } else {
+        this.productos = this.productosAll;
+      }
+    },
     productoNew() {
       this.producto = {
         medicamento: '',
@@ -211,7 +235,8 @@ export default {
           }
         })
         .then(res => {
-          this.productos = res.data.data;
+          this.productos = res.data;
+          this.productosAll = res.data;
           this.totalPages = res.data.last_page;
         })
         .catch(error => {
