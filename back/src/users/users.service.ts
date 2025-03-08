@@ -66,8 +66,17 @@ export class UsersService {
     const userPayload = plainToInstance(User, user);
     return { token, user: userPayload };
   }
-  async me() {
-
+  async me(req) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        id: req.user.id,
+      },
+    });
+    if (!user) {
+      throw new UnauthorizedException('Usuario no encontrado');
+    }
+    const userPayload = plainToInstance(User, user);
+    return userPayload;
   }
   async migracion() {
     await this.usersRepository.query('TRUNCATE TABLE users;');
@@ -78,42 +87,42 @@ export class UsersService {
       {
         name: 'ING. ADIMER PAUL CHAMBI AJATA',
         username: 'Adimer',
-        role: 'Administrador',
+        role: 'Admin',
       },
       {
         name: 'MVZ. ROGER PAUL HUARACHI TITO',
         username: 'Roger',
-        role: 'Administrador',
+        role: 'Admin',
       },
       {
         name: 'LIC. MARLENE CANAVIRI JORGE',
         username: 'Marlene',
-        role: 'Administrador',
+        role: 'Vendedor',
       },
       {
         name: 'LIC. PAMELA ELIZABETH CUEVAS VARGAS',
         username: 'Pamela',
-        role: 'Administrador',
+        role: 'Vendedor',
       },
       {
         name: 'MVZ. LUZ NAYRA CONDORI PITA',
         username: 'Luz',
-        role: 'Administrador',
+        role: 'Vendedor',
       },
       {
         name: 'MVZ. ADALID ARTURO HUAYLLAS LOPEZ',
         username: 'Adalid',
-        role: 'Administrador',
+        role: 'Vendedor',
       },
       {
         name: 'TVZ. REBECA CATALINA LOPEZ MENDIZABAL',
         username: 'Rebeca',
-        role: 'Administrador',
+        role: 'Vendedor',
       },
       {
         name: 'TVZ. JUDITH CINTIA FLORES CHOQUE',
         username: 'Judith',
-        role: 'Administrador',
+        role: 'Vendedor',
       },
     ];
 
@@ -142,8 +151,10 @@ export class UsersService {
     return users;
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    const users = await this.usersRepository.find();
+    const sanitizedUsers = users.map((user) => plainToInstance(User, user));
+    return sanitizedUsers;
   }
 
   findOne(id: number) {

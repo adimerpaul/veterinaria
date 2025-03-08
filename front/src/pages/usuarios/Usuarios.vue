@@ -53,7 +53,7 @@
       <template v-slot:body-cell-role="props">
         <q-td :props="props">
           <q-chip :label="props.row.role"
-                  :color="props.row.color"
+                  :color="$filters.color(props.row.role)"
                   text-color="white" dense  size="14px"/>
         </q-td>
       </template>

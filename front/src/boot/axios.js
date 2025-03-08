@@ -39,11 +39,16 @@ export default boot(({ app, router }) => {
       const lower = value.toLowerCase()
       return lower.charAt(0).toUpperCase() + lower.slice(1)
     },
+    color(role) {
+      if (role === 'Admin') return 'red'
+      if (role === 'Vendedor') return 'green'
+      return 'blue'
+    }
   }
   const token = localStorage.getItem('tokenClinica')
   if (token) {
     app.config.globalProperties.$axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-    app.config.globalProperties.$axios.get('me').then(response => {
+    app.config.globalProperties.$axios.get('users/me').then(response => {
       useCounterStore().isLogged = true
       useCounterStore().user = response.data
       useCounterStore().permissions = response.data.permissions

@@ -5,7 +5,11 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   process.env.TZ = 'America/La_Paz';
   const app = await NestFactory.create(AppModule, { cors: true });
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true, // Activa la transformación de class-transformer
+    }),
+  );
   console.log(`listening on port http://localhost:${process.env.PORT ?? 3000}`);
   await app.listen(process.env.PORT ?? 3000);
 }
