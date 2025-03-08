@@ -2,17 +2,17 @@
   <q-page class="q-pa-md">
     <q-card flat bordered>
       <q-card-section>
-        <q-form>
+        <q-form @submit="productosGet">
           <div class="row">
             <div class="col-8 col-md-3">
-              <q-input v-model="filter" label="Buscar" outlined dense clearable @update:modelValue="productosFilter">
+              <q-input v-model="filter" label="Buscar" outlined dense clearable >
                 <template v-slot:prepend>
                   <q-icon name="search" />
                 </template>
               </q-input>
             </div>
             <div class="col-4 col-md-2 flex flex-center">
-<!--              <q-btn color="primary" label="Buscar" type="submit" no-caps icon="search" :loading="loading" />-->
+              <q-btn color="primary" label="Buscar" type="submit" no-caps icon="search" :loading="loading" />
             </div>
             <div class="col-12 col-md-7 text-right">
               <q-btn color="positive" label="Nuevo" @click="productoNew" no-caps icon="add_circle_outline" :loading="loading" />
@@ -231,12 +231,12 @@ export default {
         .get("productos", {
           params: {
             filter: this.filter,
-            page: this.currentPage
+            page: this.currentPage,
+            limit: 20 // Puedes cambiar el límite por página
           }
         })
         .then(res => {
-          this.productos = res.data;
-          this.productosAll = res.data;
+          this.productos = res.data.data;
           this.totalPages = res.data.last_page;
         })
         .catch(error => {

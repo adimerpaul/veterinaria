@@ -17,13 +17,26 @@ export class ProductosService {
     return producto;
   }
 
-  async findAll() {
-    // return this.productosRepository.find() order by nombre
-    return this.productosRepository.find({
-      order: {
-        nombre: 'ASC',
-      },
-    });
+  async findAll(page: number = 1, limit: number = 10, filter: string = '') {
+    const query = this.productosRepository.createQueryBuilder('producto');
+
+    if (filter) {
+      query.where('producto.nombre LIKE :filter', { filter: `%${filter}%` });
+    }
+
+    query
+      .orderBy('producto.nombre', 'ASC')
+      .skip((page - 1) * limit)
+      .take(limit);
+
+    const [productos, total] = await query.getManyAndCount();
+
+    return {
+      data: productos,
+      total,
+      last_page: Math.ceil(total / limit),
+      current_page: page,
+    };
   }
 
   async update(id: number, body) {

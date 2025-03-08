@@ -5,7 +5,9 @@ import {
   Body,
   Patch,
   Param,
-  Delete, Put,
+  Delete,
+  Put,
+  Query,
 } from '@nestjs/common';
 import { ProductosService } from './productos.service';
 import { CreateProductoDto } from './dto/create-producto.dto';
@@ -21,8 +23,12 @@ export class ProductosController {
   }
 
   @Get()
-  findAll() {
-    return this.productosService.findAll();
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('filter') filter: string = '',
+  ) {
+    return this.productosService.findAll(Number(page), Number(limit), filter);
   }
 
   @Put(':id')
