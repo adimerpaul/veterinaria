@@ -11,10 +11,13 @@
                 </template>
               </q-input>
             </div>
+            <div class="col-4 col-md-2">
+              <q-select v-model="filterTipo" label="Tipo" outlined dense :options="tipos" />
+            </div>
             <div class="col-4 col-md-2 flex flex-center">
               <q-btn color="primary" label="Buscar" type="submit" no-caps icon="search" :loading="loading" />
             </div>
-            <div class="col-12 col-md-7 text-right">
+            <div class="col-12 col-md-5 text-right">
               <q-btn color="positive" label="Nuevo" @click="productoNew" no-caps icon="add_circle_outline" :loading="loading" />
             </div>
           </div>
@@ -43,6 +46,7 @@
             <td>Precio Compra</td>
             <td>Precio Venta</td>
             <td>Stock</td>
+            <td>Tipo</td>
           </tr>
           </thead>
           <tbody>
@@ -64,6 +68,11 @@
             <td>{{ producto.precioCompra }}</td>
             <td>{{ producto.precioVenta }}</td>
             <td>{{ producto.stock }}</td>
+            <td>
+              <q-chip dense :color="getColor(producto.tipo)" size="10px">
+                {{ producto.tipo }}
+              </q-chip>
+            </td>
           </tr>
           </tbody>
         </q-markup-table>
@@ -85,7 +94,7 @@
       </q-card-section>
     </q-card>
     <q-dialog v-model="productoDialog" persistent position="right" maximized>
-      <q-card style="min-width: 300px">
+      <q-card style="min-width: 350px">
         <q-card-section class="q-pb-none row items-center">
           <div class="text-bold text-sub">
             {{ actionProducto }} Producto
@@ -95,12 +104,12 @@
         </q-card-section>
         <q-card-section>
           <q-form @submit.prevent="producto.id ? productoPut() : productoPost()">
-            <q-input v-model="producto.codigo" label="Codigo" outlined dense />
-            <q-input v-model="producto.nombre" label="Nombre" outlined dense />
-            <q-input v-model="producto.precioCompra" label="Precio Compra" outlined dense type="number" step="0.01" />
-            <q-input v-model="producto.precioVenta" label="Precio Venta" outlined dense type="number" step="0.01" />
-            <q-input v-model="producto.stock" label="Stock" outlined dense type="number" />
-
+            <q-input v-model="producto.codigo" label="Codigo" outlined dense hint="" />
+            <q-input v-model="producto.nombre" label="Nombre" outlined dense hint="" />
+            <q-input v-model="producto.precioCompra" label="Precio Compra" outlined dense type="number" step="0.01" hint="" />
+            <q-input v-model="producto.precioVenta" label="Precio Venta" outlined dense type="number" step="0.01" hint="" />
+            <q-input v-model="producto.stock" label="Stock" outlined dense type="number" hint="" />
+            <q-select v-model="producto.tipo" label="Tipo" outlined dense :options="tipos" hint="" />
             <div class="text-right">
               <q-btn color="negative" label="Cancelar" @click="productoDialog = false" no-caps :loading="loading" />
               <q-btn color="primary" label="Guardar" type="submit" no-caps class="q-ml-sm" :loading="loading" />
@@ -117,6 +126,13 @@ export default {
   name: "ProductosPage",
   data() {
     return {
+      tipos: [
+        'Cirugía',
+        'Laboratorio',
+        'Peluqueria',
+        'Producto',
+        'Tratamiento'
+      ],
       productos: [],
       productosAll: [],
       producto: {},
@@ -124,85 +140,31 @@ export default {
       loading: false,
       actionProducto: '',
       filter: '',
+      filterTipo: 'Todos',
       totalPages: 1,
       currentPage: 1,
-      formas_farmaceutica:[
-      'Aerosol',
-      'Cápsula',
-      'Cápsula blanda',
-      'Cápsula o Comprimido',
-      'Cápsula o Perla',
-      'Cartucho dental',
-      'Comprimido',
-      'Comprimido o Cápsula',
-      'Comprimido o Cápsula blanda',
-      'Comprimido ranurado',
-      'Comprimido recubierto',
-      'Comprimido sublingual',
-      'Comprimido vaginal',
-      'Crema a Pomada',
-      'Crema dérmica',
-      'Crema o Pomada',
-      'Crema o Pomada oftálmica',
-      'Crema vaginal',
-      'Crema, Pomada o Gel',
-      'Emulsión dermica',
-      'Emulsión inyectable',
-      'Emulsión oral',
-      'Gas',
-      'Gel',
-      'Gel o Jalea',
-      'Gel o Pasta',
-      'Gotas',
-      'Gotas óticas',
-      'Granulado',
-      'Implante subdérmico',
-      'Inyectable',
-      'Jarabe',
-      'Jarabe o Solución Oral',
-      'Loción',
-      'Óvulo',
-      'Pasta 1 kg',
-      'Pasta o Pomada',
-      'Plegable Frasco Vial',
-      'Polvo',
-      'Polvo liofilizado',
-      'Polvo o granulado',
-      'Polvo para enema',
-      'Polvo para inyectable',
-      'Polvo para solución oral',
-      'Polvo, pasta o Granulado según disponibilidad',
-      'Pomada o Gel',
-      'Sobres',
-      'Solución',
-      'Solución 1 l',
-      'Solución acuosa',
-      'Solución hidroalcohólica',
-      'Solución nasal',
-      'Solución o Loción',
-      'Solución oftálmica',
-      'Solución oral',
-      'Solución oral gotas',
-      'Solución para atomización',
-      'Solución para gotas orales',
-      'Solución para nebulización',
-      'Solución parenteral',
-      'Solución parenteral de gran volúmen',
-      'Solución tópica',
-      'Supositorio',
-      'Suspensión',
-      'Suspensión o Jarabe',
-      'Suspensión oral',
-      'Ungüento o crema',
-      'Ungüento o Pomada oftálmica',
-      'Ungüento oftálmico',
-      ]
     };
   },
   mounted() {
     this.productosGet();
   },
   methods: {
+    getColor(tipo) {
+      switch (tipo) {
+        case 'Cirugía':
+          return 'red';
+        case 'Laboratorio':
+          return 'blue';
+        case 'Peluqueria':
+          return 'green';
+        case 'Producto':
+          return 'orange';
+        case 'Tratamiento':
+          return 'purple';
+        default:
+          return 'grey';
+      }
+    },
     productosFilter() {
       if (this.filter) {
         this.productos = this.productosAll.filter(producto => {
@@ -219,6 +181,7 @@ export default {
         concentracion: '',
         precio: 0,
         stock: 0,
+        tipo: 'Producto',
         imagen: null, // Valor por defecto
         categoria_id: null // Valor por defecto
       };
@@ -232,7 +195,8 @@ export default {
           params: {
             filter: this.filter,
             page: this.currentPage,
-            limit: 20 // Puedes cambiar el límite por página
+            limit: 20, // Puedes cambiar el límite por página
+            tipo: this.filterTipo === 'Todos' ? '' : this.filterTipo
           }
         })
         .then(res => {

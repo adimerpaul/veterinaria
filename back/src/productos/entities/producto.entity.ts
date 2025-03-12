@@ -22,6 +22,8 @@ export class Producto {
   presentacion: string;
   @Column({ nullable: true })
   contenido: string;
+  @Column({ nullable: true, default: 'Producto' })
+  tipo: string;
   @Column({ nullable: true, type: 'decimal', precision: 10, scale: 2 })
   precioCompra: number;
   @Column({ nullable: true, type: 'decimal', precision: 10, scale: 2 })

@@ -17,11 +17,19 @@ export class ProductosService {
     return producto;
   }
 
-  async findAll(page: number = 1, limit: number = 10, filter: string = '') {
+  async findAll(
+    page: number = 1,
+    limit: number = 10,
+    filter: string = '',
+    tipo: string = '',
+  ) {
     const query = this.productosRepository.createQueryBuilder('producto');
 
     if (filter) {
       query.where('producto.nombre LIKE :filter', { filter: `%${filter}%` });
+    }
+    if (tipo) {
+      query.andWhere('producto.tipo = :tipo', { tipo });
     }
 
     query
@@ -41,7 +49,7 @@ export class ProductosService {
 
   async update(id: number, body) {
     await this.productosRepository.update(id, body);
-    return this.productosRepository;
+    return await this.productosRepository.findOne({ where: { id } });
   }
 
   async remove(id: number) {

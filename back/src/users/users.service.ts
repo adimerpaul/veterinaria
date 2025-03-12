@@ -139,7 +139,7 @@ export class UsersService {
       ? join(__dirname, '..', '..', 'src', 'users') // Para producción (dentro de dist)
       : join(__dirname, 'users'); // Para desarrollo
 
-    const sqlPath = join(basePath, 'productos_202502280621.sql');
+    const sqlPath = join(basePath, 'productos_202503120545.sql');
 
     try {
       const sqlScript = readFileSync(sqlPath, 'utf8');
