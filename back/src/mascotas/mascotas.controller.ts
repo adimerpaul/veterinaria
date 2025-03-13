@@ -9,6 +9,7 @@ import {
   Query,
   UseInterceptors,
   UploadedFile,
+  Put,
 } from '@nestjs/common';
 import { MascotasService } from './mascotas.service';
 import { CreateMascotaDto } from './dto/create-mascota.dto';
@@ -56,9 +57,27 @@ export class MascotasController {
     return this.mascotasService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMascotaDto: UpdateMascotaDto) {
-    return this.mascotasService.update(+id, updateMascotaDto);
+  @Put(':id')
+  @UseInterceptors(
+    FileInterceptor('photo', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          cb(null, uniqueSuffix + extname(file.originalname));
+        },
+      }),
+    }),
+  )
+  update(@Param('id') id: number, @Body() body, @UploadedFile() file) {
+    console.log(file);
+    if (file) {
+      body.photo = `${file.filename}`;
+    } else {
+      delete body.photo;
+    }
+    return this.mascotasService.update(id, body);
   }
 
   @Delete(':id')

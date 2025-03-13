@@ -70,6 +70,22 @@ export class Alert{
       }
     })
   }
+  static confirm (message) {
+    return Dialog.create({
+      title: 'Confirmación',
+      message,
+      // position: 'top',
+      color: 'positive',
+      ok: {
+        label: 'Aceptar',
+        color: 'positive'
+      },
+      cancel: {
+        label: 'Cancelar',
+        color: 'negative'
+      },
+    })
+  }
   static dialogPrompt (message) {
     return Dialog.create({
       title: 'Confirmación',

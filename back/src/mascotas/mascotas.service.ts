@@ -19,7 +19,10 @@ export class MascotasService {
   async findAll(page: number = 1, limit: number = 10, filter: string = '') {
     const query = this.mascotasRepository.createQueryBuilder('mascota');
     if (filter) {
-      query.where('mascota.nombre LIKE :filter', { filter: `%${filter}%` });
+      query.where(
+        'mascota.nombre LIKE :filter OR mascota.propietario_nombre LIKE :filter',
+        { filter: `%${filter}%` },
+      );
     }
     query
       .orderBy('mascota.nombre', 'ASC')
@@ -38,11 +41,11 @@ export class MascotasService {
     return await this.mascotasRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateMascotaDto: UpdateMascotaDto) {
-    return `This action updates a #${id} mascota`;
+  async update(id: number, updateMascotaDto: UpdateMascotaDto) {
+    return await this.mascotasRepository.update(id, updateMascotaDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} mascota`;
+  async remove(id: number) {
+    return await this.mascotasRepository.delete(id);
   }
 }

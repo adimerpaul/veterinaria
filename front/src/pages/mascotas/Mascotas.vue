@@ -17,6 +17,17 @@
             <div class="col-12 col-md-7 text-right">
               <q-btn color="positive" label="Nuevo" no-caps icon="add_circle_outline" :loading="loading" to="/mascotas/create" />
             </div>
+            <div class="col-12 flex flex-center">
+              <q-pagination
+                v-if="totalPages > 1"
+                v-model="currentPage"
+                :max="totalPages"
+                :max-pages="5"
+                boundary-numbers
+                color="black"
+                @update:model-value="mascotasGet"
+              />
+            </div>
             <div class="col-12">
               <q-markup-table dense wrap-cells flat bordered>
                 <thead>
@@ -39,10 +50,10 @@
 <!--                      <q-btn color="negative" dense size="10px" icon="delete" @click="mascotaDelete(mascota)" />-->
                       <q-btn-dropdown size="10px" color="primary" label="Acciones" no-caps dense>
                         <q-list>
-                          <q-item clickable v-ripple @click="mascotaEdit(mascota)">
+                          <q-item clickable v-ripple @click="mascotaEdit(mascota)" v-close-popup>
                             <q-item-section>Editar</q-item-section>
                           </q-item>
-                          <q-item clickable v-ripple @click="mascotaDelete(mascota)">
+                          <q-item clickable v-ripple @click="mascotaDelete(mascota)" v-close-popup>
                             <q-item-section>Eliminar</q-item-section>
                           </q-item>
                         </q-list>
@@ -64,47 +75,7 @@
         </q-form>
       </q-card-section>
     </q-card>
-    <pre>{{mascotas}}</pre>
-<!--    [-->
-<!--    {-->
-<!--    "id": 7,-->
-<!--    "nombre": "chapi",-->
-<!--    "especie": "Perro",-->
-<!--    "raza": "Otro",-->
-<!--    "sexo": "Macho",-->
-<!--    "fecha_nac": "2025-03-13",-->
-<!--    "senas_particulares": "aaa",-->
-<!--    "photo": "defaultPet.jpg",-->
-<!--    "color": "",-->
-<!--    "propietario_nombre": "adimer",-->
-<!--    "propietario_direccion": "",-->
-<!--    "propietario_telefono": "",-->
-<!--    "propietario_ciudad": "Oruro",-->
-<!--    "propietario_celular": "",-->
-<!--    "createdAt": "2025-03-13T08:29:11.651Z",-->
-<!--    "updatedAt": "2025-03-13T08:29:11.651Z",-->
-<!--    "deletedAt": null-->
-<!--    },-->
-<!--    {-->
-<!--    "id": 8,-->
-<!--    "nombre": "rosa",-->
-<!--    "especie": "Gato",-->
-<!--    "raza": "",-->
-<!--    "sexo": "Macho",-->
-<!--    "fecha_nac": "2025-03-13",-->
-<!--    "senas_particulares": "",-->
-<!--    "photo": "1741854564211-598142247.png",-->
-<!--    "color": "",-->
-<!--    "propietario_nombre": "angela",-->
-<!--    "propietario_direccion": "",-->
-<!--    "propietario_telefono": "",-->
-<!--    "propietario_ciudad": "Oruro",-->
-<!--    "propietario_celular": "",-->
-<!--    "createdAt": "2025-03-13T08:29:24.217Z",-->
-<!--    "updatedAt": "2025-03-13T08:29:24.217Z",-->
-<!--    "deletedAt": null-->
-<!--    }-->
-<!--    ]-->
+<!--    <pre>{{mascotas}}</pre>-->
   </q-page>
 </template>
 <script>
@@ -114,21 +85,42 @@ export default {
       filter: '',
       loading: false,
       mascotas: [],
+      totalPages: 1,
+      currentPage: 1,
     }
   },
   created() {
     this.mascotasGet()
   },
   methods: {
+    mascotaDelete(mascota) {
+      // console.log('mascotaDelete', mascota)
+      this.$alert.confirm('¿Estás seguro de eliminar la mascota?')
+        .onOk(() => {
+          this.$axios.delete(`/mascotas/${mascota.id}`)
+            .then(response => {
+              this.mascotasGet()
+            })
+            .catch(error => {
+              console.log(error)
+            })
+        })
+    },
     mascotaEdit(mascota) {
       // console.log('mascotaEdit', mascota)
       this.$router.push({ name: 'mascotas-edit', params: { id: mascota.id } })
     },
     mascotasGet () {
-      this.$axios.get('/mascotas')
+      this.$axios.get('/mascotas',{
+        params: {
+          filter: this.filter,
+          page: this.currentPage,
+          limit: 20, // Puedes cambiar el límite por página
+        }
+      })
         .then(response => {
           this.mascotas = response.data.data
-          console.log(this.mascotas)
+          this.totalPages = response.data.last_page;
         })
         .catch(error => {
           console.log(error)
