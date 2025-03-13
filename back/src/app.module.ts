@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { ProductosModule } from './productos/productos.module';
+import { MascotasModule } from './mascotas/mascotas.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -22,6 +23,7 @@ import { ProductosModule } from './productos/productos.module';
     }),
     UsersModule,
     ProductosModule,
+    MascotasModule,
   ],
   controllers: [AppController],
   providers: [AppService],

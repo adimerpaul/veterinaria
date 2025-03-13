@@ -32,7 +32,12 @@ export class ProductosController {
     @Query('filter') filter: string = '',
     @Query('tipo') tipo: string = '',
   ) {
-    return this.productosService.findAll(Number(page), Number(limit), filter, tipo);
+    return this.productosService.findAll(
+      Number(page),
+      Number(limit),
+      filter,
+      tipo,
+    );
   }
 
   @Put(':id')
