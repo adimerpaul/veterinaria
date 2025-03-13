@@ -8,6 +8,7 @@ const routes = [
       { path: 'productos', component: () => import('pages/productos/Productos.vue'), meta: { requiresAuth: true } },
       { name: 'mascotas' , path: 'mascotas', component: () => import('pages/mascotas/Mascotas.vue'), meta: { requiresAuth: true } },
       { path: 'mascotas/create', component: () => import('pages/mascotas/MascotaCreate.vue'), meta: { requiresAuth: true } },
+      { name: 'mascotas-edit', path: 'mascotas/:id', component: () => import('pages/mascotas/MascotaEdit.vue'), meta: { requiresAuth: true } },
     ]
   },
   {

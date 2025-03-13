@@ -34,8 +34,8 @@ export class MascotasService {
     };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} mascota`;
+  async findOne(id: number) {
+    return await this.mascotasRepository.findOne({ where: { id } });
   }
 
   update(id: number, updateMascotaDto: UpdateMascotaDto) {
