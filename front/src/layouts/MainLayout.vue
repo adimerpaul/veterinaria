@@ -112,8 +112,8 @@ const linksList = [
   { title: 'Usuarios', icon: 'people', link: '/usuarios', can: 'Usuarios' },
   { title: 'Productos', icon: 'inventory_2', link: '/productos', can: 'Productos' },
   { title: 'Mascotas', icon: 'pets', link: '/mascotas', can: 'Mascotas' },
+  { title: 'Crear Mascota', icon: 'pets', link: '/mascotas/create', can: 'Mascotas' },
   { title: 'Ventas', icon: 'shopping_cart', link: '/ventas', can: 'Ventas' },
-  // { title: 'Compras', icon: 'shopping_bag', link: '/compras', can: 'Compras' },
 ]
 
 const leftDrawerOpen = ref(false)

@@ -26,6 +26,8 @@ export class Mascota {
   fecha_nac: string;
   @Column({ nullable: true })
   senas_particulares: string;
+  @Column({ nullable: true, default: 'defaultPet.jpg' })
+  photo: string;
   @Column({ nullable: true })
   color: string;
   @Column({ nullable: true })

@@ -11,8 +11,10 @@ export class MascotasService {
     @InjectRepository(Mascota)
     private mascotasRepository: Repository<Mascota>,
   ) {}
-  create(createMascotaDto: CreateMascotaDto) {
-    return 'This action adds a new mascota';
+  async create(body) {
+    // console.log(body);
+    const mascota = this.mascotasRepository.create(body);
+    return await this.mascotasRepository.save(mascota);
   }
   async findAll(page: number = 1, limit: number = 10, filter: string = '') {
     const query = this.mascotasRepository.createQueryBuilder('mascota');

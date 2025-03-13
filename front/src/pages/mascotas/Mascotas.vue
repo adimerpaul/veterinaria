@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
+  <q-page class="q-pa-xs">
     <q-card flat bordered>
       <q-card-section>
         <q-form @submit="mascotasGet">
@@ -15,7 +15,7 @@
               <q-btn color="primary" label="Buscar" type="submit" no-caps icon="search" :loading="loading" />
             </div>
             <div class="col-12 col-md-7 text-right">
-              <q-btn color="positive" label="Nuevo" @click="mascotaNew" no-caps icon="add_circle_outline" :loading="loading" />
+              <q-btn color="positive" label="Nuevo" no-caps icon="add_circle_outline" :loading="loading" to="/mascotas/create" />
             </div>
           </div>
         </q-form>

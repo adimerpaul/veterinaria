@@ -6,7 +6,8 @@ const routes = [
       { path: '', component: () => import('pages/IndexPage.vue'), meta: { requiresAuth: true } },
       { path: 'usuarios', component: () => import('pages/usuarios/Usuarios.vue'), meta: { requiresAuth: true } },
       { path: 'productos', component: () => import('pages/productos/Productos.vue'), meta: { requiresAuth: true } },
-      { path: 'mascotas', component: () => import('pages/mascotas/Mascotas.vue'), meta: { requiresAuth: true } },
+      { name: 'mascotas' , path: 'mascotas', component: () => import('pages/mascotas/Mascotas.vue'), meta: { requiresAuth: true } },
+      { path: 'mascotas/create', component: () => import('pages/mascotas/MascotaCreate.vue'), meta: { requiresAuth: true } },
     ]
   },
   {
