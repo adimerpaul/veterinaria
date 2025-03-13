@@ -34,7 +34,6 @@
                   outlined
                   dense
                   :options="razasDisponibles"
-                  :disable="razasDisponibles.length === 0"
                 />
               </div>
 

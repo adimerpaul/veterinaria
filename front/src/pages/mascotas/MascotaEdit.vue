@@ -1,110 +1,142 @@
 <template>
   <q-page class="q-pa-xs">
     <q-card flat bordered>
-      <q-form @submit="mascotaPost">
       <q-card-section>
-        <q-card flat bordered>
-          <q-card-section>
+        <div class="row">
+          <div class="col-12 q-pa-xs">
             <q-btn @click="$router.push({name: 'mascotas'})" label="Atrás" color="primary" icon="arrow_back" no-caps  size="10px" />
-            <br>
-            <label class="text-h6">Datos de la Mascota</label>
-            <div class="row">
-              <div class="col-12 col-md-3 q-pa-xs">
-                <label class="text-subtitle2">Nombre</label>
-                <q-input v-model="mascota.nombre" outlined dense clearable :rules="[val => !!val || 'Campo requerido']"/>
-              </div>
-
-              <div class="col-12 col-md-2 q-pa-xs">
-                <label class="text-subtitle2">Especie</label>
-                <q-select
-                  v-model="mascota.especie"
-                  label="Especie"
-                  outlined
-                  dense
-                  :options="especies"
-                  @update:model-value="actualizarRazas"
-                />
-              </div>
-
-              <div class="col-12 col-md-2 q-pa-xs">
-                <label class="text-subtitle2">Raza</label>
-                <q-select
-                  v-model="mascota.raza"
-                  label="Raza"
-                  outlined
-                  dense
-                  :options="razasDisponibles"
-                  :disable="razasDisponibles.length === 0"
-                />
-              </div>
-
-              <div class="col-12 col-md-3 q-pa-xs">
-                <label class="text-subtitle2">Sexo</label>
-                <div>
-                  <q-radio v-model="mascota.sexo" val="Macho" label="Macho" />
-                  <q-radio v-model="mascota.sexo" val="Hembra" label="Hembra" />
-                </div>
-              </div>
-
-              <div class="col-12 col-md-2 q-pa-xs">
-                <label class="text-subtitle2">Fecha de Nacimiento</label>
-                <q-input v-model="mascota.fecha_nac" label="Fecha de Nacimiento" outlined dense clearable type="date" />
-              </div>
-
-              <div class="col-12 col-md-2 q-pa-xs">
-                <label class="text-subtitle2">Foto</label>
-                <div>
-                  <q-img :src="previewImage || mascota.photo" width="80px" height="80px" @click="$refs.fileInput.click()">
-                    <q-icon name="camera_alt" class="absolute-bottom-right cursor-pointer"/>
-                  </q-img>
-                  <input type="file" @change="onFileChange" class="hidden" ref="fileInput" accept="image/*"/>
-<!--                  <pre>{{mascota.photo}}</pre>-->
-<!--                  <pre>{{previewImage}}</pre>-->
-                </div>
-              </div>
-
-              <div class="col-12 col-md-3 q-pa-xs">
-                <label class="text-subtitle2">Señas Particulares</label>
-                <q-input v-model="mascota.senas_particulares" label="Señas Particulares" outlined dense clearable/>
-              </div>
-
-              <div class="col-12 col-md-2 q-pa-xs">
-                <label class="text-subtitle2">Color</label>
-                <q-select v-model="mascota.color" label="Color" outlined dense :options="colores" />
-              </div>
-            </div>
-          </q-card-section>
+          </div>
+        </div>
+        <q-card flat bordered>
+          <q-tabs
+            v-model="tab"
+            dense
+            align="justify"
+            narrow-indicator
+          >
+            <q-tab name="mascota" :class="{'bg-blue text-white': tab === 'mascota'}">
+              <q-btn flat dense no-caps icon="pets" label="Mascota" :color="tab === 'mascota' ? 'white' : 'black'" />
+            </q-tab>
+            <q-tab name="cirugia" :class="{'bg-green text-white': tab === 'cirugia'}">
+              <q-btn flat dense no-caps icon="local_hospital" label="Cirugía" :color="tab === 'cirugia' ? 'white' : 'black'" />
+            </q-tab>
+            <q-tab name="examen" :class="{'bg-orange text-white': tab === 'examen'}">
+              <q-btn flat dense no-caps icon="assignment" label="Examen" :color="tab === 'examen' ? 'white' : 'black'" />
+            </q-tab>
+            <q-tab name="eutanacion" :class="{'bg-red text-white': tab === 'eutanacion'}">
+              <q-btn flat dense no-caps icon="recycling" label="Eutanación" :color="tab === 'eutanacion' ? 'white' : 'black'" />
+            </q-tab>
+            <q-tab name="derivacion" :class="{'bg-purple text-white': tab === 'derivacion'}">
+              <q-btn flat dense no-caps icon="swap_calls" label="Derivación" :color="tab === 'derivacion' ? 'white' : 'black'" />
+            </q-tab>
+          </q-tabs>
         </q-card>
         <q-card flat bordered>
-          <q-card-section>
-            <label class="text-h6">Datos de la Mascota</label>
-            <div class="row">
-              <div class="col-12 col-md-3 q-pa-xs">
-                <label class="text-subtitle2">Nombre del Propietario</label>
-                <q-input v-model="mascota.propietario_nombre" label="Nombre del Propietario" outlined dense clearable :rules="[val => !!val || 'Campo requerido']"/>
-              </div>
-              <div class="col-12 col-md-3 q-pa-xs">
-                <label class="text-subtitle2">Dirección del Propietario</label>
-                <q-input v-model="mascota.propietario_direccion" label="Dirección del Propietario" outlined dense
-                         clearable/>
-              </div>
-              <div class="col-12 col-md-3 q-pa-xs">
-                <label class="text-subtitle2">Teléfono del Propietario</label>
-                <q-input v-model="mascota.propietario_telefono" label="Teléfono del Propietario" outlined dense clearable/>
-              </div>
-              <div class="col-12 col-md-3 q-pa-xs">
-                <label class="text-subtitle2">Celular del Propietario</label>
-                <q-select v-model="mascota.propietario_ciudad" label="Ciudad del Propietario" outlined dense
-                          :options="ciudades"/>
-              </div>
-              <div class="col-12 text-right">
-                <q-btn type="submit" label="Guardar" color="green" :loading="loading" :disable="loading" icon="save" no-caps/>
-              </div>
-            </div>
-          </q-card-section>
+          <q-tab-panels v-model="tab">
+            <q-tab-panel name="mascota" animated>
+              <q-form @submit="mascotaPost">
+                <q-card flat bordered>
+                  <q-card-section>
+                    <label class="text-h6">Datos de la Mascota</label>
+                    <div class="row">
+                      <div class="col-12 col-md-3 q-pa-xs">
+                        <label class="text-subtitle2">Nombre</label>
+                        <q-input v-model="mascota.nombre" outlined dense clearable :rules="[val => !!val || 'Campo requerido']"/>
+                      </div>
+
+                      <div class="col-12 col-md-2 q-pa-xs">
+                        <label class="text-subtitle2">Especie</label>
+                        <q-select
+                          v-model="mascota.especie"
+                          label="Especie"
+                          outlined
+                          dense
+                          :options="especies"
+                          @update:model-value="actualizarRazas"
+                        />
+                      </div>
+
+                      <div class="col-12 col-md-2 q-pa-xs">
+                        <label class="text-subtitle2">Raza</label>
+                        <q-select
+                          v-model="mascota.raza"
+                          label="Raza"
+                          outlined
+                          dense
+                          :options="razasDisponibles"
+                        />
+                      </div>
+
+                      <div class="col-12 col-md-3 q-pa-xs">
+                        <label class="text-subtitle2">Sexo</label>
+                        <div>
+                          <q-radio v-model="mascota.sexo" val="Macho" label="Macho" />
+                          <q-radio v-model="mascota.sexo" val="Hembra" label="Hembra" />
+                        </div>
+                      </div>
+
+                      <div class="col-12 col-md-2 q-pa-xs">
+                        <label class="text-subtitle2">Fecha de Nacimiento</label>
+                        <q-input v-model="mascota.fecha_nac" label="Fecha de Nacimiento" outlined dense clearable type="date" />
+                      </div>
+
+                      <div class="col-12 col-md-2 q-pa-xs">
+                        <label class="text-subtitle2">Foto</label>
+                        <div>
+                          <q-img :src="previewImage || mascota.photo" width="80px" height="80px" @click="$refs.fileInput.click()">
+                            <q-icon name="camera_alt" class="absolute-bottom-right cursor-pointer"/>
+                          </q-img>
+                          <input type="file" @change="onFileChange" class="hidden" ref="fileInput" accept="image/*"/>
+                          <!--                  <pre>{{mascota.photo}}</pre>-->
+                          <!--                  <pre>{{previewImage}}</pre>-->
+                        </div>
+                      </div>
+
+                      <div class="col-12 col-md-3 q-pa-xs">
+                        <label class="text-subtitle2">Señas Particulares</label>
+                        <q-input v-model="mascota.senas_particulares" label="Señas Particulares" outlined dense clearable/>
+                      </div>
+
+                      <div class="col-12 col-md-2 q-pa-xs">
+                        <label class="text-subtitle2">Color</label>
+                        <q-select v-model="mascota.color" label="Color" outlined dense :options="colores" />
+                      </div>
+                    </div>
+                  </q-card-section>
+                </q-card>
+                <q-card flat bordered>
+                <q-card-section>
+                  <label class="text-h6">Datos de la Mascota</label>
+                  <div class="row">
+                    <div class="col-12 col-md-3 q-pa-xs">
+                      <label class="text-subtitle2">Nombre del Propietario</label>
+                      <q-input v-model="mascota.propietario_nombre" label="Nombre del Propietario" outlined dense clearable :rules="[val => !!val || 'Campo requerido']"/>
+                    </div>
+                    <div class="col-12 col-md-3 q-pa-xs">
+                      <label class="text-subtitle2">Dirección del Propietario</label>
+                      <q-input v-model="mascota.propietario_direccion" label="Dirección del Propietario" outlined dense
+                               clearable/>
+                    </div>
+                    <div class="col-12 col-md-3 q-pa-xs">
+                      <label class="text-subtitle2">Teléfono del Propietario</label>
+                      <q-input v-model="mascota.propietario_telefono" label="Teléfono del Propietario" outlined dense clearable/>
+                    </div>
+                    <div class="col-12 col-md-3 q-pa-xs">
+                      <label class="text-subtitle2">Celular del Propietario</label>
+                      <q-select v-model="mascota.propietario_ciudad" label="Ciudad del Propietario" outlined dense
+                                :options="ciudades"/>
+                    </div>
+                    <div class="col-12 text-right">
+                      <q-btn type="submit" label="Guardar" color="green" :loading="loading" :disable="loading" icon="save" no-caps/>
+                    </div>
+                  </div>
+                </q-card-section>
+              </q-card>
+              </q-form>
+            </q-tab-panel>
+          </q-tab-panels>
         </q-card>
       </q-card-section>
-      </q-form>
     </q-card>
   </q-page>
 </template>
@@ -115,6 +147,7 @@ import moment from "moment";
 export default {
   data() {
     return {
+      tab: 'mascota',
       loading: false,
       mascota: {
         nombre: '',
@@ -194,7 +227,7 @@ export default {
       const response = await this.$axios.get(`/mascotas/${this.$route.params.id}`);
       this.mascota = response.data;
       this.mascota.photo = this.$url + 'uploads/' + this.mascota.photo;
-      console.log(this.mascota.photo)
+      // console.log(this.mascota.photo)
     },
     actualizarRazas() {
       this.razasDisponibles = this.razas[this.mascota.especie] || [];
@@ -234,8 +267,8 @@ export default {
       formData.append('propietario_celular', this.mascota.propietario_celular);
       try {
         await this.$axios.put('mascotas/' + this.$route.params.id, formData);
-        this.$alert.success('Mascota creada', 'Éxito');
-        this.$router.push({name: 'mascotas'});
+        this.$alert.success('Mascota actualizada correctamente', 'Éxito');
+        // this.$router.push({name: 'mascotas'});
       } catch (e) {
         console.error(e);
         this.$alert.error('Error al crear la mascota', 'Error');
