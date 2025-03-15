@@ -41,8 +41,12 @@ export class MascotasService {
     return await this.mascotasRepository.findOne({ where: { id } });
   }
 
-  async update(id: number, updateMascotaDto: UpdateMascotaDto) {
-    return await this.mascotasRepository.update(id, updateMascotaDto);
+  async update(id: number, body) {
+    // console.log(body);
+    await this.mascotasRepository.update(id, body);
+    const mascota = await this.mascotasRepository.findOne({ where: { id } });
+    console.log(mascota);
+    return mascota;
   }
 
   async remove(id: number) {

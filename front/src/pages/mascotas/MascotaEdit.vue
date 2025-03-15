@@ -3,8 +3,32 @@
     <q-card flat bordered>
       <q-card-section>
         <div class="row">
-          <div class="col-12 q-pa-xs">
+          <div class="col-12 col-md-2 q-pa-xs">
             <q-btn @click="$router.push({name: 'mascotas'})" label="Atrás" color="primary" icon="arrow_back" no-caps  size="10px" />
+          </div>
+          <div class="col-6 col-md-2" style="line-height: 0.8">
+              <div class="text-caption text-bold">
+                Nombre:
+              </div>
+            {{ mascota.nombre }}
+          </div>
+          <div class="col-6 col-md-2" style="line-height: 0.8">
+              <div class="text-caption text-bold">
+                Especie:
+              </div>
+            {{ mascota.especie }}
+          </div>
+          <div class="col-6 col-md-2" style="line-height: 0.8">
+              <div class="text-caption text-bold">
+                Raza:
+              </div>
+            {{ mascota.raza }}
+          </div>
+          <div class="col-6 col-md-2" style="line-height: 0.8">
+              <div class="text-caption text-bold">
+                Sexo:
+              </div>
+            {{ mascota.sexo }}
           </div>
         </div>
         <q-card flat bordered>
@@ -227,9 +251,10 @@ export default {
       const response = await this.$axios.get(`/mascotas/${this.$route.params.id}`);
       this.mascota = response.data;
       this.mascota.photo = this.$url + 'uploads/' + this.mascota.photo;
-      // console.log(this.mascota.photo)
+      this.razasDisponibles = this.razas[this.mascota.especie] || [];
     },
     actualizarRazas() {
+      // console.log('actualizarRazas', this.mascota.especie);
       this.razasDisponibles = this.razas[this.mascota.especie] || [];
       this.mascota.raza = ''; // Reset raza cuando cambia la especie
     },
@@ -269,6 +294,7 @@ export default {
         await this.$axios.put('mascotas/' + this.$route.params.id, formData);
         this.$alert.success('Mascota actualizada correctamente', 'Éxito');
         // this.$router.push({name: 'mascotas'});
+        this.getMascota();
       } catch (e) {
         console.error(e);
         this.$alert.error('Error al crear la mascota', 'Error');

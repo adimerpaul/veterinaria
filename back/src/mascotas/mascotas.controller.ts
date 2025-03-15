@@ -92,7 +92,7 @@ export class MascotasController {
     }),
   )
   async update(@Param('id') id: number, @Body() body, @UploadedFile() file) {
-    console.log(file);
+    // console.log(file);
     if (file) {
       const compressedFilename = `compressed-${file.filename}`;
       const compressedPath = `./uploads/${compressedFilename}`;

@@ -44,20 +44,26 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="mascota in mascotas" :key="mascota.id">
-                    <td>
+                <tr v-for="mascota in mascotas" :key="mascota.id" @click="mascotaEdit(mascota)">
+
+                <td>
 <!--                      <q-btn class="q-mr-xs" color="primary" dense size="10px" icon="edit" @click="mascotaEdit(mascota)" />-->
 <!--                      <q-btn color="negative" dense size="10px" icon="delete" @click="mascotaDelete(mascota)" />-->
-                      <q-btn-dropdown size="10px" color="primary" label="Acciones" no-caps dense>
+                      <q-btn-dropdown size="10px" color="primary" label="Acciones" no-caps dense @click.stop>
                         <q-list>
-                          <q-item clickable v-ripple @click="mascotaEdit(mascota)" v-close-popup>
-                            <q-item-section>Editar</q-item-section>
+                          <q-item clickable v-ripple @click.stop="mascotaEdit(mascota)" v-close-popup dense>
+                            <q-item-section>
+                              <q-btn color="orange" dense size="10px" label="Ver" icon="visibility" no-caps />
+                            </q-item-section>
                           </q-item>
-                          <q-item clickable v-ripple @click="mascotaDelete(mascota)" v-close-popup>
-                            <q-item-section>Eliminar</q-item-section>
+                          <q-item clickable v-ripple @click.stop="mascotaDelete(mascota)" v-close-popup>
+                            <q-item-section>
+                              <q-btn color="negative" dense size="10px" label="Eliminar" icon="delete" no-caps />
+                            </q-item-section>
                           </q-item>
                         </q-list>
                       </q-btn-dropdown>
+
                     </td>
                     <td>{{ mascota.nombre }}</td>
                     <td>{{ mascota.especie }}</td>
