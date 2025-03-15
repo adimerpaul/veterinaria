@@ -17,6 +17,9 @@ import { UpdateMascotaDto } from './dto/update-mascota.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import * as sharp from 'sharp';
+import * as fs from 'node:fs';
+
 @Controller('mascotas')
 export class MascotasController {
   constructor(private readonly mascotasService: MascotasService) {}
@@ -34,12 +37,30 @@ export class MascotasController {
       }),
     }),
   )
-  create(@Body() body, @UploadedFile() file) {
+  async create(@Body() body, @UploadedFile() file) {
     if (file) {
-      body.photo = file.filename;
+      const compressedFilename = `compressed-${file.filename}`;
+      const compressedPath = `./uploads/${compressedFilename}`;
+
+      await sharp(file.path)
+        .resize(500) // Cambia el tamaño (puedes ajustar este valor)
+        .jpeg({ quality: 70 }) // Reduce la calidad al 70% (ajústalo según necesidad)
+        .toFile(compressedPath);
+
+      // Elimina la imagen original para ahorrar espacio
+      fs.unlink(file.path, (err) => {
+        if (err) {
+          console.error('Error al eliminar archivo:', err);
+        } else {
+          console.log('Archivo eliminado correctamente');
+        }
+      });
+
+      body.photo = compressedFilename;
     } else {
       body.photo = 'defaultPet.jpg';
     }
+
     return this.mascotasService.create(body);
   }
 
@@ -70,10 +91,20 @@ export class MascotasController {
       }),
     }),
   )
-  update(@Param('id') id: number, @Body() body, @UploadedFile() file) {
+  async update(@Param('id') id: number, @Body() body, @UploadedFile() file) {
     console.log(file);
     if (file) {
-      body.photo = `${file.filename}`;
+      const compressedFilename = `compressed-${file.filename}`;
+      const compressedPath = `./uploads/${compressedFilename}`;
+
+      await sharp(file.path)
+        .resize(500) // Cambia el tamaño (puedes ajustar este valor)
+        .jpeg({ quality: 70 }) // Reduce la calidad al 70% (ajústalo según necesidad)
+        .toFile(compressedPath);
+
+      // Elimina la imagen original para ahorrar espacio
+      fs.unlinkSync(file.path);
+      body.photo = compressedFilename;
     } else {
       delete body.photo;
     }
