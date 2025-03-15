@@ -1,9 +1,7 @@
-import { Injectable, Query } from '@nestjs/common';
-import { CreateMascotaDto } from './dto/create-mascota.dto';
-import { UpdateMascotaDto } from './dto/update-mascota.dto';
-import { Mascota } from './entities/mascota.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import {Injectable} from '@nestjs/common';
+import {Mascota} from './entities/mascota.entity';
+import {InjectRepository} from '@nestjs/typeorm';
+import {Repository} from 'typeorm';
 
 @Injectable()
 export class MascotasService {
@@ -44,9 +42,8 @@ export class MascotasService {
   async update(id: number, body) {
     // console.log(body);
     await this.mascotasRepository.update(id, body);
-    const mascota = await this.mascotasRepository.findOne({ where: { id } });
-    console.log(mascota);
-    return mascota;
+    // console.log(mascota);
+    return await this.mascotasRepository.findOne({where: {id}});
   }
 
   async remove(id: number) {

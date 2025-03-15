@@ -103,7 +103,13 @@ export class MascotasController {
         .toFile(compressedPath);
 
       // Elimina la imagen original para ahorrar espacio
-      fs.unlinkSync(file.path);
+      fs.unlink(file.path, (err) => {
+        if (err) {
+          console.error('Error al eliminar archivo:', err);
+        } else {
+          console.log('Archivo eliminado correctamente');
+        }
+      });
       body.photo = compressedFilename;
     } else {
       delete body.photo;
