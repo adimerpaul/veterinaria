@@ -3,11 +3,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { Sale } from '../../sales/entities/sale.entity';
 
 @Entity('mascotas')
 // @Unique(['nombre'])
@@ -49,4 +51,6 @@ export class Mascota {
   @DeleteDateColumn()
   @Exclude()
   deletedAt: Date;
+  @OneToMany(() => Sale, (sale) => sale.mascota)
+  sales: Sale[];
 }

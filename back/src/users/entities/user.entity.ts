@@ -4,10 +4,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
+import { Sale } from '../../sales/entities/sale.entity';
 
 @Entity({ name: 'users' })
 @Unique(['username'])
@@ -44,14 +46,6 @@ export class User {
   @Exclude()
   deletedAt: Date;
 
-  @Expose()
-  get color(): string {
-    const roleColors = {
-      Administrador: 'red',
-      Admin: 'red', // Agregar esta línea para coincidir con los datos
-      Vendedor: 'green',
-      Usuario: 'blue',
-    };
-    return roleColors[this.role] || 'gray'; // Color por defecto si el rol no está en la lista
-  }
+  @OneToMany(() => Sale, (sale) => sale.user)
+  sales: Sale[];
 }

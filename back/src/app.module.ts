@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { ProductosModule } from './productos/productos.module';
 import { MascotasModule } from './mascotas/mascotas.module';
+import { SalesModule } from './sales/sales.module';
+import { DetailsModule } from './details/details.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -24,6 +26,8 @@ import { MascotasModule } from './mascotas/mascotas.module';
     UsersModule,
     ProductosModule,
     MascotasModule,
+    SalesModule,
+    DetailsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
