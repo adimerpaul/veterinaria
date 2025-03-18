@@ -229,14 +229,14 @@ const reportes = ref([
 onMounted(() => {
   getVentas();
   getUsers();
-  getProductos();
+  // getProductos();
 });
 
-function getProductos() {
-  proxy.$axios.get("/productos").then(response => {
-    productos.value = response.data;
-  });
-}
+// function getProductos() {
+//   proxy.$axios.get("/productos").then(response => {
+//     productos.value = response.data;
+//   });
+// }
 
 function imprimir() {
   if (!user.value) {

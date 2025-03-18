@@ -114,6 +114,7 @@ const linksList = [
   { title: 'Principal', icon: 'home', link: '/', can: 'Todos' },
   { title: 'Usuarios', icon: 'people', link: '/usuarios', can: 'Usuarios' },
   { title: 'Productos', icon: 'inventory_2', link: '/productos', can: 'Productos' },
+  { title: 'Crear Ventas', icon: 'point_of_sale', link: '/ventas/add', can: 'Ventas' },
   { title: 'Ventas', icon: 'shopping_cart', link: '/ventas', can: 'Ventas' },
   { title: 'Crear Mascota', icon: 'pets', link: '/mascotas/create', can: 'Mascotas' },
   { title: 'Mascotas', icon: 'pets', link: '/mascotas', can: 'Mascotas' },
