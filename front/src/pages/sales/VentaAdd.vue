@@ -10,14 +10,30 @@
           <q-card-section>
             <q-form @submit.prevent="getProductos">
             <div class="row">
-              <div class="col-12 col-md-10">
-                <q-input v-model="buscarProducto" label="Buscar producto" outlined dense debounce="300" />
+              <div class="col-12 col-md-7">
+                <q-input v-model="buscarProducto" label="Buscar producto" outlined dense debounce="300" clearable />
+              </div>
+              <div class="col-12 col-md-3">
+                <q-select v-model="filterTipo" label="Tipo" outlined dense :options="tipos" />
               </div>
               <div class="col-12 col-md-2 flex flex-center">
                 <q-btn label="Buscar" color="primary" no-caps icon="search" size="10px" type="submit"/>
               </div>
             </div>
             </q-form>
+            <div class="row">
+              <div class="col-12 flex flex-center">
+                <q-pagination
+                  v-if="totalPages > 1"
+                  v-model="currentPage"
+                  :max="totalPages"
+                  :max-pages="5"
+                  boundary-numbers
+                  color="black"
+                  @update:model-value="getProductos"
+                />
+              </div>
+            </div>
             <q-markup-table dense bordered flat>
               <thead>
                 <tr>
@@ -29,16 +45,21 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="product in productos">
+                <tr v-for="product in productos" @click="agregarAlCarrito(product)" :key="product.id" style="cursor: pointer">
                   <td>{{product.codigo}}</td>
                   <td>{{product.nombre}}</td>
-                  <td>{{product.tipo}}</td>
-                  <td>{{product.precioVenta}}</td>
+                  <td>
+<!--                    {{product.tipo}}-->
+                    <q-chip dense :color="getColor(product.tipo)" size="10px">
+                      {{ product.tipo }}
+                    </q-chip>
+                  </td>
+                  <td class="text-right">{{product.precioVenta}}</td>
                   <td>{{product.stock}}</td>
                 </tr>
               </tbody>
             </q-markup-table>
-            <pre>{{productos}}</pre>
+<!--            <pre>{{productos}}</pre>-->
 <!--            [-->
 <!--            {-->
 <!--            "id": 19,-->
@@ -81,13 +102,18 @@
               </thead>
               <tbody>
               <tr v-for="(item, index) in carrito" :key="index">
-                <td>{{ item.nombre }}</td>
                 <td>
-                  <q-input v-model.number="item.cantidadVenta" type="number" dense outlined />
+<!--                  <q-btn icon="delete" color="red" dense @click="eliminarDelCarrito(index)" :loading="loading" size="10px" />-->
+                  <div style="max-width: 150px; wrap-option: wrap; line-height: 0.9">
+                    {{ item.nombre }}
+                  </div>
                 </td>
                 <td>
-                  {{ item.precio }} Bs
-                  <!--                  <q-input v-model.number="item.precioVenta" type="number" dense outlined />-->
+                  <input v-model.number="item.cantidadVenta" type="number" style="width: 50px" min="1" />
+                </td>
+                <td>
+<!--                  {{ item.precioVenta }} Bs-->
+                  <input v-model.number="item.precioVenta" type="number" style="width: 80px" min="1" step="0.1" />
                 </td>
                 <td>{{ (item.cantidadVenta * item.precioVenta).toFixed(2) }} Bs</td>
                 <td>
@@ -147,14 +173,43 @@ const carrito = ref([]);
 let buscarProducto = ref("");
 const dialogVenta = ref(false);
 const loading = ref(false);
+const currentPage = ref(1);
+const totalPages = ref(1);
+const filterTipo = ref('Todos');
+const tipos = ['Todos','Cirugía', 'Laboratorio', 'Peluqueria', 'Producto', 'Tratamiento'];
 
 onMounted(() => {
   getProductos();
 });
+function getColor(tipo) {
+  switch (tipo) {
+    case 'Cirugía':
+      return 'red';
+    case 'Laboratorio':
+      return 'blue';
+    case 'Peluqueria':
+      return 'green';
+    case 'Producto':
+      return 'orange';
+    case 'Tratamiento':
+      return 'purple';
+    default:
+      return 'grey';
+  }
+}
 function getProductos() {
-  proxy.$axios.get("/productos").then(response => {
+  proxy.$axios.get("/productos",{
+    params: {
+      filter: buscarProducto.value,
+      page: currentPage.value,
+      limit: 20, // Puedes cambiar el límite por página
+      tipo: filterTipo.value === 'Todos' ? '' : filterTipo.value
+    }
+  }).then(response => {
     productos.value = response.data.data
-    productosAll.value = response.data.data
+    // this.productos = res.data.data;
+    // this.totalPages = res.data.last_page;
+    totalPages.value = response.data.last_page;
   });
 }
 
@@ -171,7 +226,7 @@ function agregarAlCarrito(producto) {
   if (item) {
     item.cantidadVenta++;
   } else {
-    carrito.value.push({ ...producto, cantidadVenta: 1, precioVenta: producto.precio });
+    carrito.value.push({ ...producto, cantidadVenta: 1, precioVenta: producto.precioVenta });
   }
 }
 
