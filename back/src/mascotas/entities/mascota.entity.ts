@@ -11,6 +11,7 @@ import {
 import { Exclude } from 'class-transformer';
 import { Sale } from '../../sales/entities/sale.entity';
 import { Detail } from '../../details/entities/detail.entity';
+import { Documento } from '../../documentos/entities/documento.entity';
 
 @Entity('mascotas')
 // @Unique(['nombre'])
@@ -56,4 +57,6 @@ export class Mascota {
   sales: Sale[];
   @OneToMany(() => Detail, (detail) => detail.mascota)
   details: Detail[];
+  @OneToMany(() => Documento, (documento) => documento.mascota)
+  documentos: Documento[];
 }

@@ -8,6 +8,7 @@ import { ProductosModule } from './productos/productos.module';
 import { MascotasModule } from './mascotas/mascotas.module';
 import { SalesModule } from './sales/sales.module';
 import { DetailsModule } from './details/details.module';
+import { DocumentosModule } from './documentos/documentos.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -29,6 +30,7 @@ import { DetailsModule } from './details/details.module';
     MascotasModule,
     SalesModule,
     DetailsModule,
+    DocumentosModule,
   ],
   controllers: [AppController],
   providers: [AppService],
