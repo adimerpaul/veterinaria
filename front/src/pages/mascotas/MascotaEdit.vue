@@ -44,12 +44,12 @@
             <q-tab name="ventas" :class="{'bg-indigo text-white': tab === 'ventas'}">
               <q-btn flat dense no-caps icon="shopping_cart" label="Ventas" :color="tab === 'ventas' ? 'white' : 'black'" />
             </q-tab>
-            <q-tab name="cirugia" :class="{'bg-green text-white': tab === 'cirugia'}">
-              <q-btn flat dense no-caps icon="local_hospital" label="Cirugía" :color="tab === 'cirugia' ? 'white' : 'black'" />
+            <q-tab name="complementos" :class="{'bg-green text-white': tab === 'complementos'}">
+              <q-btn flat dense no-caps icon="local_hospital" label="Complementos" :color="tab === 'complementos' ? 'white' : 'black'" />
             </q-tab>
-            <q-tab name="examen" :class="{'bg-orange text-white': tab === 'examen'}">
-              <q-btn flat dense no-caps icon="assignment" label="Examen" :color="tab === 'examen' ? 'white' : 'black'" />
-            </q-tab>
+<!--            <q-tab name="examen" :class="{'bg-orange text-white': tab === 'examen'}">-->
+<!--              <q-btn flat dense no-caps icon="assignment" label="Examen" :color="tab === 'examen' ? 'white' : 'black'" />-->
+<!--            </q-tab>-->
             <q-tab name="certificados" :class="{'bg-red text-white': tab === 'certificados'}">
               <q-btn flat dense no-caps icon="receipt" label="Certificados" :color="tab === 'certificados' ? 'white' : 'black'" />
             </q-tab>
@@ -66,6 +66,9 @@
             <q-tab-panel name="ventas" animated>
               <MascotaSales :mascota="mascota" @getMascota="getMascota"/>
             </q-tab-panel>
+            <q-tab-panel name="complementos" animated>
+              <MascotaComplementos :mascota="mascota" @getMascota="getMascota"/>
+            </q-tab-panel>
           </q-tab-panels>
           <pre>{{ mascota }}</pre>
         </q-card>
@@ -78,9 +81,10 @@
 import moment from "moment";
 import MascotaUpdate from "pages/mascotas/MascotaUpdate.vue";
 import MascotaSales from "pages/mascotas/MascotaSales.vue";
+import MascotaComplementos from "pages/mascotas/MascotaComplemetos.vue";
 
 export default {
-  components: {MascotaSales, MascotaUpdate},
+  components: {MascotaComplementos, MascotaSales, MascotaUpdate},
   data() {
     return {
       tab: 'mascota',

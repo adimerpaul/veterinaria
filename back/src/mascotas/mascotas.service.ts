@@ -68,6 +68,7 @@ export class MascotasService {
         producto: In(productosEspaciales.map(p => p.id)), // Filtrar por los productos especiales
         mascota: { id }, // Filtrar por la mascota específica
       },
+      relations: ['user','producto'],
     });
 
     // Agregar los productos especiales a la mascota
