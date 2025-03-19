@@ -1,13 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { Mascota } from './entities/mascota.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
+import { Producto } from '../productos/entities/producto.entity';
+import { Detail } from '../details/entities/detail.entity';
 
 @Injectable()
 export class MascotasService {
   constructor(
     @InjectRepository(Mascota)
     private mascotasRepository: Repository<Mascota>,
+    @InjectRepository(Producto)
+    private productosRepository: Repository<Producto>,
+    @InjectRepository(Detail)
+    private detailsRepository: Repository<Detail>,
   ) {}
   async create(body) {
     // console.log(body);
@@ -36,10 +42,38 @@ export class MascotasService {
   }
 
   async findOne(id: number) {
-    return await this.mascotasRepository.findOne({
+    const mascota = await this.mascotasRepository.findOne({
       where: { id },
-      relations: ['sales', 'sales.user', 'sales.details'],
+      relations: ['sales', 'sales.user', 'sales.details', 'details'],
     });
+
+    if (!mascota) {
+      return null;
+    }
+
+    const tipos = ['Cirugía', 'Laboratorio', 'Peluqueria', 'Tratamiento'];
+
+    // Obtener solo los productos que pertenecen a los tipos deseados
+    const productosEspaciales = await this.productosRepository.find({
+      where: { tipo: In(tipos) },
+    });
+
+    if (productosEspaciales.length === 0) {
+      return mascota; // No hay productos especiales, retornamos la mascota como está
+    }
+
+    // Obtener los detalles filtrados en una sola consulta
+    const productosEspacialesMascotas = await this.detailsRepository.find({
+      where: {
+        producto: In(productosEspaciales.map(p => p.id)), // Filtrar por los productos especiales
+        mascota: { id }, // Filtrar por la mascota específica
+      },
+    });
+
+    // Agregar los productos especiales a la mascota
+    mascota['productosEspeciales'] = productosEspacialesMascotas;
+
+    return mascota;
   }
 
   async update(id: number, body) {

@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { Sale } from '../../sales/entities/sale.entity';
+import { Detail } from '../../details/entities/detail.entity';
 
 @Entity('mascotas')
 // @Unique(['nombre'])
@@ -53,4 +54,6 @@ export class Mascota {
   deletedAt: Date;
   @OneToMany(() => Sale, (sale) => sale.mascota)
   sales: Sale[];
+  @OneToMany(() => Detail, (detail) => detail.mascota)
+  details: Detail[];
 }
