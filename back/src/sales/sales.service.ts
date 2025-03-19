@@ -112,6 +112,9 @@ export class SalesService {
         fecha: Between(fechaInicioDate, fechaFinDate),
       },
       relations: ['user', 'mascota', 'details'],
+      order: {
+        fecha: 'DESC',
+      },
     });
 
     // console.log('Ventas encontradas:', sales);

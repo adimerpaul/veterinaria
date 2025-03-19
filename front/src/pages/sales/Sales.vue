@@ -135,10 +135,10 @@
                 <q-chip color="red" text-color="white" label="Anulada" />
               </div>
             </td>
-            <td>{{ venta.fecha }}</td>
+            <td>{{ $filters.dateDmYHis(venta.fecha) }}</td>
             <td>{{ venta.total }}</td>
             <td>{{ venta.nombre }}</td>
-            <td>{{ venta.user?.name }}</td>
+            <td>{{ venta.user?.username }}</td>
             <td>{{ venta.detalleText }}</td>
           </tr>
           </tbody>

@@ -301,7 +301,12 @@ function realizarVenta() {
     return;
   }
   dialogVenta.value = true;
-  venta.value = { nombre: "SN", };
+  // venta.value = { nombre: "SN", };
+  mascota.value = {
+    "id": 1,
+    "nombre": "SN",
+    "propietario_nombre": "SN"
+  };
 }
 function mascotasFilter(val, update) {
   if (val === '') {
