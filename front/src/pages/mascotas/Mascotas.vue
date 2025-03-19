@@ -33,6 +33,7 @@
                 <thead>
                   <tr class="bg-black text-white">
                     <th>Acciones</th>
+                    <th>Id</th>
                     <th>Nombre</th>
                     <th>Especie</th>
                     <th>Raza</th>
@@ -65,6 +66,7 @@
                       </q-btn-dropdown>
 
                     </td>
+                    <td>{{ mascota.id }}</td>
                     <td>{{ mascota.nombre }}</td>
                     <td>{{ mascota.especie }}</td>
                     <td>{{ mascota.raza }}</td>

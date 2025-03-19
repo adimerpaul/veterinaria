@@ -7,18 +7,22 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { SalesService } from './sales.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { UpdateSaleDto } from './dto/update-sale.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('sales')
 export class SalesController {
   constructor(private readonly salesService: SalesService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Post()
-  create(@Body() createSaleDto: CreateSaleDto) {
-    return this.salesService.create(createSaleDto);
+  create(@Body() body, @Req() req) {
+    return this.salesService.create(body, req.user);
   }
 
   @Get()

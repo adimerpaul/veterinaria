@@ -137,7 +137,7 @@
       </div>
     </div>
     <q-dialog v-model="dialogVenta">
-      <q-card flat bordered>
+      <q-card flat bordered style="min-width: 350px;">
         <q-card-section class="q-pb-none row items-center">
           <div class="text-bold">
             Realizar Venta
@@ -147,11 +147,54 @@
         </q-card-section>
         <q-card-section>
           <q-form @submit.prevent="realizarVentaPost">
-            <q-input v-model="venta.nombre" label="Nombre Cliente" outlined dense :rules="[val => !!val || 'Campo requerido']" />
-            <!--            <q-input v-model="venta.fecha" label="Fecha" type="date" outlined dense />-->
-            <!--            <q-input v-model="venta.total" label="Total" outlined dense />-->
-            <!--            <q-input v-model="venta.productos" label="Productos" outlined dense />-->
-            <q-btn label="Realizar Venta" color="positive" type="submit" no-caps :loading="loading" />
+            <div class="row">
+              <div class="col-12 q-pa-xs">
+                <q-select input-debounce="300" clearable use-input v-model="mascota" label="Mascota" outlined dense :options="mascotas" :option-label="m => m.id+'|'+m.nombre+'|'+m.propietario_nombre" :option-value="m => m.id"
+                @filter="mascotasFilter" :rules="[val => !!val || 'Campo requerido']">
+                  <template v-slot:after>
+                    <q-btn dense color="green" label="Crear mascota" no-caps icon="add_circle_outline" to="/mascotas/create" />
+                  </template>
+                </q-select>
+<!--                <pre>{{mascotas}}</pre>-->
+<!--                <pre>{{mascota}}</pre>-->
+              </div>
+              <div class="col-12">
+                <q-markup-table wrap-cells dense flat bordered>
+                  <thead>
+                  <tr class="bg-primary text-white">
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Tipo</th>
+                    <th>Precio</th>
+                    <th>Subtotal</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr v-for="(item, index) in carrito" :key="index">
+                    <td>{{ item.nombre }}</td>
+                    <td>{{ item.cantidadVenta }}</td>
+                    <td>
+                      <q-chip dense :color="getColor(item.tipo)" size="10px">
+                        {{ item.tipo }}
+                      </q-chip>
+                    </td>
+                    <td class="text-right">{{ item.precioVenta }} Bs</td>
+                    <td class="text-right">{{ (item.cantidadVenta * item.precioVenta).toFixed(2) }} Bs</td>
+                  </tr>
+                  </tbody>
+                  <tfoot>
+                  <tr>
+                    <td colspan="3" class="text-right text-bold">Total</td>
+                    <td class="text-bold text-right">{{ totalVenta }} Bs</td>
+                  </tr>
+                  </tfoot>
+                </q-markup-table>
+              </div>
+              <div class="col-12 q-pa-xs">
+                <q-btn label="Realizar Venta" color="positive" class="full-width" type="submit" no-caps :loading="loading" />
+              </div>
+            </div>
+<!--            <q-input v-model="venta.nombre" label="Nombre Cliente" outlined dense :rules="[val => !!val || 'Campo requerido']" />-->
           </q-form>
         </q-card-section>
       </q-card>
@@ -177,10 +220,19 @@ const currentPage = ref(1);
 const totalPages = ref(1);
 const filterTipo = ref('Todos');
 const tipos = ['Todos','Cirugía', 'Laboratorio', 'Peluqueria', 'Producto', 'Tratamiento'];
+const mascotas = ref([]);
+const mascota = ref(null);
 
 onMounted(() => {
   getProductos();
+  mascotasGet();
 });
+function mascotasGet() {
+  proxy.$axios.get("mascotas", { params: { filter: '' } })
+    .then(res => {
+      mascotas.value = res.data.data;
+    })
+}
 function getColor(tipo) {
   switch (tipo) {
     case 'Cirugía':
@@ -251,20 +303,40 @@ function realizarVenta() {
   dialogVenta.value = true;
   venta.value = { nombre: "SN", };
 }
+function mascotasFilter(val, update) {
+  if (val === '') {
+    update(() => {
+      proxy.$axios.get("mascotas", { params: { filter: '' } })
+        .then(res => {
+          mascotas.value = res.data.data;
+        })
+    })
+    return
+  }
+
+  update(() => {
+    // const needle = val.toLowerCase()
+    // options.value = stringOptions.filter(v => v.toLowerCase().indexOf(needle) > -1)
+    proxy.$axios.get("mascotas", { params: { filter: val } })
+      .then(res => {
+        mascotas.value = res.data.data;
+      })
+  })
+}
 function realizarVentaPost() {
   if (carrito.value.length === 0) {
     proxy.$alert.error("El carrito está vacío");
     return;
   }
   loading.value = true;
-  proxy.$axios.post("/ventas", { ...venta.value, total: totalVenta.value, productos: carrito.value }).then(async () => {
-    carrito.value = [];
-    venta.value = {nombre: "", fecha: new Date().toISOString().slice(0, 10)};
-    dialogVenta.value = false;
+  proxy.$axios.post("/sales", { mascota:mascota.value, total: totalVenta.value, productos: carrito.value }).then(async () => {
+    // carrito.value = [];
+    // venta.value = {nombre: "", fecha: new Date().toISOString().slice(0, 10)};
+    // dialogVenta.value = false;
     proxy.$alert.success("Venta realizada con éxito", "Éxito");
     router.push("/ventas");
     // await getProductos();
-    buscarProducto.value = "";
+    // buscarProducto.value = "";
   }).catch((res) => {
     proxy.$alert.error(res.response.data.message, "Error");
   }).finally(() => {
