@@ -17,6 +17,10 @@ const routes = [
     path: '/login',
     component: () => import('pages/LoginPage.vue')
   },
+  {
+    path: '/imprimir',
+    component: () => import('pages/imprimir/Imprimir.vue')
+  },
 
   // Always leave this as last one,
   // but you can also remove it
