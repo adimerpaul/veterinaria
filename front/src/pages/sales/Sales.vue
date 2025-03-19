@@ -33,7 +33,7 @@
             <div class="col-12 col-md-12 flex flex-center">
             </div>
             <div class="col-12 col-md-4">
-              <q-input v-model="filter" label="Filtro" outlined dense @update:modelValue="filtroVentas" />
+              <q-input v-model="filter" label="Filtro" outlined dense @update:modelValue="filtroVentas" clearable />
             </div>
             <div class="col-12 col-md-2 flex flex-center">
               <q-btn style="width: 150px" label="Venta" color="positive" @click="$router.push('/ventas/add')" no-caps icon="add_circle_outline"
@@ -43,9 +43,9 @@
             <div class="col-12 col-md-4 flex flex-center">
             </div>
             <div class="col-12 col-md-2 flex flex-center">
-              <q-btn style="width: 150px" label="Cerrar Caja" color="red" @click="cerraCaja" no-caps icon="point_of_sale"
-                     :loading="loading"
-              />
+<!--              <q-btn style="width: 150px" label="Cerrar Caja" color="red" @click="cerraCaja" no-caps icon="point_of_sale"-->
+<!--                     :loading="loading"-->
+<!--              />-->
             </div>
           </div>
         </q-form>
@@ -78,7 +78,7 @@
                 <q-item-section>
                   <q-item-label lines="1">
                     <span class="text-weight-bold">
-                      Bs {{ventas.filter(venta => !venta.anulada).reduce((acc, venta) => acc + parseFloat(venta.total), 0).toFixed(2)}}
+                      Bs {{ventas.filter(venta => !venta.anulado).reduce((acc, venta) => acc + parseFloat(venta.total), 0).toFixed(2)}}
                     </span>
                   </q-item-label>
                   <q-item-label caption lines="2">
@@ -98,7 +98,7 @@
                 <q-item-section>
                   <q-item-label lines="1">
                     <span class="text-weight-bold">
-                      Bs {{ventas.filter(venta => venta.anulada).reduce((acc, venta) => acc + parseFloat(venta.total), 0).toFixed(2)}}
+                      Bs {{ventas.filter(venta => venta.anulado).reduce((acc, venta) => acc + parseFloat(venta.total), 0).toFixed(2)}}
                     </span>
                   </q-item-label>
                   <q-item-label caption lines="2">
@@ -129,52 +129,84 @@
           <tr v-for="venta in ventas" :key="venta.id">
             <td>
               <q-btn style="width: 80px" icon="remove_circle_outline" color="negative" dense @click="anular(venta.id)" label="Anular" no-caps size="10px"
-                     v-if="!venta.anulada"
+                     v-if="!venta.anulado"
               />
               <div v-else>
                 <q-chip color="red" text-color="white" label="Anulada" />
               </div>
             </td>
             <td>{{ $filters.dateDmYHis(venta.fecha) }}</td>
-            <td>{{ venta.total }}</td>
+            <td class="text-right">{{ venta.total }}</td>
             <td>{{ venta.nombre }}</td>
             <td>{{ venta.user?.username }}</td>
-            <td>{{ venta.detalleText }}</td>
+            <td>
+              <div style="max-width: 350px; wrap-option: wrap;line-height: 0.9;">
+              <span  v-for="detail in venta.details" :key="detail.id">
+                {{ detail.cantidad }} {{ detail.productoName }},
+              </span>
+              </div>
+            </td>
           </tr>
           </tbody>
         </q-markup-table>
-        <!--        <pre>{{ventas}}</pre>-->
-        <!--        [-->
-        <!--        {-->
-        <!--        "id": 31,-->
-        <!--        "fecha": "2025-02-21 22:28:25",-->
-        <!--        "total": 20,-->
-        <!--        "nombre": "SN",-->
-        <!--        "anulada": 0,-->
-        <!--        "user_id": 1,-->
-        <!--        "detalleText": "1 COMBO PIPOCA Y 2 GASEOSA 20",-->
-        <!--        "detalles": [-->
-        <!--        {-->
-        <!--        "id": 27,-->
-        <!--        "cantidad": 1,-->
-        <!--        "producto": "COMBO PIPOCA Y 2 GASEOSA",-->
-        <!--        "precio": 20,-->
-        <!--        "producto_id": 15,-->
-        <!--        "venta_id": 31,-->
-        <!--        "user_id": 1-->
-        <!--        }-->
-        <!--        ],-->
-        <!--        "user": {-->
-        <!--        "id": 1,-->
-        <!--        "name": "Adimer Paul Chambi Ajata",-->
-        <!--        "avatar": "default.png",-->
-        <!--        "username": "admin",-->
-        <!--        "email": null,-->
-        <!--        "role": "Admin",-->
-        <!--        "email_verified_at": null,-->
-        <!--        "color": "red"-->
-        <!--        }-->
-        <!--        },-->
+<!--        <pre>{{ventas}}</pre>-->
+<!--        [-->
+<!--        {-->
+<!--        "id": 11,-->
+<!--        "tipo": "Venta",-->
+<!--        "fecha": "2025-03-19T08:26:14.000Z",-->
+<!--        "fechaCreacion": "2025-03-19T08:26:14.000Z",-->
+<!--        "facturado": false,-->
+<!--        "nombre": "SN",-->
+<!--        "ci": null,-->
+<!--        "total": "292.50",-->
+<!--        "anulado": false,-->
+<!--        "createdAt": "2025-03-19T08:26:14.522Z",-->
+<!--        "updatedAt": "2025-03-19T08:26:14.522Z",-->
+<!--        "deletedAt": null,-->
+<!--        "mascota": {-->
+<!--        "id": 1,-->
+<!--        "nombre": "SN",-->
+<!--        "especie": "Otro",-->
+<!--        "raza": "",-->
+<!--        "sexo": "Macho",-->
+<!--        "fecha_nac": "2000-01-01",-->
+<!--        "senas_particulares": "null",-->
+<!--        "photo": "compressed-1742371183193-441920296.png",-->
+<!--        "color": "Negro",-->
+<!--        "propietario_nombre": "SN",-->
+<!--        "propietario_direccion": "",-->
+<!--        "propietario_telefono": "",-->
+<!--        "propietario_ciudad": "Oruro",-->
+<!--        "propietario_celular": "a",-->
+<!--        "createdAt": "2025-03-12T10:21:25.461Z",-->
+<!--        "updatedAt": "2025-03-19T07:59:43.000Z",-->
+<!--        "deletedAt": null-->
+<!--        },-->
+<!--        "user": {-->
+<!--        "id": 1,-->
+<!--        "name": "ING. ADIMER PAUL CHAMBI AJATA",-->
+<!--        "role": "Admin",-->
+<!--        "username": "Adimer",-->
+<!--        "password": "$2b$10$hLxScAvuENNvqjNTwS1p6u/TUd0Ej9Oae9iCAzZSHBqMlCI.fLO0a",-->
+<!--        "createdAt": "2025-03-12T09:47:07.189Z",-->
+<!--        "updatedAt": "2025-03-12T09:47:07.189Z",-->
+<!--        "deletedAt": null-->
+<!--        },-->
+<!--        "details": [-->
+<!--        {-->
+<!--        "id": 19,-->
+<!--        "fecha": "2025-03-19T08:26:14.000Z",-->
+<!--        "productoName": "Desparasitaciones mayor a 10 kg",-->
+<!--        "subtotal": "292.50",-->
+<!--        "cantidad": 5,-->
+<!--        "anulado": false,-->
+<!--        "createdAt": "2025-03-19T08:26:14.528Z",-->
+<!--        "updatedAt": "2025-03-19T08:26:14.528Z",-->
+<!--        "deletedAt": null-->
+<!--        }-->
+<!--        ]-->
+<!--        },-->
       </q-card-section>
     </q-card>
   </q-page>
@@ -284,11 +316,14 @@ function cerraCajaSubmit() {
   });
 }
 function filtroVentas() {
+  if (!filter.value) {
+    ventas.value = ventasAll.value;
+    return;
+  }
   ventas.value = ventasAll.value.filter(venta => {
     return (
       venta.nombre.toLowerCase().includes(filter.value.toLowerCase()) ||
-      venta.user?.name.toLowerCase().includes(filter.value.toLowerCase()) ||
-      venta.detalleText.toLowerCase().includes(filter.value.toLowerCase())
+      venta.user?.name.toLowerCase().includes(filter.value.toLowerCase())
       //    texto de detalle
     );
   });
@@ -302,7 +337,7 @@ function anular(id) {
     cancel: "No"
   }).onOk(() => {
     loading.value = true;
-    proxy.$axios.put(`/ventas/${id}/anular`).then(() => {
+    proxy.$axios.put(`/sales/${id}/anular`).then(() => {
       getVentas();
     }).finally(() => {
       loading.value = false;

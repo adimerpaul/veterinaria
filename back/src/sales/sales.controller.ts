@@ -9,6 +9,7 @@ import {
   Query,
   UseGuards,
   Req,
+  Put,
 } from '@nestjs/common';
 import { SalesService } from './sales.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
@@ -29,8 +30,9 @@ export class SalesController {
   findAll(
     @Query('fechaInicio') fechaInicio: string = '',
     @Query('fechaFin') fechaFin: string = '',
+    @Query('user_id') user_id: string = '',
   ) {
-    return this.salesService.findAll(fechaInicio, fechaFin);
+    return this.salesService.findAll(fechaInicio, fechaFin, user_id);
   }
 
   @Get(':id')
@@ -41,6 +43,11 @@ export class SalesController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateSaleDto: UpdateSaleDto) {
     return this.salesService.update(+id, updateSaleDto);
+  }
+  // proxy.$axios.put(`/ventas/${id}/anular`).then(() => {
+  @Put(':id/anular')
+  anular(@Param('id') id: string) {
+    return this.salesService.anular(+id);
   }
 
   @Delete(':id')

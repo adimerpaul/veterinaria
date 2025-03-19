@@ -23,6 +23,8 @@ export class Detail {
   productoName: string;
   @Column({ nullable: true, type: 'decimal', precision: 10, scale: 2 })
   subtotal: number;
+  @Column({ nullable: true })
+  cantidad: number;
   @Column({ default: true })
   anulado: boolean;
   @CreateDateColumn()
@@ -40,7 +42,6 @@ export class Detail {
   user: User;
   @ManyToOne(() => Sale, (sale) => sale.details, { nullable: true })
   sale: Sale;
-  //   producto: Producto;
   @ManyToOne(() => Producto, (producto) => producto.details, { nullable: true })
   producto: Producto;
 }

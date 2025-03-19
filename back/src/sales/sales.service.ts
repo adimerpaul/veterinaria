@@ -27,6 +27,36 @@ export class SalesService {
     @InjectRepository(Producto)
     private readonly productoRepository: Repository<Producto>,
   ) {}
+  async anular(id: number) {
+    try {
+      // Obtener la venta desde la base de datos
+      const sale = await this.salesRepository.findOne({
+        where: { id: id },
+        relations: ['details'],
+      });
+
+      if (!sale) {
+        throw new Error('Venta no encontrada');
+      }
+
+      // Actualizar la venta
+      sale.anulado = true;
+      // sale.fechaAnulacion = new Date();
+
+      // Actualizar los detalles de la venta
+      for (const detail of sale.details) {
+        detail.anulado = true;
+        await this.detailRepository.save(detail);
+      }
+
+      // Guardar la venta en la base de datos
+      await this.salesRepository.save(sale);
+
+      return { message: 'Venta anulada exitosamente', sale: sale };
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
   async create(body: any, user: any) {
     try {
       // Obtener la mascota desde la base de datos
@@ -78,6 +108,7 @@ export class SalesService {
         const detail = this.detailRepository.create({
           fecha: new Date(),
           productoName: producto.nombre,
+          cantidad: product.cantidadVenta,
           subtotal: parseFloat(product.precioVenta) * product.cantidadVenta,
           anulado: false,
           mascota: mascota,
@@ -96,21 +127,20 @@ export class SalesService {
     }
   }
 
-  async findAll(fechaInicio: string, fechaFin: string) {
-    // console.log('Fecha Inicio:', fechaInicio);
-    // console.log('Fecha Fin:', fechaFin);
-
-    // Convertir a formato Date UTC para evitar problemas de zona horaria
+  async findAll(fechaInicio: string, fechaFin: string, user_id: string) {
     const fechaInicioDate = new Date(fechaInicio + ' 00:00:00');
     const fechaFinDate = new Date(fechaFin + ' 23:59:59');
 
-    // console.log('Fecha Inicio Formateada:', fechaInicioDate.toISOString());
-    // console.log('Fecha Fin Formateada:', fechaFinDate.toISOString());
+    const whereCondition = {
+      fecha: Between(fechaInicioDate, fechaFinDate),
+    };
+
+    if (user_id) {
+      whereCondition['user'] = { id: user_id };
+    }
 
     const sales = await this.salesRepository.find({
-      where: {
-        fecha: Between(fechaInicioDate, fechaFinDate),
-      },
+      where: whereCondition,
       relations: ['user', 'mascota', 'details'],
       order: {
         fecha: 'DESC',
