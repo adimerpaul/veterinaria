@@ -41,14 +41,17 @@
             <q-tab name="mascota" :class="{'bg-blue text-white': tab === 'mascota'}">
               <q-btn flat dense no-caps icon="pets" label="Mascota" :color="tab === 'mascota' ? 'white' : 'black'" />
             </q-tab>
+            <q-tab name="ventas" :class="{'bg-indigo text-white': tab === 'ventas'}">
+              <q-btn flat dense no-caps icon="shopping_cart" label="Ventas" :color="tab === 'ventas' ? 'white' : 'black'" />
+            </q-tab>
             <q-tab name="cirugia" :class="{'bg-green text-white': tab === 'cirugia'}">
               <q-btn flat dense no-caps icon="local_hospital" label="Cirugía" :color="tab === 'cirugia' ? 'white' : 'black'" />
             </q-tab>
             <q-tab name="examen" :class="{'bg-orange text-white': tab === 'examen'}">
               <q-btn flat dense no-caps icon="assignment" label="Examen" :color="tab === 'examen' ? 'white' : 'black'" />
             </q-tab>
-            <q-tab name="eutanacion" :class="{'bg-red text-white': tab === 'eutanacion'}">
-              <q-btn flat dense no-caps icon="recycling" label="Eutanación" :color="tab === 'eutanacion' ? 'white' : 'black'" />
+            <q-tab name="certificados" :class="{'bg-red text-white': tab === 'certificados'}">
+              <q-btn flat dense no-caps icon="receipt" label="Certificados" :color="tab === 'certificados' ? 'white' : 'black'" />
             </q-tab>
             <q-tab name="derivacion" :class="{'bg-purple text-white': tab === 'derivacion'}">
               <q-btn flat dense no-caps icon="swap_calls" label="Derivación" :color="tab === 'derivacion' ? 'white' : 'black'" />
@@ -60,7 +63,11 @@
             <q-tab-panel name="mascota" animated>
               <MascotaUpdate :mascota="mascota" :razas="razas" @getMascota="getMascota"/>
             </q-tab-panel>
+            <q-tab-panel name="ventas" animated>
+              <MascotaSales :mascota="mascota" @getMascota="getMascota"/>
+            </q-tab-panel>
           </q-tab-panels>
+          <pre>{{ mascota }}</pre>
         </q-card>
       </q-card-section>
     </q-card>
@@ -70,9 +77,10 @@
 <script>
 import moment from "moment";
 import MascotaUpdate from "pages/mascotas/MascotaUpdate.vue";
+import MascotaSales from "pages/mascotas/MascotaSales.vue";
 
 export default {
-  components: {MascotaUpdate},
+  components: {MascotaSales, MascotaUpdate},
   data() {
     return {
       tab: 'mascota',

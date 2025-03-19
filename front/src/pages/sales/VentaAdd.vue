@@ -115,7 +115,7 @@
 <!--                  {{ item.precioVenta }} Bs-->
                   <input v-model.number="item.precioVenta" type="number" style="width: 80px" min="1" step="0.1" />
                 </td>
-                <td>{{ (item.cantidadVenta * item.precioVenta).toFixed(2) }} Bs</td>
+                <td class="text-right">{{ (item.cantidadVenta * item.precioVenta).toFixed(2) }} Bs</td>
                 <td>
                   <q-btn icon="delete" color="red" dense @click="eliminarDelCarrito(index)" :loading="loading" size="10px" />
                 </td>
@@ -124,7 +124,7 @@
               <tfoot>
               <tr>
                 <td colspan="3" class="text-right text-bold">Total</td>
-                <td class="text-bold">{{ totalVenta }} Bs</td>
+                <td class="text-bold text-right">{{ totalVenta }} Bs</td>
                 <td></td>
               </tr>
               </tfoot>
