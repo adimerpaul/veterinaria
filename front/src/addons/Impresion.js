@@ -4,6 +4,12 @@ import { Printd } from 'printd'
 import moment from 'moment'
 import {useCounterStore} from "stores/example-store";
 export class Impresion {
+  static dateDmYHis (value) {
+    const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Set', 'Oct', 'Nov', 'Dic']
+    const mes = meses[moment(String(value)).format('MM') - 1]
+    if (!value) return ''
+    return moment(String(value)).format('DD') + ' ' + mes + ' ' + moment(String(value)).format('YYYY') + ' ' + moment(String(value)).format('hh:mm A')
+  }
   static imprimirSalas (salas, fechaInicio, fechaFin, userFind) {
     // [
     //   {
@@ -340,25 +346,31 @@ export class Impresion {
     const d = new Printd()
     d.print(document.getElementById('myElement'))
   }
-  static imprimirCaja (caja, fechaInicio, fechaFin, userFind) {
-    // console.log(caja)
-    const cajas = caja.cajas
-    let textoCajas = '<table>'
-    cajas.forEach((element) => {
+  static imprimirCaja (sales, fechaInicio, fechaFin, userFind) {
+    // console.log(sales)
+    let textoCajas = '<table style="border-collapse: collapse;border: 1px;width: 100%"><tr><th>N</th><th>Fecha</th><th>Nombre</th><th>Total</th></tr>'
+    let contador = 1
+    let total = 0
+    sales.forEach((sale) => {
+      console.log(sale)
+      total += parseFloat(sale.total)
       textoCajas += `
-      <div style="border: 1px solid black; padding: 5px;border-radius: 5px;">
-        <div><span class="text-bold">Fecha Cierre:</span> ${moment(element.fecha_cierre).format('DD/MM/YYYY HH:mm:ss')}</div>
-<!--        <div><span class="text-bold">Total Reservas:</span> ${parseInt(element.monto_reserva).toFixed(2)}</div>-->
-<!--        <div><span class="text-bold">Total Venta:</span> ${parseInt(element.monto_venta).toFixed(2)}</div>-->
-<!--        <div><span class="text-bold">Monto Inicial:</span> ${parseInt(element.monto_inicial).toFixed(2)}</div>-->
-        <div><span class="text-bold">Total:</span> ${parseInt(element.monto_caja).toFixed(2)}</div>
-        <div><span class="text-bold">Monto Final:</span> ${parseInt(element.monto_final).toFixed(2)}</div>
-<!--        <div><span class="text-bold">Monto Real:</span> ${parseInt(element.monto_real).toFixed(2)}</div>-->
-        <div><span class="text-bold">Monto Diferencia:</span> ${parseInt(element.monto_diferencia).toFixed(2)}</div>
-        <div><span class="text-bold">Observación:</span> ${element.observacion == null ? '' : element.observacion}</div>
-      </div>
+        <tr>
+          <td>${contador++}</td>
+          <td>${this.dateDmYHis(sale.fecha)}</td>
+          <td>${sale.nombre}</td>
+          <td style="text-align: right">${sale.total} Bs</td>
+        </tr>
       `
     })
+    textoCajas += `
+      <tr>
+        <td></td>
+        <td></td>
+        <td class="text-right text-bold">Total</td>
+        <td style="text-align: right">${total.toFixed(2)} Bs</td>
+      </tr>
+    `
 
     const cadena = `
     <style>
@@ -382,14 +394,11 @@ export class Impresion {
         }
     </style>
     <div>
-      <div class="text-right text-h6">Fecha: ${moment(caja.fecha).format('DD/MM/YYYY HH:mm:ss')}</div>
+      <div class="text-right text-h6">Fecha: ${moment().format('DD/MM/YYYY HH:mm:ss')}</div>
       <div class="text-right text-h6">${useCounterStore().user.name}</div>
       <div class="text-center text-bold">CONTROL CAJA</div>
       <div><span class="text-bold">Fecha</span> ${moment(fechaInicio).format('DD/MM/YYYY')} - ${moment(fechaFin).format('DD/MM/YYYY')}</div>
       <div><span class="text-bold">Usuario:</span> ${userFind}</div>
-      <div><span class="text-bold">Total Ventas:</span> ${parseInt(caja.ventas).toFixed(2)}</div>
-      <div><span class="text-bold">Total Reservas:</span> ${parseInt(caja.reservas).toFixed(2)}</div>
-      <div><span class="text-bold">Total:</span> ${(parseInt(caja.ventas) + parseInt(caja.reservas)).toFixed(2)}</div>
       <div>
       <span class="text-bold">Cajas:</span>
       <div>

@@ -27,6 +27,35 @@ export class SalesService {
     @InjectRepository(Producto)
     private readonly productoRepository: Repository<Producto>,
   ) {}
+  async imprimir(body: any) {
+    try {
+      // console.log('Imprimir:', body);
+      // user_id: 1,
+      //     fechaInicio: '2025-03-19',
+      //     fechaFin: '2025-03-19',
+      //     reporte: 'CAJA'
+      const fechaInicioDate = new Date(body.fechaInicio + ' 00:00:00');
+      const fechaFinDate = new Date(body.fechaFin + ' 23:59:59');
+      const whereCondition = {
+        fecha: Between(fechaInicioDate, fechaFinDate),
+        anulado: false,
+      };
+      if (body.user_id) {
+        whereCondition['user'] = { id: body.user_id };
+      }
+      const sales = await this.salesRepository.find({
+        where: whereCondition,
+        relations: ['user', 'mascota', 'details'],
+        order: {
+          fecha: 'DESC',
+        },
+      });
+      console.log('Ventas encontradas:', sales);
+      return sales;
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
   async anular(id: number) {
     try {
       // Obtener la venta desde la base de datos

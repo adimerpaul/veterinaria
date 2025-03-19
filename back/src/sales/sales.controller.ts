@@ -26,6 +26,11 @@ export class SalesController {
     return this.salesService.create(body, req.user);
   }
 
+  @Post('imprimir')
+  imprimir(@Body() body) {
+    return this.salesService.imprimir(body);
+  }
+
   @Get()
   findAll(
     @Query('fechaInicio') fechaInicio: string = '',

@@ -231,7 +231,7 @@
     </q-card>
   </q-dialog>
   <!--  myElement-->
-  <div id="myElement"></div>
+  <div id="myElement" class="hidden"></div>
 </template>
 
 <script setup>
@@ -255,7 +255,6 @@ const productos = ref([]);
 const reportes = ref([
   'CAJA',
   'PRODUCTOS',
-  'SALA'
 ]);
 
 onMounted(() => {
@@ -277,7 +276,7 @@ function imprimir() {
   }
   const userFind = users.value.find(usuario => usuario.id === user.value);
   loading.value = true;
-  proxy.$axios.post("/ventas/imprimir", {
+  proxy.$axios.post("/sales/imprimir", {
     user_id: user.value,
     fechaInicio: fechaInicio.value,
     fechaFin: fechaFin.value,
@@ -288,9 +287,6 @@ function imprimir() {
     }
     if (reporte.value === 'PRODUCTOS') {
       Impresion.imprimirProductos(res.data,fechaInicio.value,fechaFin.value,userFind.name,productos.value);
-    }
-    if (reporte.value === 'SALA') {
-      Impresion.imprimirSalas(res.data,fechaInicio.value,fechaFin.value,userFind.name);
     }
   }).finally(() => {
     loading.value = false;
