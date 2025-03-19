@@ -97,15 +97,24 @@ export class SalesService {
   }
 
   async findAll(fechaInicio: string, fechaFin: string) {
-    console.log(fechaInicio, fechaFin);
+    // console.log('Fecha Inicio:', fechaInicio);
+    // console.log('Fecha Fin:', fechaFin);
+
+    // Convertir a formato Date UTC para evitar problemas de zona horaria
+    const fechaInicioDate = new Date(fechaInicio + ' 00:00:00');
+    const fechaFinDate = new Date(fechaFin + ' 23:59:59');
+
+    // console.log('Fecha Inicio Formateada:', fechaInicioDate.toISOString());
+    // console.log('Fecha Fin Formateada:', fechaFinDate.toISOString());
 
     const sales = await this.salesRepository.find({
       where: {
-        fecha: Between(new Date(fechaInicio), new Date(fechaFin)), // Convertir a Date
+        fecha: Between(fechaInicioDate, fechaFinDate),
       },
       relations: ['user', 'mascota', 'details'],
     });
 
+    // console.log('Ventas encontradas:', sales);
     return sales;
   }
 

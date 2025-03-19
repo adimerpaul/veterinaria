@@ -22,6 +22,7 @@ import { DetailsModule } from './details/details.module';
       database: process.env.DB_DATABASE,
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: process.env.DB_SYNC === 'true',
+      timezone: '-04:00',
     }),
     UsersModule,
     ProductosModule,

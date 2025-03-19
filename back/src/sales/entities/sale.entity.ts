@@ -19,9 +19,17 @@ export class Sale {
   id: number;
   @Column({ nullable: true, default: 'Venta' })
   tipo: string;
-  @Column({ nullable: true })
+  @Column({
+    nullable: true,
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   fecha: Date;
-  @Column({ nullable: true })
+  @Column({
+    nullable: true,
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   fechaCreacion: Date;
   @Column({ nullable: true })
   facturado: boolean;
