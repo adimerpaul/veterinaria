@@ -286,7 +286,7 @@ function imprimir() {
       Impresion.imprimirCaja(res.data,fechaInicio.value,fechaFin.value,userFind.name);
     }
     if (reporte.value === 'PRODUCTOS') {
-      Impresion.imprimirProductos(res.data,fechaInicio.value,fechaFin.value,userFind.name,productos.value);
+      Impresion.imprimirProductos(res.data,fechaInicio.value,fechaFin.value,userFind.name);
     }
   }).finally(() => {
     loading.value = false;

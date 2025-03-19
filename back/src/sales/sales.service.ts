@@ -43,15 +43,30 @@ export class SalesService {
       if (body.user_id) {
         whereCondition['user'] = { id: body.user_id };
       }
-      const sales = await this.salesRepository.find({
-        where: whereCondition,
-        relations: ['user', 'mascota', 'details'],
-        order: {
-          fecha: 'DESC',
-        },
-      });
-      console.log('Ventas encontradas:', sales);
-      return sales;
+
+      const reporte = body.reporte;
+      if (reporte === 'CAJA') {
+        const sales = await this.salesRepository.find({
+          where: whereCondition,
+          relations: ['user', 'mascota', 'details'],
+          order: {
+            fecha: 'DESC',
+          },
+        });
+        // console.log('Ventas encontradas:', sales);
+        return sales;
+      }
+      if (reporte === 'PRODUCTOS') {
+        const details = await this.detailRepository.find({
+          where: whereCondition,
+          relations: ['user', 'mascota', 'sale', 'producto'],
+          order: {
+            fecha: 'DESC',
+          },
+        });
+        // console.log('Detalles encontrados:', details);
+        return details;
+      }
     } catch (error) {
       return { error: error.message };
     }
@@ -138,6 +153,7 @@ export class SalesService {
           fecha: new Date(),
           productoName: producto.nombre,
           cantidad: product.cantidadVenta,
+          precio: parseFloat(product.precioVenta),
           subtotal: parseFloat(product.precioVenta) * product.cantidadVenta,
           anulado: false,
           mascota: mascota,

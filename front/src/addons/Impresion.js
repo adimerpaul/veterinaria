@@ -156,13 +156,7 @@ export class Impresion {
     d.print(document.getElementById('myElement'))
 
   }
-  static imprimirProductos (data, fechaInicio, fechaFin, userFind, productosAll) {
-    const productos = data.productos
-    const productosCombo = data.productosCombo
-
-    const productosGaseosa = data.productosGaseosa
-    const productosPipoca = data.productosPipoca
-    const productosFrape = data.productosFrape
+  static imprimirProductos (productos, fechaInicio, fechaFin, userFind) {
 
     // console.log(productosAll)
     let textoProductos = '<div class="text-h5"><table class="table">' +
@@ -175,15 +169,16 @@ export class Impresion {
 
     let sumaTotal = 0
     productos.forEach((element) => {
+      console.log(element)
       textoProductos += `
         <tr style="border-top: 1px solid black; border-bottom: 1px solid black;">
-          <td>${element.nombre}</td>
+          <td>${element.productoName}</td>
           <td class="text-right">${parseInt(element.precio).toFixed(2)}</td>
-          <td class="text-right">${element.cantidad_total}</td>
-          <td class="text-right">${(parseInt(element.precio) * parseInt(element.cantidad_total)).toFixed(2)}</td>
+          <td class="text-right">${element.cantidad}</td>
+          <td class="text-right">${element.subtotal}</td>
         </tr>
       `
-      sumaTotal += parseInt(element.precio) * parseInt(element.cantidad_total)
+      sumaTotal += parseInt(element.subtotal)
     })
     textoProductos += `
       <tr style="border-top: 1px solid black; border-bottom: 1px solid black;">
@@ -194,113 +189,6 @@ export class Impresion {
       </tr>
     `
     textoProductos += '</table></div>'
-
-
-//     let textoProductosAll = '<div class="text-h5"><table class="table">' +
-//       '<tr style="border-top: 1px solid black; border-bottom: 1px solid black;">' +
-//       '<th>Nombre</th>' +
-//       '<th class="text-right">Precio</th>' +
-//       '<th class="text-right">Cantidad</th>' +
-//       '<th class="text-right">Total</th>' +
-//       '</tr>'
-//
-//     let sumaTotalAll = 0
-//     productosCombo.forEach((element) => {
-//       textoProductosAll += `
-//         <tr style="border-top: 1px solid black; border-bottom: 1px solid black;">
-//           <td>${element.nombre}</td>
-//           <td class="text-right">${parseInt(element.precio).toFixed(2)}</td>
-//           <td class="text-right">${element.cantidad_total}</td>
-// <!--          <td class="text-right">${(parseInt(element.precio) * parseInt(element.cantidad_total)).toFixed(2)}</td>-->
-//           <td class="text-right">${(0).toFixed(2)}</td>
-//         </tr>
-//       `
-//       // sumaTotalAll += parseInt(element.precio) * parseInt(element.cantidad_total)
-//     })
-//     textoProductosAll += `
-//       <tr style="border-top: 1px solid black; border-bottom: 1px solid black;">
-//         <td class="text-right"></td>
-//         <td class="text-right"></td>
-//         <td class="text-right text-bold">Total</td>
-//         <td class="text-right">${sumaTotalAll.toFixed(2)}</td>
-//       </tr>
-//     `
-//
-//     textoProductosAll += '</table></div>'
-
-    let sumGaseosa = 0
-    let textoGaseosa = '<div class="text-h5"><table class="table">' +
-      '<tr style="border-top: 1px solid black; border-bottom: 1px solid black;">' +
-      '<th>Nombre</th>' +
-      '<th class="text-right">Cantidad</th>' +
-      '</tr>'
-
-    productosGaseosa.forEach((element) => {
-      textoGaseosa += `
-        <tr style="border-top: 1px solid black; border-bottom: 1px solid black;">
-          <td>${element.nombre}</td>
-          <td class="text-right">${element.cantidad_total}</td>
-        </tr>
-        `
-      sumGaseosa += parseInt(element.cantidad_total)
-    })
-    textoGaseosa += `
-      <tr style="border-top: 1px solid black; border-bottom: 1px solid black;">
-        <td class="text-right"></td>
-        <td class="text-right text-bold">Total</td>
-        <td class="text-right text-bold">${sumGaseosa}</td>
-      </tr>
-    `
-    textoGaseosa += '</table></div>'
-
-    let sumPipoca = 0
-    let textoPipoca = '<div class="text-h5"><table class="table">' +
-      '<tr style="border-top: 1px solid black; border-bottom: 1px solid black;">' +
-      '<th>Nombre</th>' +
-      '<th class="text-right">Cantidad</th>' +
-      '</tr>'
-    productosPipoca.forEach((element) => {
-      textoPipoca += `
-        <tr style="border-top: 1px solid black; border-bottom: 1px solid black;">
-          <td>${element.nombre}</td>
-          <td class="text-right">${element.cantidad_total}</td>
-        </tr>
-        `
-      sumPipoca += parseInt(element.cantidad_total)
-    })
-    textoPipoca += `
-      <tr style="border-top: 1px solid black; border-bottom: 1px solid black;">
-      <td class="text-right"></td>
-      <td class="text-right text-bold">Total</td>
-      <td class="text-right text-bold">${sumPipoca}</td>
-      </tr>
-      `
-    textoPipoca += '</table></div>'
-
-    let sumFrape = 0
-    let textoFrape = '<div class="text-h5"><table class="table">' +
-      '<tr style="border-top: 1px solid black; border-bottom: 1px solid black;">' +
-      '<th>Nombre</th>' +
-      '<th class="text-right">Cantidad</th>' +
-      '</tr>'
-
-    productosFrape.forEach((element) => {
-      textoFrape += `
-        <tr style="border-top: 1px solid black; border-bottom: 1px solid black;">
-          <td>${element.nombre}</td>
-          <td class="text-right">${element.cantidad_total}</td>
-        </tr>
-        `
-      sumFrape += parseInt(element.cantidad_total)
-    })
-    textoFrape += `
-      <tr style="border-top: 1px solid black; border-bottom: 1px solid black;">
-      <td class="text-right"></td>
-      <td class="text-right text-bold">Total</td>
-      <td class="text-right text-bold">${sumFrape}</td>
-      </tr>
-      `
-    textoFrape += '</table></div>'
 
     const cadena = `
     <style>
@@ -334,12 +222,6 @@ export class Impresion {
       <div><span class="text-bold">Fecha</span> ${moment(fechaInicio).format('DD/MM/YYYY')} - ${moment(fechaFin).format('DD/MM/YYYY')}</div>
       <div><span class="text-bold">Usuario:</span> ${userFind}</div>
       <div>${textoProductos}</div>
-      <div class="text-center">Gaseosas</div>
-      <div>${textoGaseosa}</div>
-      <div class="text-center">Pipocas</div>
-      <div>${textoPipoca}</div>
-      <div class="text-center">Frape</div>
-      <div>${textoFrape}</div>
     </div>
     `
     document.getElementById('myElement').innerHTML = cadena

@@ -23,6 +23,8 @@ export class Detail {
   productoName: string;
   @Column({ nullable: true, type: 'decimal', precision: 10, scale: 2 })
   subtotal: number;
+  @Column({ nullable: true, type: 'decimal', precision: 10, scale: 2 })
+  precio: number;
   @Column({ nullable: true })
   cantidad: number;
   @Column({ default: true })
