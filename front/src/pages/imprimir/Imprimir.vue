@@ -12,7 +12,7 @@
 <!--    <div>N° 000097</div>-->
     <div class="header">
       <div class="logo">
-        <img src="logoCastro.jpg" width="100" height="100" alt="Logo Castro">
+        <img src="logoCastro.jpg" width="80" height="80" alt="Logo Castro">
       </div>
       <div class="title">
         <div class="bold blue" style="line-height: 0.9">
@@ -25,61 +25,94 @@
         </div>
       </div>
       <div class="logo">
-        <img src="logoOruro.png" width="100" height="100" alt="Logo Oruro">
+        <img src="logoOruro.png" width="80" height="80" alt="Logo Oruro">
       </div>
     </div>
-    <div class="center bold blue subrayado">CERTIFICADO DE AUTORIZACIÓN QUIRÚRGICA</div>
+<!--    <div class="center bold blue subrayado h1">CERTIFICADO DE AUTORIZACIÓN QUIRÚRGICA</div>-->
 
-    <div>
-      <div>PROPIETARIO RESPONSABLE</div>
-      <p><strong>Nombre y Apellidos:</strong> [Nombre escrito a mano]</p>
-      <p><strong>C.I.:</strong> [Número de identificación]</p>
-      <p><strong>Teléfono:</strong> [Número de teléfono]</p>
+    <div style="text-align: center; font-weight: bold; color: blue; text-decoration: underline; font-size: 1.2em;">
+      CERTIFICADO DE AUTORIZACIÓN QUIRÚRGICA
     </div>
-
     <div>
-      <div>VETERINARIOS RESPONSABLES</div>
-      <p><strong>Cirujano:</strong> [Nombre del veterinario]</p>
-      <p><strong>Cirujano 2 o instrumentista:</strong> [Nombre del asistente]</p>
-      <p><strong>Anestesista:</strong> [Nombre si aplica]</p>
+      El Sr. Propietario responsable del paciente quirúrgico reconoce como correctos los siguientes datos identificados:
     </div>
-
+    <div style="font-weight: bold;color: blue">PROPIETARIO RESPONSABLE</div>
     <div>
-      <div>PACIENTE QUIRÚRGICO</div>
-      <p><strong>Especie:</strong> [Ej. Canino, Felino]</p>
-      <p><strong>Raza:</strong> [Ej. Poodle, Labrador]</p>
-      <p><strong>Sexo:</strong> [Macho/Hembra]</p>
-      <p><strong>Edad:</strong> [Edad del animal]</p>
-      <p><strong>Color:</strong> [Color del animal]</p>
-      <p><strong>Nombre:</strong> [Nombre de la mascota]</p>
-      <p><strong>Cirugía a realizar:</strong> [Tipo de cirugía]</p>
-      <p><strong>Costo Cirugía:</strong> [Monto]</p>
-      <p><strong>Adelanto:</strong> [Monto]</p>
-      <p><strong>Saldo:</strong> [Monto]</p>
+      <span style="font-weight: bold">Nombre y Apellidos:</span> adimer pal chambi ajta
+      <span style="font-weight: bold">C.I.:</span> 7336199
+      <span style="font-weight: bold">Teléfono:</span> 69603027
     </div>
+    <div style="font-weight: bold;color: blue">VETERINARIOS RESPONSABLES</div>
+    <div><strong>Cirujano:</strong> ...................................................................................................................</div>
+    <div><strong>Cirujano 2 o instrumentista:</strong> ............................................................................</div>
+    <div><strong>Anestesista:</strong> ............................................................................................................</div>
+    <div style="font-weight: bold;color: blue">PACIENTE QUIRÚRGICO</div>
 
     <div>
-      <div>Declaración del Propietario</div>
-      <p>El Sr. Propietario y/o tenedor responsable autoriza al profesional veterinario y a su equipo a realizar el acto quirúrgico indicado al paciente ya mencionado.</p>
-      <ul>
-        <li>Tengo pleno conocimiento de la cirugía a realizar a mi animal, quedando satisfactoriamente informado de los pormenores de la misma.</li>
-        <li>Estoy consciente de posibles reacciones secundarias no previstas a cualquiera de los fármacos o líquidos administrados.</li>
-        <li>Conozco y acepto el riesgo que supone todo acto quirúrgico bajo anestesia general.</li>
-        <li>La veterinaria no se responsabiliza por posibles reacciones alérgicas, infecciones post-quirúrgicas o sangrados imprevistos.</li>
-        <li>Autorizo al profesional a modificar la conducta quirúrgica preestablecida cuando sea necesario.</li>
-      </ul>
+      <strong>Especie:</strong> ..........
+      <strong>Raza:</strong> ..........
+      <strong>Sexo:</strong> ..........
+      <strong>Edad:</strong> ..........
+      <strong>Color:</strong> ..........
+      <strong>Nombre:</strong> ..........
+      <strong>Cirugía a realizar:</strong> ..........
+      <strong>Costo Cirugía:</strong> ..........
+      <strong>Adelanto:</strong> ..........
+      <strong>Saldo:</strong> ..........
     </div>
-
+    <div>El Señor. Propietario y/o tenedor responsable autoriza al profesional veterinario y a su equipo a realizar el acto quirúrgico indicado al paciente ya mencionado.</div>
+    <div>El Señor. Responsable otorga el consentimiento y autoriza al profesional en el párrafo precedente, dejado constancia de:</div>
     <div>
-      <div>Firmas</div>
-      <p><strong>Firma del Propietario:</strong> ___________________</p>
-      <p><strong>Nombre:</strong> [Nombre del propietario]</p>
-      <p><strong>C.I.:</strong> [Número de identificación]</p>
-      <p><strong>Fecha de cirugía:</strong> [Día] de [Mes] de [Año]</p>
+      Tengo pleno conocimiento de la cirugía a realizar a mi animal, quedando satisfactoriamente informado de los pormenores de la misma;
+      en lo que concierne al pre, intra y post operatorio., asi como los objetivos terapéuticos y/o exploratorios, dicho paciente ingresa con riesgo de :.............
+    </div>
+    <div>
+      Estoy consciente de posibles reacciones secundarias no previstas a cualquiera de los fármacos o líquidos administrados,
+      con posibles repercusion cardiaca, pulmonar, hepatica, renal y/o del sistema nervioso.
+    </div>
+    <div>
+      Conozco y acepto el riesgo que supone todo acto quirúrgico bajo anestesia general,
+      asi como las posibles complicaciones que puedan surgir en el dasarrollo de la misma.
+    </div>
+    <div>La veterinaria no se responsabiliza por posibles reacciones alérgicas o anafilácticas que el paciente pueda presentar antes, durante y después de la cirugía, asi como infeciones post quirurgicas y/o Sangrados improvistos.</div>
+    <div>Autorizo al profesional a modificar la conducta quirúrgica pre-establecida e informada cuando sugieren razones médico quirúrgicas.</div>
+    <div>
+      Autorizo, SI .......... NO ......... a realizar pruebas de : .............................................................................................................
+      a mi mascota, en caso de no apcetar deslindo responsabilidades al medico veterinario.por cualquier situación que surja intra y post operatorias.
+    </div>
+    <div>
+      El Propietario con su forma certifica haber leido y comprendido todo lo expuesto en este documento, y acepta las condiciones y riesgos que implica la cirugía.
+    </div>
+    <br>
+    <br>
+    <br>
+    <div>
+      <table style="width: 100%">
+        <tr>
+          <td style="width: 33%">
+            <div style="text-align: center;line-height: 0.9">
+              ........................................<br>
+              Firma del propietario <br>
+              Nombre: xxxxxxxxxx <br>
+              C.I.: xxxxxxxxxx <br>
+            </div>
+          </td>
+          <td style="width: 33%" valign="top">
+            <div style="text-align: center;line-height: 0.9">
+              ........................................<br>
+              Firma Veterinario Responsable <br>
+<!--              Nombre: xxxxxxxxxx <br>-->
+<!--              C.I.: xxxxxxxxxx <br>-->
+            </div>
+          </td>
+          <td style="width: 33%">
 
-      <p><strong>Firma Veterinario Responsable:</strong> ___________________</p>
-      <p><strong>Nombre:</strong> Dra. M. Cristina Huayñap Choque</p>
-      <p><strong>NED Veterinario Zootecnista</strong></p>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div style="text-align: center">
+      Fecha de cirugía: xxxxxxx de: xxxxxxxxx de xxxxx
     </div>
   </div>
 </template>
@@ -158,5 +191,8 @@ export default {
 }
 .subrayado {
   text-decoration: underline;
+}
+.h1 {
+  font-size: 1.2em;
 }
 </style>
