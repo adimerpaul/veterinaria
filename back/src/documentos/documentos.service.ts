@@ -37,8 +37,14 @@ export class DocumentosService {
     return `This action returns all documentos`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} documento`;
+  async findOne(id: number) {
+    const documento = await this.documentoRepository.findOne({ where: { id } });
+
+    if (!documento) {
+      throw new Error(`Documento con ID ${id} no encontrado`);
+    }
+
+    return documento;
   }
 
   async update(id: number, body) {

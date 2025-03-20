@@ -30,10 +30,10 @@ export class DocumentosController {
   //   return this.documentosService.findAll();
   // }
   //
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.documentosService.findOne(+id);
-  // }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.documentosService.findOne(+id);
+  }
   //
   @Put(':id')
   update(@Param('id') id: string, @Body() body) {

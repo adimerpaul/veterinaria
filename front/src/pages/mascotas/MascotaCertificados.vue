@@ -51,7 +51,7 @@
                 </q-item-section>
                 <q-item-section>Ver</q-item-section>
               </q-item>
-              <q-item clickable v-ripple @click="verCertificado(documento)" v-close-popup>
+              <q-item clickable v-ripple @click="imprimirCertificado(documento)" v-close-popup>
                 <q-item-section avatar>
                   <q-icon name="print" />
                 </q-item-section>
@@ -138,6 +138,10 @@ export default {
     }
   },
   methods: {
+    imprimirCertificado(documento) {
+      const url = '/imprimir/'+documento.id
+      window.open(url, '_blank')
+    },
     verCertificado(documento) {
       this.dialog = true
       this.documento = documento.nombre

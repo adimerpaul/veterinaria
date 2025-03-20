@@ -18,7 +18,7 @@ const routes = [
     component: () => import('pages/LoginPage.vue')
   },
   {
-    path: '/imprimir',
+    path: '/imprimir/:id',
     component: () => import('pages/imprimir/Imprimir.vue')
   },
 
