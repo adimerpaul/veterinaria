@@ -71,6 +71,10 @@
                 <label class="text-subtitle2">Color</label>
                 <q-select v-model="mascota.color" label="Color" outlined dense :options="colores" />
               </div>
+              <div class="col-12 col-md-2 q-pa-xs">
+                <label class="text-subtitle2">Edad</label>
+                <q-input v-model="mascota.edad" label="Edad" outlined dense clearable/>
+              </div>
             </div>
           </q-card-section>
         </q-card>
@@ -81,6 +85,10 @@
               <div class="col-12 col-md-3 q-pa-xs">
                 <label class="text-subtitle2">Nombre del Propietario</label>
                 <q-input v-model="mascota.propietario_nombre" label="Nombre del Propietario" outlined dense clearable :rules="[val => !!val || 'Campo requerido']"/>
+              </div>
+              <div class="col-12 col-md-3 q-pa-xs">
+                <label class="text-subtitle2">CI del Propietario</label>
+                <q-input v-model="mascota.propietario_ci" label="CI del Propietario" outlined dense clearable/>
               </div>
               <div class="col-12 col-md-3 q-pa-xs">
                 <label class="text-subtitle2">Dirección del Propietario</label>
@@ -213,11 +221,13 @@ export default {
       formData.append('especie', this.mascota.especie);
       formData.append('raza', this.mascota.raza);
       formData.append('sexo', this.mascota.sexo);
+      formData.append('edad', this.mascota.edad);
       formData.append('fecha_nac', this.mascota.fecha_nac);
       formData.append('senas_particulares', this.mascota.senas_particulares);
       formData.append('photo', this.file);
       formData.append('color', this.mascota.color);
       formData.append('propietario_nombre', this.mascota.propietario_nombre);
+      formData.append('propietario_ci', this.mascota.propietario_ci);
       formData.append('propietario_direccion', this.mascota.propietario_direccion);
       formData.append('propietario_telefono', this.mascota.propietario_telefono);
       formData.append('propietario_ciudad', this.mascota.propietario_ciudad);

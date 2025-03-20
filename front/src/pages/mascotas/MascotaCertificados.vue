@@ -67,7 +67,7 @@
       </q-card>
     </template>
     <q-dialog v-model="dialog" persistent>
-      <q-card style="min-width: 650px">
+      <q-card style="max-width: 850px">
         <q-card-section class="text-bold row items-center q-pb-none">
           <div>
             Crear certificado
@@ -135,7 +135,7 @@ export default {
       // console.log(value)
       this.html = ''
       if (value === 'CERTIFICADO DE AUTORIZACION QUIRURGICA') {
-        this.html = Html.certificadoAutorizacionQuirurgica()
+        this.html = Html.certificadoAutorizacionQuirurgica(this.mascota)
       }
     },
   },
