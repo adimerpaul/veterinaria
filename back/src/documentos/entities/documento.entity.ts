@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Mascota } from '../../mascotas/entities/mascota.entity';
+import { User } from '../../users/entities/user.entity';
 
 @Entity('documentos')
 export class Documento {
@@ -17,6 +18,12 @@ export class Documento {
   nombre: string;
   @Column({ nullable: true, type: 'text' })
   html: string;
+  @Column({
+    nullable: true,
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  fechaCreacion: Date;
   @CreateDateColumn()
   createdAt: Date;
   @UpdateDateColumn()
@@ -25,4 +32,6 @@ export class Documento {
   deletedAt: Date;
   @ManyToOne(() => Mascota, (mascota) => mascota.documentos)
   mascota: Mascota;
+  @ManyToOne(() => User, (user) => user.documentos)
+  user: User;
 }

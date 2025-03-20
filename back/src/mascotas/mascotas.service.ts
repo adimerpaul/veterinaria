@@ -44,7 +44,13 @@ export class MascotasService {
   async findOne(id: number) {
     const mascota = await this.mascotasRepository.findOne({
       where: { id },
-      relations: ['sales', 'sales.user', 'sales.details', 'details'],
+      relations: [
+        'sales',
+        'sales.user',
+        'sales.details',
+        'details',
+        'documentos',
+      ],
     });
 
     if (!mascota) {
@@ -65,10 +71,10 @@ export class MascotasService {
     // Obtener los detalles filtrados en una sola consulta
     const productosEspacialesMascotas = await this.detailsRepository.find({
       where: {
-        producto: In(productosEspaciales.map(p => p.id)), // Filtrar por los productos especiales
+        producto: In(productosEspaciales.map((p) => p.id)), // Filtrar por los productos especiales
         mascota: { id }, // Filtrar por la mascota específica
       },
-      relations: ['user','producto'],
+      relations: ['user', 'producto'],
     });
 
     // Agregar los productos especiales a la mascota

@@ -10,6 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Sale } from '../../sales/entities/sale.entity';
+import {Documento} from "../../documentos/entities/documento.entity";
 
 @Entity({ name: 'users' })
 @Unique(['username'])
@@ -48,4 +49,7 @@ export class User {
 
   @OneToMany(() => Sale, (sale) => sale.user)
   sales: Sale[];
+
+  @OneToMany(() => Documento, (documento) => documento.user)
+  documentos: Documento[];
 }
