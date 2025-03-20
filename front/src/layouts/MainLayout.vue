@@ -6,10 +6,10 @@
         <q-btn
           dense
           rounded
+          push
           color="primary"
           :icon="leftDrawerOpen ? 'keyboard_double_arrow_left' : 'keyboard_double_arrow_right'"
           aria-label="Menu"
-          size="10px"
           @click="toggleLeftDrawer"
           unelevated
         />

@@ -50,6 +50,7 @@ export class MascotasService {
         'sales.details',
         'details',
         'documentos',
+        'documentos.user',
       ],
     });
 

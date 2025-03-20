@@ -20,13 +20,14 @@ export class Alert{
       classes: 'bg-white text-black text-bold left-green-border'
     });
   }
-  static error(message) {
+  static error(message,subTitle = '') {
     Notify.create({
       progress: true,
       color: 'white',
       textColor: 'black',
       position: 'top',
       message,
+      caption: subTitle,
       timeout: 1500,
       icon: 'error',
       iconColor: 'negative',
