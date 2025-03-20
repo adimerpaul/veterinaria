@@ -30,7 +30,7 @@
       <q-markup-table wrap-cells dense flat bordered>
         <thead>
         <tr class="bg-red text-white">
-          <td>#</td>
+          <td>ID</td>
           <th>Acciones</th>
           <th>Tipo</th>
           <th>Fecha</th>
@@ -42,7 +42,7 @@
         </thead>
         <tbody>
         <tr v-for="(documento, index) in mascota.documentos" :key="documento.id">
-          <td>{{ index + 1 }}</td>
+          <td>{{ documento.id }}</td>
           <td>
             <q-btn-dropdown dense color="primary" size="sm" label="Opciones" no-caps>
               <q-item clickable v-ripple @click="verCertificado(documento)" v-close-popup>
@@ -73,7 +73,7 @@
         </q-card-section>
       </q-card>
     </template>
-    <q-dialog v-model="dialog" persistent>
+    <q-dialog v-model="dialog">
       <q-card style="max-width: 850px">
         <q-card-section class="text-bold row items-center q-pb-none">
           <div>
@@ -186,6 +186,9 @@ export default {
       this.html = ''
       if (value === 'CERTIFICADO DE AUTORIZACION QUIRURGICA') {
         this.html = Html.certificadoAutorizacionQuirurgica(this.mascota)
+      }
+      if (value === 'AUTORIZACION DE EUTANASIA') {
+        this.html = Html.autorizacionEutanasia(this.mascota)
       }
     },
   },

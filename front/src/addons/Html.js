@@ -2,7 +2,7 @@ import moment from "moment";
 
 export class Html{
   static certificadoAutorizacionQuirurgica(mascota){
-    console.log(mascota)
+    // console.log(mascota)
     const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto','Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
     const dia = moment().format('DD')
     const mes = meses[moment().format('MM') - 1]
@@ -25,7 +25,6 @@ export class Html{
     <div><strong>Cirujano 2 o instrumentista:</strong> ............................................................................</div>
     <div><strong>Anestesista:</strong> ............................................................................................................</div>
     <div style="font-weight: bold;color: blue">PACIENTE QUIRÚRGICO</div>
-
     <div>
       <strong>Especie:</strong> ${mascota.especie}
       <strong>Raza:</strong> ${mascota.raza}
@@ -79,8 +78,6 @@ export class Html{
             <div style="text-align: center;line-height: 0.9">
               ........................................<br>
               Firma Veterinario Responsable <br>
-<!--              Nombre: xxxxxxxxxx <br>-->
-<!--              C.I.: xxxxxxxxxx <br>-->
             </div>
           </td>
           <td style="width: 20%">
@@ -91,8 +88,83 @@ export class Html{
       </table>
     </div>
     <div style="text-align: center">
-<!--      Fecha de cirugía: xxxxxxx de: xxxxxxxxx de xxxxx-->
       Fecha de cirugía: ${dia} de ${mes} de ${anio}
+    </div>
+  </div>`
+  }
+  static autorizacionEutanasia(mascota){
+    // console.log(mascota)
+    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto','Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+    const dia = moment().format('DD')
+    const mes = meses[moment().format('MM') - 1]
+    const anio = moment().format('YYYY')
+    return `  <div>
+    <div style="text-align: center; font-weight: bold; color: blue; text-decoration: underline; font-size: 1.2em;">
+      AUTORIZACIÓN DE EUTANASIA
+    </div>
+    <div>
+        Fecha de cirugía: ${dia} de ${mes} de ${anio}
+    </div>
+    <div style="font-weight: bold;color: blue">DATOS PROPIETARIO Y/O RESPONSABLE</div>
+    <div>
+      <span style="font-weight: bold">Nombre Propietario:</span> ${mascota.propietario_nombre}
+      <span style="font-weight: bold">C.I.:</span> ${mascota.propietario_ci}
+      <span style="font-weight: bold">Teléfono:</span> ${mascota.propietario_telefono}
+      <span style="font-weight: bold">Dirección:</span> ${mascota.propietario_direccion}
+    </div>
+    <div style="font-weight: bold;color: blue">DATOS DEL PACIENTE</div>
+    <div>
+        <strong>Nombre:</strong> ${mascota.nombre} <br>
+        <strong>Especie:</strong> ${mascota.especie} <br>
+        <strong>Raza:</strong> ${mascota.raza} <br>
+        <strong>Sexo:</strong> ${mascota.sexo} <br>
+        <strong>Edad:</strong> ${mascota.edad} <br>
+        <strong>Color:</strong> ${mascota.color} <br>
+    </div>
+    <div style="font-weight: bold;color: blue">MOTIVO DE EUATANASIA</div>
+    <div>
+        <strong>Motivo:</strong><br>
+        <div>...........................................................................................................................................................................................................................</div>
+        <div>...........................................................................................................................................................................................................................</div>
+        <div>...........................................................................................................................................................................................................................</div>
+        <div>...........................................................................................................................................................................................................................</div>
+        <div>...........................................................................................................................................................................................................................</div>
+    </div>
+    <div style="font-weight: bold;color: blue">METODO DE EUATANASIA</div>
+    <div>
+        <strong>Metodo:</strong><br>
+        <div>...........................................................................................................................................................................................................................</div>
+        <div>...........................................................................................................................................................................................................................</div>
+        <div>...........................................................................................................................................................................................................................</div>
+        <div>...........................................................................................................................................................................................................................</div>
+        <div>...........................................................................................................................................................................................................................</div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div>
+      <table style="width: 100%">
+        <tr>
+          <td style="width: 40%" valign="top">
+            <div style="text-align: center;line-height: 0.9">
+              ........................................<br>
+              Firma del propietario <br>
+              Nombre: ${mascota.propietario_nombre} <br>
+              C.I.: ${mascota.propietario_ci} <br>
+            </div>
+          </td>
+          <td style="width: 40%" valign="top">
+            <div style="text-align: center;line-height: 0.9">
+              ........................................<br>
+              Firma Veterinario Responsable <br>
+            </div>
+          </td>
+          <td style="width: 20%">
+            <div style="text-align: right">
+            </div>
+          </td>
+        </tr>
+      </table>
     </div>
   </div>`
   }

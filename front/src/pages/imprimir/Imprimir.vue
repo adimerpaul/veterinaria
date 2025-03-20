@@ -9,7 +9,7 @@
           CLÍNICA VETERINARIA "CASTRO DE PADILLA" <br>
           CENTRO VETERINARIO "SEBASTIÁN PAGADOR" <br>
           ORURO - BOLIVIA <br>
-          <span class="bold red">N° 000097</span>
+          <span class="bold red">N° {{ cerosAdelante(documento.id) }}</span>
         </div>
         <div>
         </div>
@@ -18,8 +18,7 @@
         <img src="/logoOruro.png" width="80" height="80" alt="Logo Oruro">
       </div>
     </div>
-    <div v-html="documento">
-    </div>
+    <div v-html="documento.html"></div>
   </div>
 </template>
 
@@ -43,7 +42,7 @@ export default {
         const id = this.$route.params.id;
         this.$axios.get(`documentos/${id}`)
           .then((response) => {
-            this.documento = response.data?.html;
+            this.documento = response.data;
             this.$nextTick(() => {
               window.print();
             //   auto close
@@ -76,6 +75,11 @@ export default {
       });
     } else {
       checkAllLoaded();
+    }
+  },
+  methods: {
+    cerosAdelante(id) {
+      return String(id).padStart(6, '0');
     }
   }
 };
