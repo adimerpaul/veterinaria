@@ -89,7 +89,7 @@
     <div>
       <table style="width: 100%">
         <tr>
-          <td style="width: 33%">
+          <td style="width: 40%" valign="top">
             <div style="text-align: center;line-height: 0.9">
               ........................................<br>
               Firma del propietario <br>
@@ -97,7 +97,7 @@
               C.I.: xxxxxxxxxx <br>
             </div>
           </td>
-          <td style="width: 33%" valign="top">
+          <td style="width: 40%" valign="top">
             <div style="text-align: center;line-height: 0.9">
               ........................................<br>
               Firma Veterinario Responsable <br>
@@ -105,8 +105,9 @@
 <!--              C.I.: xxxxxxxxxx <br>-->
             </div>
           </td>
-          <td style="width: 33%">
-
+          <td style="width: 20%">
+            <div style="text-align: right">
+            </div>
           </td>
         </tr>
       </table>
@@ -118,8 +119,11 @@
 </template>
 
 <script>
+import {QrcodeCanvas} from "qrcode.vue";
+
 export default {
   name: 'Imprimir',
+  components: {QrcodeCanvas},
   mounted() {
     // Espera a que todas las imágenes y el contenido se carguen antes de imprimir
     const checkAllLoaded = () => {
