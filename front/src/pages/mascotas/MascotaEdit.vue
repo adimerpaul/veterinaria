@@ -73,7 +73,7 @@
               <MascotaCertificados :mascota="mascota" @getMascota="getMascota"/>
             </q-tab-panel>
           </q-tab-panels>
-          <pre>{{ mascota }}</pre>
+<!--          <pre>{{ mascota }}</pre>-->
         </q-card>
       </q-card-section>
     </q-card>

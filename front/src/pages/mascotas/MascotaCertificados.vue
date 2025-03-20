@@ -129,7 +129,11 @@ export default {
   data() {
     return {
       dialog: false,
-      documentos: ['CERTIFICADO DE AUTORIZACION QUIRURGICA', 'AUTORIZACION DE EUTANASIA', 'ANESTECIA Y RESTRO DE RECUPERACION'],
+      documentos: [
+        'CERTIFICADO DE AUTORIZACION QUIRURGICA',
+        'AUTORIZACION DE EUTANASIA',
+        // 'ANESTECIA Y RESTRO DE RECUPERACION'
+      ],
       documento: '',
       html: '',
       moment: moment,
