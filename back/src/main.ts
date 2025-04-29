@@ -12,7 +12,7 @@ async function bootstrap() {
       transform: true, // Activa la transformación de class-transformer
     }),
   );
-  console.log(`listening on port http://localhost:${process.env.PORT ?? 3000}`);
   await app.listen(process.env.PORT ?? 3000);
+  console.log(`listening on port http://localhost:${process.env.PORT ?? 3000}`);
 }
 bootstrap();
