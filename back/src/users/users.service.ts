@@ -189,6 +189,7 @@ export class UsersService {
     user.name = body.name;
     user.role = body.role;
     user.username = body.username;
+    user.agencia = body.agencia;
     await this.usersRepository.save(user);
   }
 

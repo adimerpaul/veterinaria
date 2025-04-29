@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { Sale } from '../../sales/entities/sale.entity';
 import { Documento } from '../../documentos/entities/documento.entity';
-import {UserPermiso} from "../../user-permisos/entities/user-permiso.entity";
+import { UserPermiso } from '../../user-permisos/entities/user-permiso.entity';
 
 @Entity({ name: 'users' })
 @Unique(['username'])
@@ -35,6 +35,10 @@ export class User {
   @Column()
   @Exclude()
   password: string;
+
+  @Column({ nullable: true, default: 'Oasis' })
+  @Expose()
+  agencia: string;
 
   @CreateDateColumn()
   @Exclude()
