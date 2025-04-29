@@ -135,6 +135,7 @@ export class SalesService {
         nombre: mascota.propietario_nombre,
         total,
         anulado: false,
+        comentarioDoctor: body.comentarioDoctor,
         mascota,
         user: userEntity,
       });

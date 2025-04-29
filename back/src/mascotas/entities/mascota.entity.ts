@@ -21,6 +21,8 @@ export class Mascota {
   @Column({ nullable: true })
   nombre: string;
   @Column({ nullable: true })
+  apellido: string;
+  @Column({ nullable: true })
   especie: string;
   @Column({ nullable: true })
   raza: string;
