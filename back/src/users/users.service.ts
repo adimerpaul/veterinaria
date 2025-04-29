@@ -152,7 +152,14 @@ export class UsersService {
   }
 
   async findAll() {
-    const users = await this.usersRepository.find();
+    // const users = await this.usersRepository.find(); user relacionado con permisos
+    const users = await this.usersRepository.find({
+      relations: {
+        userPermisos: {
+          permiso: true,
+        },
+      },
+    });
     const sanitizedUsers = users.map((user) => plainToInstance(User, user));
     return sanitizedUsers;
   }

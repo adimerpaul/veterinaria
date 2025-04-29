@@ -20,23 +20,23 @@ export class UserPermisosController {
     return this.userPermisosService.create(createUserPermisoDto);
   }
 
-  @Get()
-  findAll() {
-    return this.userPermisosService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userPermisosService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateUserPermisoDto: UpdateUserPermisoDto,
-  ) {
-    return this.userPermisosService.update(+id, updateUserPermisoDto);
-  }
+  // @Get()
+  // findAll() {
+  //   return this.userPermisosService.findAll();
+  // }
+  //
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.userPermisosService.findOne(+id);
+  // }
+  //
+  // @Patch(':id')
+  // update(
+  //   @Param('id') id: string,
+  //   @Body() updateUserPermisoDto: UpdateUserPermisoDto,
+  // ) {
+  //   return this.userPermisosService.update(+id, updateUserPermisoDto);
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
