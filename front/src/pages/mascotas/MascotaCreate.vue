@@ -100,11 +100,11 @@
                          clearable/>
               </div>
               <div class="col-12 col-md-3 q-pa-xs">
-                <label class="text-subtitle2">Teléfono del Propietario</label>
+                <label class="text-subtitle2">Numero de contacto</label>
                 <q-input v-model="mascota.propietario_telefono" label="Teléfono del Propietario" outlined dense clearable/>
               </div>
               <div class="col-12 col-md-3 q-pa-xs">
-                <label class="text-subtitle2">Celular del Propietario</label>
+                <label class="text-subtitle2">Ciudad del Propietario</label>
                 <q-select v-model="mascota.propietario_ciudad" label="Ciudad del Propietario" outlined dense
                           :options="ciudades"/>
               </div>

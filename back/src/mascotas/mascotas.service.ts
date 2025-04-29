@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Producto } from '../productos/entities/producto.entity';
 import { Detail } from '../details/entities/detail.entity';
+import { Sale } from '../sales/entities/sale.entity';
 
 @Injectable()
 export class MascotasService {
@@ -14,7 +15,43 @@ export class MascotasService {
     private productosRepository: Repository<Producto>,
     @InjectRepository(Detail)
     private detailsRepository: Repository<Detail>,
+    @InjectRepository(Sale)
+    private salesRepository: Repository<Sale>,
   ) {}
+  async historial(body) {
+    const mascotaId = body.mascotaId;
+    //   hostorail de sale
+    console.log('mascotaId');
+    const historial = await this.salesRepository.find({
+      where: { mascota: { id: mascotaId } },
+      relations: ['user', 'mascota', 'details'],
+      order: { id: 'DESC' },
+    });
+
+    if (!historial) {
+      return null;
+    }
+    console.log('historial');
+
+    // // Obtener los detalles filtrados en una sola consulta
+    // const detalles = await this.detailsRepository.find({
+    //   where: {
+    //     sale: In(historial.map((h) => h.id)), // Filtrar por las ventas específicas
+    //   },
+    //   relations: ['producto'],
+    // });
+    // console.log('detalles');
+    //
+    // // Agregar los detalles a cada venta
+    // // historial.forEach((venta) => {
+    // //   venta['detalles'] = detalles.filter(
+    // //     (detalle) => detalle.sale.id === venta.id,
+    // //   );
+    // // });
+    // console.log('historial con detalles');
+
+    return historial;
+  }
   async create(body) {
     // console.log(body);
     const mascota = this.mascotasRepository.create(body);

@@ -63,6 +63,10 @@ export class MascotasController {
 
     return this.mascotasService.create(body);
   }
+  @Post('historial')
+  async createHistorial(@Body() body) {
+    return this.mascotasService.historial(body);
+  }
 
   @Get()
   findAll(

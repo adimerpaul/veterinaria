@@ -11,25 +11,27 @@
 
       <div class="col-12 col-md-2 q-pa-xs">
         <label class="text-subtitle2">Especie</label>
-        <q-select
-          v-model="mascota.especie"
-          label="Especie"
-          outlined
-          dense
-          :options="especies"
-          @update:model-value="actualizarRazas"
-        />
+<!--        <q-select-->
+<!--          v-model="mascota.especie"-->
+<!--          label="Especie"-->
+<!--          outlined-->
+<!--          dense-->
+<!--          :options="especies"-->
+<!--          @update:model-value="actualizarRazas"-->
+<!--        />-->
+        <q-input v-model="mascota.especie" label="Especie" outlined dense clearable/>
       </div>
 
       <div class="col-12 col-md-2 q-pa-xs">
         <label class="text-subtitle2">Raza</label>
-        <q-select
-          v-model="mascota.raza"
-          label="Raza"
-          outlined
-          dense
-          :options="razasDisponibles"
-        />
+<!--        <q-select-->
+<!--          v-model="mascota.raza"-->
+<!--          label="Raza"-->
+<!--          outlined-->
+<!--          dense-->
+<!--          :options="razasDisponibles"-->
+<!--        />-->
+        <q-input v-model="mascota.raza" label="Raza" outlined dense clearable/>
       </div>
 
       <div class="col-12 col-md-3 q-pa-xs">
@@ -63,8 +65,10 @@
       </div>
 
       <div class="col-12 col-md-2 q-pa-xs">
+<!--        <label class="text-subtitle2">Color</label>-->
+<!--        <q-select v-model="mascota.color" label="Color" outlined dense :options="colores" />-->
         <label class="text-subtitle2">Color</label>
-        <q-select v-model="mascota.color" label="Color" outlined dense :options="colores" />
+        <q-input v-model="mascota.color" label="Color" outlined dense clearable/>
       </div>
       <div class="col-12 col-md-2 q-pa-xs">
         <label class="text-subtitle2">Edad</label>
@@ -91,7 +95,7 @@
                  clearable/>
       </div>
       <div class="col-12 col-md-3 q-pa-xs">
-        <label class="text-subtitle2">Teléfono del Propietario</label>
+        <label class="text-subtitle2">Numero de contacto</label>
         <q-input v-model="mascota.propietario_telefono" label="Teléfono del Propietario" outlined dense clearable/>
       </div>
       <div class="col-12 col-md-3 q-pa-xs">
