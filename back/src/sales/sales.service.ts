@@ -4,10 +4,11 @@ import { UpdateSaleDto } from './dto/update-sale.dto';
 import { Sale } from './entities/sale.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Producto } from '../productos/entities/producto.entity';
-import { Between, Repository } from 'typeorm';
+import {Between, DataSource, Repository} from 'typeorm';
 import { Detail } from '../details/entities/detail.entity';
 import { Mascota } from '../mascotas/entities/mascota.entity';
 import { User } from '../users/entities/user.entity';
+import { InternalServerErrorException } from '@nestjs/common';
 
 @Injectable()
 export class SalesService {
@@ -26,6 +27,8 @@ export class SalesService {
 
     @InjectRepository(Producto)
     private readonly productoRepository: Repository<Producto>,
+    private dataSource: DataSource,
+
   ) {}
   async imprimir(body: any) {
     try {
@@ -102,73 +105,87 @@ export class SalesService {
     }
   }
   async create(body: any, user: any) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
     try {
-      // Obtener la mascota desde la base de datos
-      const mascota = await this.mascotaRepository.findOne({
+      // 1. Validar mascota
+      const mascota = await queryRunner.manager.findOne(Mascota, {
         where: { id: body.mascota.id },
       });
+      if (!mascota) throw new Error('Mascota no encontrada');
 
-      if (!mascota) {
-        throw new Error('Mascota no encontrada');
-      }
-
-      // Obtener el usuario desde la base de datos
-      const userEntity = await this.userRepository.findOne({
+      // 2. Validar usuario
+      const userEntity = await queryRunner.manager.findOne(User, {
         where: { id: user.userId },
       });
+      if (!userEntity) throw new Error('Usuario no encontrado');
 
-      if (!userEntity) {
-        throw new Error('Usuario no encontrado');
-      }
+      // 3. Validar total
+      const total = parseFloat(body.total);
+      if (isNaN(total)) throw new Error('Total inválido');
 
-      // Crear la venta
-      const sale = this.salesRepository.create({
+      // 4. Crear la venta
+      const sale = queryRunner.manager.create(Sale, {
         tipo: 'Venta',
         fecha: new Date(),
         fechaCreacion: new Date(),
         facturado: false,
         nombre: mascota.propietario_nombre,
-        total: parseFloat(body.total),
+        total,
         anulado: false,
-        mascota: mascota,
+        mascota,
         user: userEntity,
       });
 
-      // Guardar la venta en la base de datos
-      const savedSale = await this.salesRepository.save(sale);
+      const savedSale = await queryRunner.manager.save(Sale, sale);
 
-      // Insertar los detalles de la venta
+      // 5. Insertar detalles de venta
       for (const product of body.productos) {
-        // Obtener el producto desde la base de datos
-        const producto = await this.productoRepository.findOne({
+        // Validar producto
+        const producto = await queryRunner.manager.findOne(Producto, {
           where: { id: product.id },
         });
+        if (!producto) throw new Error(`Producto con ID ${product.id} no encontrado`);
 
-        if (!producto) {
-          throw new Error(`Producto con ID ${product.id} no encontrado`);
+        // Validar precio y cantidad
+        const precio = parseFloat(product.precioVenta);
+        const cantidad = parseInt(product.cantidadVenta);
+        if (isNaN(precio) || isNaN(cantidad)) {
+          throw new Error(`Precio o cantidad inválida para producto ${product.id}`);
         }
 
-        // Crear el detalle de la venta
-        const detail = this.detailRepository.create({
+        const detail = queryRunner.manager.create(Detail, {
           fecha: new Date(),
           productoName: producto.nombre,
-          cantidad: product.cantidadVenta,
-          precio: parseFloat(product.precioVenta),
-          subtotal: parseFloat(product.precioVenta) * product.cantidadVenta,
+          cantidad,
+          precio,
+          subtotal: precio * cantidad,
           anulado: false,
-          mascota: mascota,
+          mascota,
           user: userEntity,
           sale: savedSale,
-          producto: producto,
+          producto,
         });
 
-        // Guardar el detalle en la base de datos
-        await this.detailRepository.save(detail);
+        await queryRunner.manager.save(Detail, detail);
       }
 
-      return { message: 'Venta registrada exitosamente', sale: savedSale };
+      // 6. Confirmar la transacción
+      await queryRunner.commitTransaction();
+
+      return {
+        message: 'Venta registrada exitosamente',
+        sale: savedSale,
+      };
     } catch (error) {
-      return { error: error.message };
+      await queryRunner.rollbackTransaction();
+
+      // Lanzar error como 500 para que Nest lo capture correctamente
+      throw new InternalServerErrorException(error.message);
+    } finally {
+      await queryRunner.release();
     }
   }
 
