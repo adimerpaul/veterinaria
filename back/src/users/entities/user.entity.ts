@@ -10,7 +10,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Sale } from '../../sales/entities/sale.entity';
-import {Documento} from "../../documentos/entities/documento.entity";
+import { Documento } from '../../documentos/entities/documento.entity';
+import {UserPermiso} from "../../user-permisos/entities/user-permiso.entity";
 
 @Entity({ name: 'users' })
 @Unique(['username'])
@@ -52,4 +53,7 @@ export class User {
 
   @OneToMany(() => Documento, (documento) => documento.user)
   documentos: Documento[];
+
+  @OneToMany(() => UserPermiso, (userPermiso) => userPermiso.user)
+  userPermisos: UserPermiso[];
 }

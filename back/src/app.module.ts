@@ -9,6 +9,8 @@ import { MascotasModule } from './mascotas/mascotas.module';
 import { SalesModule } from './sales/sales.module';
 import { DetailsModule } from './details/details.module';
 import { DocumentosModule } from './documentos/documentos.module';
+import { PermisosModule } from './permisos/permisos.module';
+import { UserPermisosModule } from './user-permisos/user-permisos.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -31,6 +33,8 @@ import { DocumentosModule } from './documentos/documentos.module';
     SalesModule,
     DetailsModule,
     DocumentosModule,
+    PermisosModule,
+    UserPermisosModule,
   ],
   controllers: [AppController],
   providers: [AppService],
