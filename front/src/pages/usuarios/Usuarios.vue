@@ -57,6 +57,13 @@
                   text-color="white" dense  size="14px"/>
         </q-td>
       </template>
+      <template v-slot:body-cell-agencia="props">
+        <q-td :props="props">
+          <q-chip :label="props.row.agencia"
+                  :color="$filters.colorAgencia(props.row.agencia)"
+                  text-color="white" dense  size="14px"/>
+        </q-td>
+      </template>
       <template v-slot:body-cell-permisos="props">
         <q-td :props="props">
           <ul class="pm-0">
@@ -64,7 +71,6 @@
               {{ permiso?.permiso?.nombre }}
             </li>
           </ul>
-<!--          <pre>{{props.row.userPermisos}}</pre>-->
         </q-td>
       </template>
     </q-table>
@@ -99,6 +105,7 @@
 <!--            <q-input v-model="user.email" label="Email" dense outlined hint="" />-->
             <q-input v-model="user.password" label="Contraseña" dense outlined :rules="[val => !!val || 'Campo requerido']" v-if="!user.id" />
             <q-select v-model="user.role" label="Rol" dense outlined :options="roles" :rules="[val => !!val || 'Campo requerido']" />
+            <q-select v-model="user.agencia" label="Agencia" dense outlined :options="$agencias" :rules="[val => !!val || 'Campo requerido']" />
 <!--            <q-input v-model="user.phone" label="Telefono" dense outlined hint="" />-->
 <!--            <q-input v-model="user.codigo" label="Codigo" dense outlined hint="" />-->
 <!--            <q-input v-model="user.gestion" label="Gestion" dense outlined hint="" />-->
@@ -160,7 +167,7 @@ export default {
         { name: 'username', label: 'Usuario', align: 'left', field: 'username' },
         { name: 'permisos', label: 'Permisos', align: 'left', field: 'permisos' },
         { name: 'role', label: 'Rol', align: 'left', field: 'role' },
-        // { name: 'email', label: 'Email', align: 'left', field: 'email' }
+        { name: 'agencia', label: 'Agencia', align: 'left', field: 'agencia' },
       ],
       permissions: [],
       dialogPermisos: false
@@ -233,8 +240,8 @@ export default {
       this.$axios.post('users', this.user).then(res => {
         this.userDialog = false
         this.$alert.success('User creado')
-        // this.usersGet()
-        this.users.push(res.data)
+        this.usersGet()
+        // this.users.push(res.data)
       }).catch(error => {
         this.$alert.error(error.response.data.message)
       }).finally(() => {

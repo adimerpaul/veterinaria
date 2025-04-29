@@ -19,6 +19,7 @@ export default boot(({ app, router }) => {
   app.config.globalProperties.$alert = Alert
   app.config.globalProperties.$store = useCounterStore()
   app.config.globalProperties.$url = import.meta.env.VITE_API_BACK
+  app.config.globalProperties.$agencias = ['Oasis', 'Clinica']
   app.config.globalProperties.$version = import.meta.env.VITE_VERSION
   app.config.globalProperties.$filters = {
     dateDmYHis (value) {
@@ -44,6 +45,11 @@ export default boot(({ app, router }) => {
       if (role === 'Admin') return 'red'
       if (role === 'Vendedor') return 'green'
       return 'blue'
+    },
+    colorAgencia(agencia) {
+      if (agencia === 'Oasis') return 'indigo'
+      if (agencia === 'Clinica') return 'info'
+      return 'red'
     }
   }
   const token = localStorage.getItem('tokenClinica')
