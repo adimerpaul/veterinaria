@@ -47,6 +47,11 @@ export class UsersService {
       where: {
         username: body.username,
       },
+      relations: {
+        userPermisos: {
+          permiso: true,
+        },
+      },
     });
     if (!user) {
       throw new UnauthorizedException('Usuario no encontrado');
@@ -70,6 +75,11 @@ export class UsersService {
     const user = await this.usersRepository.findOne({
       where: {
         id: req.user.id,
+      },
+      relations: {
+        userPermisos: {
+          permiso: true,
+        },
       },
     });
     if (!user) {
@@ -158,6 +168,9 @@ export class UsersService {
         userPermisos: {
           permiso: true,
         },
+      },
+      order: {
+        id: 'DESC',
       },
     });
     const sanitizedUsers = users.map((user) => plainToInstance(User, user));
