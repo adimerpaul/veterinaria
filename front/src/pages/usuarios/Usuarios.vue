@@ -38,14 +38,14 @@
                   <q-item-label>Cambiar contraseña</q-item-label>
                 </q-item-section>
               </q-item>
-<!--              <q-item clickable @click="permisosShow(props.row)" v-close-popup>-->
-<!--                <q-item-section avatar>-->
-<!--                  <q-icon name="edit" />-->
-<!--                </q-item-section>-->
-<!--                <q-item-section>-->
-<!--                  <q-item-label>Permisos</q-item-label>-->
-<!--                </q-item-section>-->
-<!--              </q-item>-->
+              <q-item clickable @click="permisosShow(props.row)" v-close-popup>
+                <q-item-section avatar>
+                  <q-icon name="lock" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>Permisos</q-item-label>
+                </q-item-section>
+              </q-item>
             </q-list>
           </q-btn-dropdown>
         </q-td>
@@ -55,6 +55,16 @@
           <q-chip :label="props.row.role"
                   :color="$filters.color(props.row.role)"
                   text-color="white" dense  size="14px"/>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-permisos="props">
+        <q-td :props="props">
+          <ul class="pm-0">
+            <li class="pm-0" v-for="permiso in props.row.userPermisos" :key="permiso.id">
+              {{ permiso?.permiso?.nombre }}
+            </li>
+          </ul>
+<!--          <pre>{{props.row.userPermisos}}</pre>-->
         </q-td>
       </template>
     </q-table>
@@ -110,10 +120,10 @@
           <q-btn icon="close" flat round dense @click="dialogPermisos = false" />
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <q-list>
+          <q-list dense>
             <q-item v-for="permiso in permissions" :key="permiso.id">
               <q-item-section>
-                <q-item-label>{{ permiso.name }}</q-item-label>
+                <q-item-label>{{ permiso.nombre }}</q-item-label>
               </q-item-section>
               <q-item-section side>
                 <q-toggle v-model="permiso.checked" />
@@ -148,6 +158,7 @@ export default {
         { name: 'actions', label: 'Acciones', align: 'center' },
         { name: 'name', label: 'Nombre', align: 'left', field: 'name' },
         { name: 'username', label: 'Usuario', align: 'left', field: 'username' },
+        { name: 'permisos', label: 'Permisos', align: 'left', field: 'permisos' },
         { name: 'role', label: 'Rol', align: 'left', field: 'role' },
         // { name: 'email', label: 'Email', align: 'left', field: 'email' }
       ],
@@ -157,15 +168,19 @@ export default {
   },
   mounted() {
     this.usersGet()
-    // this.permissionsGet()
+    this.permissionsGet()
   },
   methods: {
     permisosPost() {
       this.loading = true
       const permissions = this.permissions.filter(p => p.checked).map(p => p.id)
-      this.$axios.post('permissions/' + this.user.id, { permissions }).then(res => {
+      this.$axios.post('permisos', {
+        user_id: this.user.id,
+        permissions
+      }).then(res => {
         this.dialogPermisos = false
         this.$alert.success('Permisos actualizados')
+        this.usersGet()
       }).catch(error => {
         this.$alert.error(error.response.data.message)
       }).finally(() => {
@@ -173,7 +188,7 @@ export default {
       })
     },
     permissionsGet() {
-      this.$axios.get('permissions').then(res => {
+      this.$axios.get('permisos').then(res => {
         this.permissions = res.data
       }).catch(error => {
         this.$alert.error(error.response.data.message)
@@ -242,7 +257,7 @@ export default {
       this.dialogPermisos = true
       this.user = { ...user }
       this.permissions.forEach(permiso => {
-        permiso.checked = user.permissions.some(p => p.id === permiso.id)
+        permiso.checked = user.userPermisos.some(p => p.permisoId === permiso.id)
       })
     },
     userEditPassword(user) {
