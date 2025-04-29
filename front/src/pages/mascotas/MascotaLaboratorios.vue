@@ -15,30 +15,32 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(venta,i) in mascota.productosEspeciales" :key="venta.id">
-          <td>{{ i + 1 }}</td>
-          <td>
-            <div v-if="venta.anulado">
-              <q-chip color="red" text-color="white" label="Anulada" />
-            </div>
-          </td>
-          <td>{{ $filters.dateDmYHis(venta.fecha) }}</td>
-          <td class="text-right">{{ venta.subtotal }}</td>
-          <td>{{ venta.productoName }}</td>
-          <td>
-            <q-chip dense :color="getColor(venta.producto?.tipo)" size="10px">
-              {{ venta.producto?.tipo }}
-            </q-chip>
-          </td>
-          <td>{{ venta.user?.username }}</td>
-<!--          <td>-->
-<!--            <div style="max-width: 350px; wrap-option: wrap;line-height: 0.9;">-->
-<!--              <span  v-for="detail in venta.details" :key="detail.id">-->
-<!--                {{ detail.cantidad }} {{ detail.productoName }},-->
-<!--              </span>-->
-<!--            </div>-->
-<!--          </td>-->
-        </tr>
+        <template v-for="(venta,i) in mascota.productosEspeciales" :key="venta.id">
+          <tr v-if="venta.producto?.tipo == 'Laboratorio'">
+            <td>{{ i + 1 }}</td>
+            <td>
+              <div v-if="venta.anulado">
+                <q-chip color="red" text-color="white" label="Anulada" />
+              </div>
+            </td>
+            <td>{{ $filters.dateDmYHis(venta.fecha) }}</td>
+            <td class="text-right">{{ venta.subtotal }}</td>
+            <td>{{ venta.productoName }}</td>
+            <td>
+              <q-chip dense :color="getColor(venta.producto?.tipo)" size="10px">
+                {{ venta.producto?.tipo }}
+              </q-chip>
+            </td>
+            <td>{{ venta.user?.username }}</td>
+            <!--          <td>-->
+            <!--            <div style="max-width: 350px; wrap-option: wrap;line-height: 0.9;">-->
+            <!--              <span  v-for="detail in venta.details" :key="detail.id">-->
+            <!--                {{ detail.cantidad }} {{ detail.productoName }},-->
+            <!--              </span>-->
+            <!--            </div>-->
+            <!--          </td>-->
+          </tr>
+        </template>
         </tbody>
         <tfoot>
         <tr>

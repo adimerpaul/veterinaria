@@ -116,13 +116,14 @@
       <q-card-section>
         <q-markup-table wrap-cells dense flat bordered>
           <thead>
-          <tr>
+          <tr class="bg-orange text-white">
             <th>Acciones</th>
             <th>Fecha</th>
             <th>Total</th>
             <th>Nombre Cliente</th>
             <th>Usuario</th>
             <th>Detalle</th>
+            <th>Comentario Doctor</th>
           </tr>
           </thead>
           <tbody>
@@ -137,13 +138,21 @@
             </td>
             <td>{{ $filters.dateDmYHis(venta.fecha) }}</td>
             <td class="text-right">{{ venta.total }}</td>
-            <td>{{ venta.nombre }}</td>
+            <td>
+              {{ venta.nombre }}-{{ venta.mascota?.nombre }}
+<!--              <pre>{{ venta }}</pre>-->
+            </td>
             <td>{{ venta.user?.username }}</td>
             <td>
               <div style="max-width: 350px; wrap-option: wrap;line-height: 0.9;">
               <span  v-for="detail in venta.details" :key="detail.id">
                 {{ detail.cantidad }} {{ detail.productoName }},
               </span>
+              </div>
+            </td>
+            <td>
+              <div style="max-width: 350px; wrap-option: wrap;line-height: 0.9;">
+                {{ venta.comentarioDoctor }}
               </div>
             </td>
           </tr>

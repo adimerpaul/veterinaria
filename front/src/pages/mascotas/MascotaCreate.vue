@@ -9,9 +9,13 @@
             <br>
             <label class="text-h6">Datos de la Mascota</label>
             <div class="row">
-              <div class="col-12 col-md-3 q-pa-xs">
+              <div class="col-12 col-md-2 q-pa-xs">
                 <label class="text-subtitle2">Nombre</label>
                 <q-input v-model="mascota.nombre" outlined dense clearable :rules="[val => !!val || 'Campo requerido']"/>
+              </div>
+              <div class="col-12 col-md-2 q-pa-xs">
+                <label class="text-subtitle2">Apellido</label>
+                <q-input v-model="mascota.apellido" outlined dense clearable/>
               </div>
 
               <div class="col-12 col-md-2 q-pa-xs">
@@ -39,11 +43,12 @@
                 <q-input v-model="mascota.raza" label="Raza" outlined dense clearable :rules="[val => !!val || 'Campo requerido']"/>
               </div>
 
-              <div class="col-12 col-md-3 q-pa-xs">
+              <div class="col-12 col-md-2 q-pa-xs">
                 <label class="text-subtitle2">Sexo</label>
                 <div>
-                  <q-radio v-model="mascota.sexo" val="Macho" label="Macho" />
-                  <q-radio v-model="mascota.sexo" val="Hembra" label="Hembra" />
+                  <q-radio v-model="mascota.sexo" val="Macho" label="Macho"  dense/>
+                  <br>
+                  <q-radio v-model="mascota.sexo" val="Hembra" label="Hembra" dense />
                 </div>
               </div>
 
@@ -202,7 +207,7 @@ export default {
       if (this.mascota.fecha_nac) {
         const today = moment();
         const birthDate = moment(this.mascota.fecha_nac);
-        this.mascota.edad = today.diff(birthDate, 'years');
+        this.mascota.edad = today.diff(birthDate, 'years')+ ' años';
       } else {
         this.mascota.edad = '';
       }
@@ -234,6 +239,7 @@ export default {
       formData.append('nombre', this.mascota.nombre);
       formData.append('especie', this.mascota.especie);
       formData.append('raza', this.mascota.raza);
+      formData.append('apellido', this.mascota.apellido);
       formData.append('sexo', this.mascota.sexo);
       formData.append('edad', this.mascota.edad);
       formData.append('fecha_nac', this.mascota.fecha_nac);

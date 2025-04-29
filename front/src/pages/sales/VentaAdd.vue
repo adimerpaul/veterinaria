@@ -153,8 +153,6 @@
                   <div class="col-8">
                     <q-select input-debounce="300" clearable use-input v-model="mascota" label="Mascota" outlined dense :options="mascotas" :option-label="m => m.id+'|'+m.nombre+'|'+m.propietario_nombre" :option-value="m => m.id"
                               @filter="mascotasFilter" :rules="[val => !!val || 'Campo requerido']">
-<!--                      <template v-slot:after>-->
-<!--                      </template>-->
                     </q-select>
                   </div>
                   <div class="col-2 flex flex-center">
@@ -166,6 +164,10 @@
                 </div>
 <!--                <pre>{{mascotas}}</pre>-->
 <!--                <pre>{{mascota}}</pre>-->
+              </div>
+              <div class="col-12">
+<!--                textarea comentario doctor-->
+                <q-input v-model="venta.comentarioDoctor" label="Comentario Doctor" outlined dense type="textarea" rows="2" />
               </div>
               <div class="col-12">
                 <q-markup-table wrap-cells dense flat bordered>
@@ -232,285 +234,6 @@
                     </tr>
                   </tbody>
                 </q-markup-table>
-<!--                <pre>{{historialCompra}}</pre>-->
-<!--                [-->
-<!--                {-->
-<!--                "id": 15,-->
-<!--                "tipo": "Venta",-->
-<!--                "fecha": "2025-03-19T09:38:17.000Z",-->
-<!--                "fechaCreacion": "2025-03-19T09:38:17.000Z",-->
-<!--                "facturado": false,-->
-<!--                "nombre": "SN",-->
-<!--                "ci": null,-->
-<!--                "total": "533.00",-->
-<!--                "anulado": true,-->
-<!--                "createdAt": "2025-03-19T09:38:17.957Z",-->
-<!--                "updatedAt": "2025-03-19T09:53:25.257Z",-->
-<!--                "deletedAt": null,-->
-<!--                "mascota": {-->
-<!--                "id": 1,-->
-<!--                "nombre": "SN",-->
-<!--                "especie": "Otro",-->
-<!--                "raza": "",-->
-<!--                "sexo": "Macho",-->
-<!--                "fecha_nac": "2000-01-01",-->
-<!--                "edad": null,-->
-<!--                "senas_particulares": "null",-->
-<!--                "photo": "compressed-1742371183193-441920296.png",-->
-<!--                "color": "Negro",-->
-<!--                "propietario_nombre": "SN",-->
-<!--                "propietario_ci": null,-->
-<!--                "propietario_direccion": "",-->
-<!--                "propietario_telefono": "",-->
-<!--                "propietario_ciudad": "Oruro",-->
-<!--                "propietario_celular": "a",-->
-<!--                "createdAt": "2025-03-12T10:21:25.461Z",-->
-<!--                "updatedAt": "2025-03-19T07:59:43.000Z",-->
-<!--                "deletedAt": null-->
-<!--                },-->
-<!--                "user": {-->
-<!--                "id": 2,-->
-<!--                "name": "MVZ. ROGER PAUL HUARACHI TITO",-->
-<!--                "role": "Admin",-->
-<!--                "username": "Roger",-->
-<!--                "password": "$2b$10$hLxScAvuENNvqjNTwS1p6u/TUd0Ej9Oae9iCAzZSHBqMlCI.fLO0a",-->
-<!--                "agencia": "Oasis",-->
-<!--                "createdAt": "2025-03-12T09:47:07.193Z",-->
-<!--                "updatedAt": "2025-03-12T09:47:07.193Z",-->
-<!--                "deletedAt": null-->
-<!--                },-->
-<!--                "details": [-->
-<!--                {-->
-<!--                "id": 26,-->
-<!--                "fecha": "2025-03-19T09:38:17.000Z",-->
-<!--                "productoName": "Peluquería Razas Grandes Mayores a 20 kg",-->
-<!--                "subtotal": "325.00",-->
-<!--                "precio": "325.00",-->
-<!--                "cantidad": 1,-->
-<!--                "anulado": true,-->
-<!--                "createdAt": "2025-03-19T09:38:17.996Z",-->
-<!--                "updatedAt": "2025-03-19T09:38:26.000Z",-->
-<!--                "deletedAt": null-->
-<!--                },-->
-<!--                {-->
-<!--                "id": 27,-->
-<!--                "fecha": "2025-03-19T09:38:18.000Z",-->
-<!--                "productoName": "Peluquería Razas Medianas Menores a 20 kg",-->
-<!--                "subtotal": "208.00",-->
-<!--                "precio": "208.00",-->
-<!--                "cantidad": 1,-->
-<!--                "anulado": true,-->
-<!--                "createdAt": "2025-03-19T09:38:18.009Z",-->
-<!--                "updatedAt": "2025-03-19T09:38:26.000Z",-->
-<!--                "deletedAt": null-->
-<!--                }-->
-<!--                ]-->
-<!--                },-->
-<!--                {-->
-<!--                "id": 16,-->
-<!--                "tipo": "Venta",-->
-<!--                "fecha": "2025-03-19T09:38:23.000Z",-->
-<!--                "fechaCreacion": "2025-03-19T09:38:23.000Z",-->
-<!--                "facturado": false,-->
-<!--                "nombre": "SN",-->
-<!--                "ci": null,-->
-<!--                "total": "140.00",-->
-<!--                "anulado": false,-->
-<!--                "createdAt": "2025-03-19T09:38:23.893Z",-->
-<!--                "updatedAt": "2025-03-19T09:53:25.245Z",-->
-<!--                "deletedAt": null,-->
-<!--                "mascota": {-->
-<!--                "id": 1,-->
-<!--                "nombre": "SN",-->
-<!--                "especie": "Otro",-->
-<!--                "raza": "",-->
-<!--                "sexo": "Macho",-->
-<!--                "fecha_nac": "2000-01-01",-->
-<!--                "edad": null,-->
-<!--                "senas_particulares": "null",-->
-<!--                "photo": "compressed-1742371183193-441920296.png",-->
-<!--                "color": "Negro",-->
-<!--                "propietario_nombre": "SN",-->
-<!--                "propietario_ci": null,-->
-<!--                "propietario_direccion": "",-->
-<!--                "propietario_telefono": "",-->
-<!--                "propietario_ciudad": "Oruro",-->
-<!--                "propietario_celular": "a",-->
-<!--                "createdAt": "2025-03-12T10:21:25.461Z",-->
-<!--                "updatedAt": "2025-03-19T07:59:43.000Z",-->
-<!--                "deletedAt": null-->
-<!--                },-->
-<!--                "user": {-->
-<!--                "id": 3,-->
-<!--                "name": "LIC. MARLENE CANAVIRI JORGE",-->
-<!--                "role": "Vendedor",-->
-<!--                "username": "Marlene",-->
-<!--                "password": "$2b$10$hLxScAvuENNvqjNTwS1p6u/TUd0Ej9Oae9iCAzZSHBqMlCI.fLO0a",-->
-<!--                "agencia": "Oasis",-->
-<!--                "createdAt": "2025-03-12T09:47:07.197Z",-->
-<!--                "updatedAt": "2025-03-12T09:47:07.197Z",-->
-<!--                "deletedAt": null-->
-<!--                },-->
-<!--                "details": [-->
-<!--                {-->
-<!--                "id": 28,-->
-<!--                "fecha": "2025-03-19T09:38:23.000Z",-->
-<!--                "productoName": "Adaptil",-->
-<!--                "subtotal": "120.00",-->
-<!--                "precio": "120.00",-->
-<!--                "cantidad": 1,-->
-<!--                "anulado": false,-->
-<!--                "createdAt": "2025-03-19T09:38:23.926Z",-->
-<!--                "updatedAt": "2025-03-19T09:38:23.926Z",-->
-<!--                "deletedAt": null-->
-<!--                },-->
-<!--                {-->
-<!--                "id": 29,-->
-<!--                "fecha": "2025-03-19T09:38:23.000Z",-->
-<!--                "productoName": "Acondicionador Farecs",-->
-<!--                "subtotal": "20.00",-->
-<!--                "precio": "20.00",-->
-<!--                "cantidad": 1,-->
-<!--                "anulado": false,-->
-<!--                "createdAt": "2025-03-19T09:38:23.935Z",-->
-<!--                "updatedAt": "2025-03-19T09:38:23.935Z",-->
-<!--                "deletedAt": null-->
-<!--                }-->
-<!--                ]-->
-<!--                },-->
-<!--                {-->
-<!--                "id": 19,-->
-<!--                "tipo": "Venta",-->
-<!--                "fecha": "2025-03-19T10:32:08.000Z",-->
-<!--                "fechaCreacion": "2025-03-19T10:32:08.000Z",-->
-<!--                "facturado": false,-->
-<!--                "nombre": "SN",-->
-<!--                "ci": null,-->
-<!--                "total": "50.00",-->
-<!--                "anulado": false,-->
-<!--                "createdAt": "2025-03-19T10:32:08.324Z",-->
-<!--                "updatedAt": "2025-03-19T10:32:08.324Z",-->
-<!--                "deletedAt": null,-->
-<!--                "mascota": {-->
-<!--                "id": 1,-->
-<!--                "nombre": "SN",-->
-<!--                "especie": "Otro",-->
-<!--                "raza": "",-->
-<!--                "sexo": "Macho",-->
-<!--                "fecha_nac": "2000-01-01",-->
-<!--                "edad": null,-->
-<!--                "senas_particulares": "null",-->
-<!--                "photo": "compressed-1742371183193-441920296.png",-->
-<!--                "color": "Negro",-->
-<!--                "propietario_nombre": "SN",-->
-<!--                "propietario_ci": null,-->
-<!--                "propietario_direccion": "",-->
-<!--                "propietario_telefono": "",-->
-<!--                "propietario_ciudad": "Oruro",-->
-<!--                "propietario_celular": "a",-->
-<!--                "createdAt": "2025-03-12T10:21:25.461Z",-->
-<!--                "updatedAt": "2025-03-19T07:59:43.000Z",-->
-<!--                "deletedAt": null-->
-<!--                },-->
-<!--                "user": {-->
-<!--                "id": 1,-->
-<!--                "name": "ING. ADIMER PAUL CHAMBI AJATA",-->
-<!--                "role": "Admin",-->
-<!--                "username": "Adimer",-->
-<!--                "password": "$2b$10$hLxScAvuENNvqjNTwS1p6u/TUd0Ej9Oae9iCAzZSHBqMlCI.fLO0a",-->
-<!--                "agencia": "Clinica",-->
-<!--                "createdAt": "2025-03-12T09:47:07.189Z",-->
-<!--                "updatedAt": "2025-04-29T08:36:19.000Z",-->
-<!--                "deletedAt": null-->
-<!--                },-->
-<!--                "details": [-->
-<!--                {-->
-<!--                "id": 33,-->
-<!--                "fecha": "2025-03-19T10:32:08.000Z",-->
-<!--                "productoName": "Acondicionador Miel 4 litros",-->
-<!--                "subtotal": "50.00",-->
-<!--                "precio": "10.00",-->
-<!--                "cantidad": 5,-->
-<!--                "anulado": false,-->
-<!--                "createdAt": "2025-03-19T10:32:08.335Z",-->
-<!--                "updatedAt": "2025-03-19T10:32:08.335Z",-->
-<!--                "deletedAt": null-->
-<!--                }-->
-<!--                ]-->
-<!--                },-->
-<!--                {-->
-<!--                "id": 21,-->
-<!--                "tipo": "Venta",-->
-<!--                "fecha": "2025-04-29T09:03:17.000Z",-->
-<!--                "fechaCreacion": "2025-04-29T09:03:17.000Z",-->
-<!--                "facturado": false,-->
-<!--                "nombre": "SN",-->
-<!--                "ci": null,-->
-<!--                "total": "65.00",-->
-<!--                "anulado": false,-->
-<!--                "createdAt": "2025-04-29T09:03:17.597Z",-->
-<!--                "updatedAt": "2025-04-29T09:03:17.597Z",-->
-<!--                "deletedAt": null,-->
-<!--                "mascota": {-->
-<!--                "id": 1,-->
-<!--                "nombre": "SN",-->
-<!--                "especie": "Otro",-->
-<!--                "raza": "",-->
-<!--                "sexo": "Macho",-->
-<!--                "fecha_nac": "2000-01-01",-->
-<!--                "edad": null,-->
-<!--                "senas_particulares": "null",-->
-<!--                "photo": "compressed-1742371183193-441920296.png",-->
-<!--                "color": "Negro",-->
-<!--                "propietario_nombre": "SN",-->
-<!--                "propietario_ci": null,-->
-<!--                "propietario_direccion": "",-->
-<!--                "propietario_telefono": "",-->
-<!--                "propietario_ciudad": "Oruro",-->
-<!--                "propietario_celular": "a",-->
-<!--                "createdAt": "2025-03-12T10:21:25.461Z",-->
-<!--                "updatedAt": "2025-03-19T07:59:43.000Z",-->
-<!--                "deletedAt": null-->
-<!--                },-->
-<!--                "user": {-->
-<!--                "id": 1,-->
-<!--                "name": "ING. ADIMER PAUL CHAMBI AJATA",-->
-<!--                "role": "Admin",-->
-<!--                "username": "Adimer",-->
-<!--                "password": "$2b$10$hLxScAvuENNvqjNTwS1p6u/TUd0Ej9Oae9iCAzZSHBqMlCI.fLO0a",-->
-<!--                "agencia": "Clinica",-->
-<!--                "createdAt": "2025-03-12T09:47:07.189Z",-->
-<!--                "updatedAt": "2025-04-29T08:36:19.000Z",-->
-<!--                "deletedAt": null-->
-<!--                },-->
-<!--                "details": [-->
-<!--                {-->
-<!--                "id": 35,-->
-<!--                "fecha": "2025-04-29T09:03:17.000Z",-->
-<!--                "productoName": "Acedan",-->
-<!--                "subtotal": "45.00",-->
-<!--                "precio": "45.00",-->
-<!--                "cantidad": 1,-->
-<!--                "anulado": false,-->
-<!--                "createdAt": "2025-04-29T09:03:17.610Z",-->
-<!--                "updatedAt": "2025-04-29T09:03:17.610Z",-->
-<!--                "deletedAt": null-->
-<!--                },-->
-<!--                {-->
-<!--                "id": 36,-->
-<!--                "fecha": "2025-04-29T09:03:17.000Z",-->
-<!--                "productoName": "Acondicionador Farecs",-->
-<!--                "subtotal": "20.00",-->
-<!--                "precio": "20.00",-->
-<!--                "cantidad": 1,-->
-<!--                "anulado": false,-->
-<!--                "createdAt": "2025-04-29T09:03:17.618Z",-->
-<!--                "updatedAt": "2025-04-29T09:03:17.618Z",-->
-<!--                "deletedAt": null-->
-<!--                }-->
-<!--                ]-->
-<!--                }-->
-<!--                ]-->
               </div>
             </div>
 <!--            <q-input v-model="venta.nombre" label="Nombre Cliente" outlined dense :rules="[val => !!val || 'Campo requerido']" />-->
@@ -667,7 +390,8 @@ function realizarVentaPost() {
   proxy.$axios.post("/sales", {
     mascota:mascota.value,
     total: parseFloat(totalVenta.value),
-    productos: carrito.value
+    productos: carrito.value,
+    comentarioDoctor: venta.value.comentarioDoctor,
   }).then(async () => {
     // carrito.value = [];
     // venta.value = {nombre: "", fecha: new Date().toISOString().slice(0, 10)};
