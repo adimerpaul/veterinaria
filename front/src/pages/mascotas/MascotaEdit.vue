@@ -53,9 +53,10 @@
             <q-tab name="certificados" :class="{'bg-red text-white': tab === 'certificados'}">
               <q-btn flat dense no-caps icon="receipt" label="Certificados" :color="tab === 'certificados' ? 'white' : 'black'" />
             </q-tab>
-<!--            <q-tab name="derivacion" :class="{'bg-purple text-white': tab === 'derivacion'}">-->
-<!--              <q-btn flat dense no-caps icon="swap_calls" label="Derivación" :color="tab === 'derivacion' ? 'white' : 'black'" />-->
-<!--            </q-tab>-->
+<!--            laboratorios-->
+            <q-tab name="laboratorios" :class="{'bg-blue text-white': tab === 'laboratorios'}">
+              <q-btn flat dense no-caps icon="local_hospital" label="Laboratorios" :color="tab === 'laboratorios' ? 'white' : 'black'" />
+            </q-tab>
           </q-tabs>
         </q-card>
         <q-card flat bordered>
@@ -72,6 +73,9 @@
             <q-tab-panel name="certificados" animated>
               <MascotaCertificados :mascota="mascota" @getMascota="getMascota"/>
             </q-tab-panel>
+            <q-tab-panel name="laboratorios" animated>
+              <MascotaLaboratorios :mascota="mascota" @getMascota="getMascota"/>
+            </q-tab-panel>
           </q-tab-panels>
 <!--          <pre>{{ mascota }}</pre>-->
         </q-card>
@@ -86,9 +90,10 @@ import MascotaUpdate from "pages/mascotas/MascotaUpdate.vue";
 import MascotaSales from "pages/mascotas/MascotaSales.vue";
 import MascotaComplementos from "pages/mascotas/MascotaComplemetos.vue";
 import MascotaCertificados from "pages/mascotas/MascotaCertificados.vue";
+import MascotaLaboratorios from "pages/mascotas/MascotaLaboratorios.vue";
 
 export default {
-  components: {MascotaCertificados, MascotaComplementos, MascotaSales, MascotaUpdate},
+  components: {MascotaLaboratorios, MascotaCertificados, MascotaComplementos, MascotaSales, MascotaUpdate},
   data() {
     return {
       tab: 'mascota',

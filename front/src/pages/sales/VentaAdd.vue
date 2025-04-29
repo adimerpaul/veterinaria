@@ -664,7 +664,11 @@ function realizarVentaPost() {
     return;
   }
   loading.value = true;
-  proxy.$axios.post("/sales", { mascota:mascota.value, total: totalVenta.value, productos: carrito.value }).then(async () => {
+  proxy.$axios.post("/sales", {
+    mascota:mascota.value,
+    total: parseFloat(totalVenta.value),
+    productos: carrito.value
+  }).then(async () => {
     // carrito.value = [];
     // venta.value = {nombre: "", fecha: new Date().toISOString().slice(0, 10)};
     // dialogVenta.value = false;
