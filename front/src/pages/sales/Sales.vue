@@ -50,7 +50,7 @@
           </div>
         </q-form>
         <div class="row">
-          <div class="col-12 col-md-4 q-pa-xs">
+          <div class="col-12 col-md-4 q-pa-xs" v-if="$store.user.role === 'Admin'">
             <q-list bordered padding dense>
               <q-item clickable v-ripple>
                 <q-item-section avatar>
@@ -69,7 +69,7 @@
               </q-item>
             </q-list>
           </div>
-          <div class="col-12 col-md-4 q-pa-xs">
+          <div class="col-12 col-md-4 q-pa-xs" v-if="$store.user.role === 'Admin'">
             <q-list bordered padding dense>
               <q-item clickable v-ripple>
                 <q-item-section avatar>
@@ -82,14 +82,14 @@
                     </span>
                   </q-item-label>
                   <q-item-label caption lines="2">
-                    Total de reservas
+                    Total de ventas
                   </q-item-label>
                 </q-item-section>
               </q-item>
             </q-list>
           </div>
           <!--          total cancalado anulados-->
-          <div class="col-12 col-md-4 q-pa-xs">
+          <div class="col-12 col-md-4 q-pa-xs" v-if="$store.user.role === 'Admin'">
             <q-list bordered padding dense>
               <q-item clickable v-ripple>
                 <q-item-section avatar>
@@ -102,7 +102,7 @@
                     </span>
                   </q-item-label>
                   <q-item-label caption lines="2">
-                    Total de reservas canceladas
+                    Total de ventas anuladas
                   </q-item-label>
                 </q-item-section>
               </q-item>

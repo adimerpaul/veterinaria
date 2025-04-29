@@ -16,25 +16,27 @@
 
               <div class="col-12 col-md-2 q-pa-xs">
                 <label class="text-subtitle2">Especie</label>
-                <q-select
-                  v-model="mascota.especie"
-                  label="Especie"
-                  outlined
-                  dense
-                  :options="especies"
-                  @update:model-value="actualizarRazas"
-                />
+<!--                <q-select-->
+<!--                  v-model="mascota.especie"-->
+<!--                  label="Especie"-->
+<!--                  outlined-->
+<!--                  dense-->
+<!--                  :options="especies"-->
+<!--                  @update:model-value="actualizarRazas"-->
+<!--                />-->
+                <q-input v-model="mascota.especie" label="Especie" outlined dense clearable :rules="[val => !!val || 'Campo requerido']"/>
               </div>
 
               <div class="col-12 col-md-2 q-pa-xs">
                 <label class="text-subtitle2">Raza</label>
-                <q-select
-                  v-model="mascota.raza"
-                  label="Raza"
-                  outlined
-                  dense
-                  :options="razasDisponibles"
-                />
+<!--                <q-select-->
+<!--                  v-model="mascota.raza"-->
+<!--                  label="Raza"-->
+<!--                  outlined-->
+<!--                  dense-->
+<!--                  :options="razasDisponibles"-->
+<!--                />-->
+                <q-input v-model="mascota.raza" label="Raza" outlined dense clearable :rules="[val => !!val || 'Campo requerido']"/>
               </div>
 
               <div class="col-12 col-md-3 q-pa-xs">
@@ -47,7 +49,8 @@
 
               <div class="col-12 col-md-2 q-pa-xs">
                 <label class="text-subtitle2">Fecha de Nacimiento</label>
-                <q-input v-model="mascota.fecha_nac" label="Fecha de Nacimiento" outlined dense clearable type="date" />
+                <q-input v-model="mascota.fecha_nac" label="Fecha de Nacimiento" outlined dense clearable type="date"
+                         @update:modelValue="caculateEdad"/>
               </div>
 
               <div class="col-12 col-md-2 q-pa-xs">
@@ -69,7 +72,8 @@
 
               <div class="col-12 col-md-2 q-pa-xs">
                 <label class="text-subtitle2">Color</label>
-                <q-select v-model="mascota.color" label="Color" outlined dense :options="colores" />
+<!--                <q-select v-model="mascota.color" label="Color" outlined dense :options="colores" />-->
+                <q-input v-model="mascota.color" label="Color" outlined dense clearable :rules="[val => !!val || 'Campo requerido']"/>
               </div>
               <div class="col-12 col-md-2 q-pa-xs">
                 <label class="text-subtitle2">Edad</label>
@@ -80,7 +84,7 @@
         </q-card>
         <q-card flat bordered>
           <q-card-section>
-            <label class="text-h6">Datos de la Mascota</label>
+            <label class="text-h6">Datos del propietario</label>
             <div class="row">
               <div class="col-12 col-md-3 q-pa-xs">
                 <label class="text-subtitle2">Nombre del Propietario</label>
@@ -194,6 +198,16 @@ export default {
     }
   },
   methods: {
+    caculateEdad() {
+      if (this.mascota.fecha_nac) {
+        const today = moment();
+        const birthDate = moment(this.mascota.fecha_nac);
+        this.mascota.edad = today.diff(birthDate, 'years');
+      } else {
+        this.mascota.edad = '';
+      }
+    },
+
     actualizarRazas() {
       this.razasDisponibles = this.razas[this.mascota.especie] || [];
       this.mascota.raza = ''; // Reset raza cuando cambia la especie
