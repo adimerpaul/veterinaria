@@ -11,6 +11,8 @@ import { DetailsModule } from './details/details.module';
 import { DocumentosModule } from './documentos/documentos.module';
 import { PermisosModule } from './permisos/permisos.module';
 import { UserPermisosModule } from './user-permisos/user-permisos.module';
+import { VacunasModule } from './vacunas/vacunas.module';
+import { DesparacitacionesModule } from './desparacitaciones/desparacitaciones.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -35,6 +37,8 @@ import { UserPermisosModule } from './user-permisos/user-permisos.module';
     DocumentosModule,
     PermisosModule,
     UserPermisosModule,
+    VacunasModule,
+    DesparacitacionesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

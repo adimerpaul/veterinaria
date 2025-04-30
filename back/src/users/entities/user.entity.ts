@@ -12,6 +12,7 @@ import {
 import { Sale } from '../../sales/entities/sale.entity';
 import { Documento } from '../../documentos/entities/documento.entity';
 import { UserPermiso } from '../../user-permisos/entities/user-permiso.entity';
+import { Vacuna } from '../../vacunas/entities/vacuna.entity';
 
 @Entity({ name: 'users' })
 @Unique(['username'])
@@ -60,4 +61,7 @@ export class User {
 
   @OneToMany(() => UserPermiso, (userPermiso) => userPermiso.user)
   userPermisos: UserPermiso[];
+
+  @OneToMany(() => Vacuna, (vacuna) => vacuna.user)
+  vacunas: Vacuna[];
 }
