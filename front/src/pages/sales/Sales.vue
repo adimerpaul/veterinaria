@@ -21,14 +21,15 @@
               <q-btn style="width: 150px" label="Buscar" color="primary" type="submit" icon="search" no-caps :loading="loading" />
             </div>
             <div class="col-12 col-md-2">
-              <q-select v-model="reporte" label="Tipo Reporte" outlined dense :options="reportes"
-                        v-if="$store.user.role === 'Admin'"
-              />
+<!--              <q-select v-model="reporte" label="Tipo Reporte" outlined dense :options="reportes"-->
+<!--                        v-if="$store.user.role === 'Admin'"-->
+<!--              />-->
             </div>
             <div class="col-12 col-md-2 flex flex-center">
-              <q-btn style="width: 150px" label="Imprimir" color="indigo" icon="print" no-caps :loading="loading"
-                     @click="imprimir" v-if="$store.user.role === 'Admin'"
-              />
+<!--              <q-btn style="width: 150px" label="Imprimir" color="indigo" icon="print" no-caps :loading="loading"-->
+<!--                     @click="imprimir" v-if="$store.user.role === 'Admin'"-->
+<!--              />-->
+              <q-btn label="Excel" color="green" icon="fa-solid fa-file-excel" no-caps :loading="loading" @click="excelExport" />
             </div>
             <div class="col-12 col-md-12 flex flex-center">
             </div>
@@ -129,17 +130,45 @@
           <tbody>
           <tr v-for="venta in ventas" :key="venta.id">
             <td>
-              <q-btn style="width: 80px" icon="remove_circle_outline" color="negative" dense @click="anular(venta.id)" label="Anular" no-caps size="10px"
-                     v-if="!venta.anulado"
-              />
+              <q-btn-dropdown label="Opciones" no-caps dropdown-icon="more_vert" color="indigo" size="10px"
+                              v-if="!venta.anulado"
+              >
+                <q-list>
+                  <q-item clickable v-ripple @click="imprimirVenta(venta)" v-close-popup>
+                    <q-item-section avatar>
+                      <q-avatar icon="print" />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>Imprimir</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-separator />
+                  <q-item clickable v-ripple @click="anular(venta.id)" v-if="!venta.anulado" v-close-popup>
+                    <q-item-section avatar>
+                      <q-avatar icon="delete" />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label>Anular</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-btn-dropdown>
               <div v-else>
                 <q-chip color="red" text-color="white" label="Anulada" />
               </div>
+<!--              <q-btn style="width: 80px" icon="remove_circle_outline" color="negative" dense @click="anular(venta.id)" label="Anular" no-caps size="10px"-->
+<!--                     v-if="!venta.anulado"-->
+<!--              />-->
+<!--              <div v-else>-->
+<!--                <q-chip color="red" text-color="white" label="Anulada" />-->
+<!--              </div>-->
             </td>
             <td>{{ $filters.dateDmYHis(venta.fecha) }}</td>
             <td class="text-right">{{ venta.total }}</td>
             <td>
-              {{ venta.nombre }}-{{ venta.mascota?.nombre }}
+              {{ venta.nombre }}
+              <br>
+              {{ venta.mascota?.nombre }}
 <!--              <pre>{{ venta }}</pre>-->
             </td>
             <td>{{ venta.user?.username }}</td>
@@ -247,6 +276,8 @@
 import { ref, onMounted, getCurrentInstance } from "vue";
 import moment from "moment";
 import {Impresion} from "src/addons/Impresion.js";
+import {Imprimir} from "src/addons/Imprimir.js";
+import {Excel} from "src/addons/Excel.js";
 
 const { proxy } = getCurrentInstance();
 const fechaInicio = ref(moment().format("YYYY-MM-DD"));
@@ -332,6 +363,51 @@ function filtroVentas() {
       //    texto de detalle
     );
   });
+}
+function imprimirVenta(venta) {
+  Imprimir.nota(venta);
+}
+function excelExport() {
+  // let data = [
+  //   {
+  //     sheet: "Adults",
+  //     columns: [
+  //       { label: "User", value: "user" }, // Top level data
+  //       { label: "Age", value: (row) => row.age + " years" }, // Custom format
+  //       { label: "Phone", value: (row) => (row.more ? row.more.phone || "" : "") }, // Run functions
+  //     ],
+  //     content: [
+  //       { user: "Andrea", age: 20, more: { phone: "11111111" } },
+  //       { user: "Luis", age: 21, more: { phone: "12345678" } },
+  //     ],
+  //   },
+  // ]
+  const data = [{
+    sheet: "Ventas",
+    columns: [
+      { label: "Fecha", value: (row) => moment(row.fecha).format("DD/MM/YYYY HH:mm") },
+      { label: "Cliente", value: (row) => row.nombre },
+      { label: "Mascota", value: (row) => row.mascota?.nombre },
+      { label: "Usuario", value: (row) => row.user?.username },
+      { label: "Total", value: (row) => row.total },
+      { label: "Comentario Doctor", value: (row) => row.comentarioDoctor },
+      { label: "Detalles", value: (row) => row.details.map(detail =>{
+        return `${detail.cantidad} ${detail.productoName}`;
+      }).join(", ") },
+    ],
+    content: ventas.value.map(venta => {
+      return {
+        fecha: venta.fecha,
+        nombre: venta.nombre,
+        mascota: venta.mascota,
+        user: venta.user,
+        total: venta.total,
+        comentarioDoctor: venta.comentarioDoctor,
+        details: venta.details
+      };
+    }),
+  }]
+  Excel.export(data,"Ventas");
 }
 
 function anular(id) {

@@ -9,23 +9,6 @@ import moment from 'moment'
 // import puppeteer from 'puppeteer'
 
 export class Imprimir {
-  static numeroALetras(num) {
-    const unidades = ['cero', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve'];
-    const decenas = ['', '', 'veinte', 'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa'];
-    const especiales = {
-      10: 'diez', 11: 'once', 12: 'doce', 13: 'trece', 14: 'catorce',
-      15: 'quince', 16: 'dieciséis', 17: 'diecisiete', 18: 'dieciocho', 19: 'diecinueve',
-    };
-
-    if (num < 10) return unidades[num];
-    if (num >= 10 && num < 20) return especiales[num];
-    if (num < 100) {
-      const unidad = num % 10;
-      return `${decenas[Math.floor(num / 10)]}${unidad > 0 ? ' y ' + unidades[unidad] : ''}`;
-    }
-
-    return 'Número muy grande';
-  }
   static factura (factura) {
     console.log('factura', factura)
     return new Promise((resolve, reject) => {
@@ -109,10 +92,21 @@ Oruro</div>
     })
   }
 
+  static formatDate (date) {
+    if (date === null || date === undefined || date === '') {
+      return ''
+    }
+    const formattedDate = moment(date).format('DD/MM/YYYY HH:mm A')
+    return formattedDate
+  }
+
   static nota (factura, imprimir = true) {
     console.log('factura', factura)
     return new Promise((resolve, reject) => {
-      const a = this.numeroALetras(123)
+      // const a = this.numeroALetras(123)
+      const ClaseConversor = conversor.conversorNumerosALetras
+      const miConversor = new ClaseConversor()
+      const a = miConversor.convertToText(parseInt(factura.total))
       const opts = {
         errorCorrectionLevel: 'M',
         type: 'png',
@@ -126,16 +120,6 @@ Oruro</div>
       }
       const env = useCounterStore().env
       QRCode.toDataURL(`Fecha: ${factura.fecha_emision} Monto: ${parseFloat(factura.total).toFixed(2)}`, opts).then(url => {
-        let producto = ''
-        let cantidad = ''
-        if (factura.producto) {
-          // eslint-disable-next-line no-template-curly-in-string
-          producto = '<tr><td class=\'titder\'>PRODUCTO:</td><td class=\'contenido\'>' + factura.producto + '</td></tr>'
-        }
-        if (factura.cantidad) {
-          // eslint-disable-next-line no-template-curly-in-string
-          cantidad = '<tr><td class=\'titder\'>CANTIDAD:</td><td class=\'contenido\'>' + factura.cantidad + '</td></tr>'
-        }
 
         let cadena = `${this.head()}
   <!--div style='padding-left: 0.5cm;padding-right: 0.5cm'>
@@ -164,53 +148,35 @@ Oruro</div!-->
 <table>
 <tr><td class='titder'>ID:</td><td class='titder'>${factura.id }</td></tr>
 <tr><td class='titder'>NOMBRE/RAZÓN SOCIAL:</td><td class='titder'>${factura.nombre }</td></tr>
-<tr><!-- td class='titder'>NIT/CI/CEX:</td><td class='contenido'>${factura.client ? factura.client.nit : ''}</td --></tr>
-<tr><td class='titder'>FECHA DE EMISIÓN:</td><td class='contenido'>${factura.fecha}</td></tr>
-${producto}
-${cantidad}
+<tr><!-- td class='titder'>NIT/CI/CEX:</td><td class='contenido'>${factura.mascota ? factura.mascota.id : ''}</td --></tr>
+<tr><td class='titder'>FECHA DE EMISIÓN:</td><td class='contenido'>${this.formatDate(factura.fecha)}</td></tr>
 </table><hr><div class='titulo'>DETALLE</div>`
-        factura.venta_detalles.forEach(r => {
+        factura.details.forEach(r => {
           console.log('r', r)
           cadena += `<div style='font-size: 12px'><b> ${r.producto?.nombre} </b></div>`
-          if (r.visible === 1) {
-            cadena += `<div>
-                    <span style='font-size: 18px;font-weight: bold'>
-                        ${r.cantidad}
-                    </span>
-                    <span>
-                    ${parseFloat(r.precio).toFixed(2)}
-                    </span>
+          cadena += `<div>
+                  <span style='font-size: 18px;font-weight: bold'>
+                      ${r.cantidad}
+                  </span>
+                  <span>
+                  ${parseFloat(r.precio).toFixed(2)}
+                  </span>
 
-                    <span style='float:right'>
-                        ${parseFloat(r.precio * r.cantidad).toFixed(2)}
-                    </span>
-                    </div>`
-          } else {
-            cadena += `<div>
-                    <span style='font-size: 18px;font-weight: bold'>
-                        ${r.cantidad}
-                    </span>
-                    <span>
-
-                    </span>
-
-                    <span style='float:right'>
-
-                    </span>`
-          }
+                  <span style='float:right'>
+                      ${parseFloat(r.subtotal).toFixed(2)}
+                  </span>
+                  </div>`
         })
         cadena += `<hr>
-<div>${factura.comentario === '' || factura.comentario === null  || factura.comentario === undefined ? '' : 'Comentario: ' + factura.comentario}</div>
+<div>${factura.comentarioDoctor === '' || factura.comentarioDoctor === null  || factura.comentarioDoctor === undefined ? '' : 'Comentario: ' + factura.comentarioDoctor}</div>
       <table style='font-size: 8px;'>
       <tr><td class='titder' style='width: 60%'>SUBTOTAL Bs</td><td class='titder'>${parseFloat(factura.total).toFixed(2)}</td></tr>
-<!--      <tr><td class='titder' style='width: 60%'>Descuento Bs</td><td class='titder'>${parseFloat(factura.descuento).toFixed(2)}</td></tr>-->
-<!--      <tr><td class='titder' style='width: 60%'>TOTAL Bs</td><td class='titder'>${parseFloat(factura.total - factura.descuento).toFixed(2)}</td></tr>-->
+
       </table>
       <br>
-      <div>Son ${a} ${((parseFloat(factura.total) - Math.floor(parseFloat(factura.total))) * 100).toFixed(2)} /100 Bolivianos</div><hr>
-        <!--div style='display: flex;justify-content: center;'>
-          <img  src="${url}" style="width: 75px; height: 75px; display: block; margin-left: auto; margin-right: auto;">
-        </div--!>
+        <div>
+        Son ${a} ${((parseFloat(factura.total) - Math.floor(parseFloat(factura.total))) * 100).toFixed(2)} /100 Bolivianos
+        </div><hr>
       </div>
       </div>
 </body>

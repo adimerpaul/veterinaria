@@ -402,7 +402,7 @@ function realizarVentaPost() {
     router.push("/ventas");
     // await getProductos();
     // buscarProducto.value = "";
-    Imprimir.factura(res.data.sale);
+    Imprimir.nota(res.data.sale);
   }).catch((res) => {
     proxy.$alert.error(res.response.data.message, "Error");
   }).finally(() => {
