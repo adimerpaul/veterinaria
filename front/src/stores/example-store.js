@@ -5,7 +5,17 @@ export const useCounterStore = defineStore('counter', {
     counter: 0,
     isLogged: !!localStorage.getItem('tokenClinica'),
     user: {},
-    permissions: []
+    permissions: [],
+    env: {
+      razon: 'Clinica Veterinaria',
+      direccion: 'Heroes del Chaco y Campo Jordán Oruro, Bolivia',
+      telefono: '75705687',
+    }
+// <div class='titulo2'>${env.razon} <br>
+//   Casa Matriz<br>
+//   No. Punto de Venta 0<br>
+//   ${env.direccion}<br>
+//   Tel. ${env.telefono}<br>
   }),
 
   getters: {

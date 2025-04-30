@@ -242,11 +242,13 @@
       </q-card>
     </q-dialog>
   </q-page>
+  <div id="myElement"></div>
 </template>
 
 <script setup>
 import {ref, computed, getCurrentInstance, onMounted} from "vue";
 import { useRouter } from 'vue-router';
+import {Imprimir} from "src/addons/Imprimir.js";
 
 const router = useRouter();
 
@@ -392,7 +394,7 @@ function realizarVentaPost() {
     total: parseFloat(totalVenta.value),
     productos: carrito.value,
     comentarioDoctor: venta.value.comentarioDoctor,
-  }).then(async () => {
+  }).then(async (res) => {
     // carrito.value = [];
     // venta.value = {nombre: "", fecha: new Date().toISOString().slice(0, 10)};
     // dialogVenta.value = false;
@@ -400,6 +402,7 @@ function realizarVentaPost() {
     router.push("/ventas");
     // await getProductos();
     // buscarProducto.value = "";
+    Imprimir.factura(res.data.sale);
   }).catch((res) => {
     proxy.$alert.error(res.response.data.message, "Error");
   }).finally(() => {

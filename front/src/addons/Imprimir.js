@@ -1,7 +1,7 @@
 import QRCode from 'qrcode'
 import { useCounterStore } from 'stores/example-store'
 import { Printd } from 'printd'
-// import conversor from 'conversor-numero-a-letras-es-ar'
+import conversor from 'conversor-numero-a-letras-es-ar'
 import { Unidades } from 'numero-a-letras';
 
 import moment from 'moment'
@@ -27,10 +27,11 @@ export class Imprimir {
     return 'Número muy grande';
   }
   static factura (factura) {
+    console.log('factura', factura)
     return new Promise((resolve, reject) => {
       const ClaseConversor = conversor.conversorNumerosALetras
       const miConversor = new ClaseConversor()
-      const a = miConversor.convertToText(parseInt(factura.montoTotal))
+      const a = miConversor.convertToText(parseInt(factura.total))
       const opts = {
         errorCorrectionLevel: 'M',
         type: 'png',
@@ -43,11 +44,13 @@ export class Imprimir {
         }
       }
       const env = useCounterStore().env
-      QRCode.toDataURL(env.url2 + 'consulta/QR?nit=' + env.nit + '&cuf=' + factura.cuf + '&numero=' + factura.numeroFactura + '&t=2', opts).then(url => {
+      console.log(env)
+      const qr = factura.nombre+' ' + factura.numeroFactura
+      QRCode.toDataURL(qr, opts).then(url => {
         let cadena = `${this.head()}
   <div style='padding-left: 0.5cm;padding-right: 0.5cm'>
       <div class='titulo'>FACTURA <br>CON DERECHO A CREDITO FISCAL</div>
-      <div class='titulo2'>${env.razon} <br>
+      <div class='titulo2'>${env.razon}<br>
       Casa Matriz<br>
       No. Punto de Venta 0<br>
 ${env.direccion}<br>
@@ -62,28 +65,28 @@ Oruro</div>
 <div class='titulo2'>${factura.cuf}</div>
 <hr>
 <table>
-<tr><td class='titder'>NOMBRE/RAZÓN SOCIAL:</td><td class='contenido'>${factura.client.nombreRazonSocial}</td>
-</tr><tr><td class='titder'>NIT/CI/CEX:</td><td class='contenido'>${factura.client.numeroDocumento}</td></tr>
-<tr><td class='titder'>COD. CLIENTE:</td ><td class='contenido'>${factura.client.id}</td></tr>
-<tr><td class='titder'>FECHA DE EMISIÓN:</td><td class='contenido'>${factura.fechaEmision}</td></tr>
+<tr><td class='titder'>NOMBRE/RAZÓN SOCIAL:</td><td class='contenido'>${factura.nombre}</td>
+</tr><tr><td class='titder'>NIT/CI/CEX:</td><td class='contenido'>${factura.ci}</td></tr>
+<tr><td class='titder'>COD. CLIENTE:</td ><td class='contenido'>${factura.mascota.id}</td></tr>
+<tr><td class='titder'>FECHA DE EMISIÓN:</td><td class='contenido'>${factura.fecha}</td></tr>
 </table><hr><div class='titulo'>DETALLE</div>`
         factura.details.forEach(r => {
-          cadena += `<div style='font-size: 12px'><b>${r.product_id} ${r.descripcion} </b></div>`
-          cadena += `<div>${r.cantidad} ${parseFloat(r.precioUnitario).toFixed(2)} 0.00
+          cadena += `<div style='font-size: 12px'><b>${r.producto?.id} ${r.producto?.nombre} </b></div>`
+          cadena += `<div>${r.cantidad} ${parseFloat(r.precio).toFixed(2)} 0.00
                     <span style='float:right'>${parseFloat(r.subTotal).toFixed(2)}</span></div>`
         })
         cadena += `<hr>
       <table style='font-size: 8px;'>
-      <tr><td class='titder' style='width: 60%'>SUBTOTAL Bs</td><td class='conte2'>${parseFloat(factura.montoTotal).toFixed(2)}</td></tr>
+      <tr><td class='titder' style='width: 60%'>SUBTOTAL Bs</td><td class='conte2'>${parseFloat(factura.total).toFixed(2)}</td></tr>
       <tr><td class='titder'>DESCUENTO Bs</td><td class='conte2'>0.00</td></tr>
-      <tr><td class='titder'>TOTAL Bs</td><td class='conte2'>${parseFloat(factura.montoTotal).toFixed(2)}</td></tr>
+      <tr><td class='titder'>TOTAL Bs</td><td class='conte2'>${parseFloat(factura.total).toFixed(2)}</td></tr>
       <tr><td class='titder'>MONTO GIFT CARD Bs</td ><td class='conte2'>0.00</td></tr>
-      <tr><td class='titder'>MONTO A PAGAR Bs</td><td class='conte2'>${parseFloat(factura.montoTotal).toFixed(2)}</td></tr>
+      <tr><td class='titder'>MONTO A PAGAR Bs</td><td class='conte2'>${parseFloat(factura.total).toFixed(2)}</td></tr>
       <tr><td class='titder' style='font-size: 8px'>IMPORTE BASE CRÉDITO FISCAL Bs</td>
-      <td class='conte2'>${parseFloat(factura.montoTotal).toFixed(2)}</td></tr>
+      <td class='conte2'>${parseFloat(factura.total).toFixed(2)}</td></tr>
       </table>
       <br>
-      <div>Son ${a} ${((parseFloat(factura.montoTotal) - Math.floor(parseFloat(factura.montoTotal))) * 100).toFixed(2)} /100 Bolivianos</div><hr>
+      <div>Son ${a} ${((parseFloat(factura.total) - Math.floor(parseFloat(factura.total))) * 100).toFixed(2)} /100 Bolivianos</div><hr>
       <div class='titulo2' style='font-size: 9px'>
       ESTA FACTURA CONTRIBUYE AL DESARROLLO DEL PAÍS,<br>
       EL USO ILÍCITO SERÁ SANCIONADO PENALMENTE DE<br>
