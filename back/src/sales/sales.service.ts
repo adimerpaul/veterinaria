@@ -4,11 +4,12 @@ import { UpdateSaleDto } from './dto/update-sale.dto';
 import { Sale } from './entities/sale.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Producto } from '../productos/entities/producto.entity';
-import {Between, DataSource, Repository} from 'typeorm';
+import { Between, DataSource, Repository } from 'typeorm';
 import { Detail } from '../details/entities/detail.entity';
 import { Mascota } from '../mascotas/entities/mascota.entity';
 import { User } from '../users/entities/user.entity';
 import { InternalServerErrorException } from '@nestjs/common';
+import any = jasmine.any;
 
 @Injectable()
 export class SalesService {
@@ -28,7 +29,6 @@ export class SalesService {
     @InjectRepository(Producto)
     private readonly productoRepository: Repository<Producto>,
     private dataSource: DataSource,
-
   ) {}
   async imprimir(body: any) {
     try {
@@ -143,20 +143,23 @@ export class SalesService {
       const savedSale = await queryRunner.manager.save(Sale, sale);
 
       // 5. Insertar detalles de venta
+      const details: Detail[] = [];
       for (const product of body.productos) {
         // Validar producto
         const producto = await queryRunner.manager.findOne(Producto, {
           where: { id: product.id },
         });
-        if (!producto) throw new Error(`Producto con ID ${product.id} no encontrado`);
+        if (!producto)
+          throw new Error(`Producto con ID ${product.id} no encontrado`);
 
         // Validar precio y cantidad
         const precio = parseFloat(product.precioVenta);
         const cantidad = parseInt(product.cantidadVenta);
         if (isNaN(precio) || isNaN(cantidad)) {
-          throw new Error(`Precio o cantidad inválida para producto ${product.id}`);
+          throw new Error(
+            `Precio o cantidad inválida para producto ${product.id}`,
+          );
         }
-
         const detail = queryRunner.manager.create(Detail, {
           fecha: new Date(),
           productoName: producto.nombre,
@@ -171,7 +174,9 @@ export class SalesService {
         });
 
         await queryRunner.manager.save(Detail, detail);
+        details.push(detail);
       }
+      savedSale.details = details;
 
       // 6. Confirmar la transacción
       await queryRunner.commitTransaction();
