@@ -103,11 +103,11 @@ const { proxy } = getCurrentInstance()
 const linksList = [
   { title: 'Principal', icon: 'home', link: '/', can: 'Todos' },
   { title: 'Usuarios', icon: 'people', link: '/usuarios', can: 1 },
-  { title: 'Productos', icon: 'inventory_2', link: '/productos', can: 2 },
-  { title: 'Crear Ventas', icon: 'point_of_sale', link: '/ventas/add', can: 3 },
+  { title: 'Productos', icon: 'inventory', link: '/productos', can: 2 },
   { title: 'Ventas', icon: 'shopping_cart', link: '/ventas', can: 4 },
-  { title: 'Crear Mascota', icon: 'pets', link: '/mascotas/create', can: 5 },
+  { title: 'Crear Ventas', icon: 'add_shopping_cart', link: '/ventas/add', can: 3 },
   { title: 'Mascotas', icon: 'pets', link: '/mascotas', can: 6 },
+  { title: 'Crear Mascota', icon: 'group_add', link: '/mascotas/create', can: 5 },
 ]
 
 const leftDrawerOpen = ref(false)

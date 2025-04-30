@@ -47,15 +47,17 @@
             <q-tab name="complementos" :class="{'bg-green text-white': tab === 'complementos'}">
               <q-btn flat dense no-caps icon="local_hospital" label="Complementos" :color="tab === 'complementos' ? 'white' : 'black'" />
             </q-tab>
-<!--            <q-tab name="examen" :class="{'bg-orange text-white': tab === 'examen'}">-->
-<!--              <q-btn flat dense no-caps icon="assignment" label="Examen" :color="tab === 'examen' ? 'white' : 'black'" />-->
-<!--            </q-tab>-->
             <q-tab name="certificados" :class="{'bg-red text-white': tab === 'certificados'}">
               <q-btn flat dense no-caps icon="receipt" label="Certificados" :color="tab === 'certificados' ? 'white' : 'black'" />
             </q-tab>
-<!--            laboratorios-->
             <q-tab name="laboratorios" :class="{'bg-blue text-white': tab === 'laboratorios'}">
               <q-btn flat dense no-caps icon="local_hospital" label="Laboratorios" :color="tab === 'laboratorios' ? 'white' : 'black'" />
+            </q-tab>
+            <q-tab name="vacunas" :class="{'bg-black text-white': tab === 'vacunas'}">
+              <q-btn flat dense no-caps icon="vaccines" label="Vacunas" :color="tab === 'vacunas' ? 'white' : 'black'" />
+            </q-tab>
+            <q-tab name="desparacitacion" :class="{'bg-indigo text-white': tab === 'desparacitacion'}">
+              <q-btn flat dense no-caps icon="pest_control" label="Desparacitacion" :color="tab === 'desparacitacion' ? 'white' : 'black'" />
             </q-tab>
           </q-tabs>
         </q-card>
@@ -76,6 +78,12 @@
             <q-tab-panel name="laboratorios" animated>
               <MascotaLaboratorios :mascota="mascota" @getMascota="getMascota"/>
             </q-tab-panel>
+            <q-tab-panel name="vacunas" animated>
+              <MascotaVacunas :mascota="mascota" @getMascota="getMascota"/>
+            </q-tab-panel>
+            <q-tab-panel name="desparacitacion" animated>
+              <MascotaDesparacitacion :mascota="mascota" @getMascota="getMascota"/>
+            </q-tab-panel>
           </q-tab-panels>
 <!--          <pre>{{ mascota }}</pre>-->
         </q-card>
@@ -91,9 +99,14 @@ import MascotaSales from "pages/mascotas/MascotaSales.vue";
 import MascotaComplementos from "pages/mascotas/MascotaComplemetos.vue";
 import MascotaCertificados from "pages/mascotas/MascotaCertificados.vue";
 import MascotaLaboratorios from "pages/mascotas/MascotaLaboratorios.vue";
+import MascotaVacunas from "pages/mascotas/MascotaVacunas.vue";
+import MascotaDesparacitacion from "pages/mascotas/MascotaDesparacitacion.vue";
 
 export default {
-  components: {MascotaLaboratorios, MascotaCertificados, MascotaComplementos, MascotaSales, MascotaUpdate},
+  components: {
+    MascotaDesparacitacion,
+    MascotaVacunas,
+    MascotaLaboratorios, MascotaCertificados, MascotaComplementos, MascotaSales, MascotaUpdate},
   data() {
     return {
       tab: 'mascota',
