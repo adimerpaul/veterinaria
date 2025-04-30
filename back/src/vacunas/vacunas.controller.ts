@@ -6,18 +6,23 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { VacunasService } from './vacunas.service';
 import { CreateVacunaDto } from './dto/create-vacuna.dto';
 import { UpdateVacunaDto } from './dto/update-vacuna.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('vacunas')
 export class VacunasController {
   constructor(private readonly vacunasService: VacunasService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Post()
-  create(@Body() createVacunaDto: CreateVacunaDto) {
-    return this.vacunasService.create(createVacunaDto);
+  create(@Body() body, @Req() req: Request) {
+    // console.log(req.user.id);
+    return this.vacunasService.create(body, req);
   }
 
   // @Get()

@@ -89,6 +89,7 @@ export class MascotasService {
         'documentos',
         'documentos.user',
         'vacunas',
+        'vacunas.user',
         'desparacitaciones',
         'desparacitaciones.user',
       ],

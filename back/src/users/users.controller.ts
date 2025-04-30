@@ -41,6 +41,7 @@ export class UsersController {
   @UseGuards(AuthGuard('jwt'))
   @Get('me')
   me(@Req() req: Request) {
+    // console.log(req.user.id);
     return this.usersService.me(req);
   }
 

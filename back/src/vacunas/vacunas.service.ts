@@ -4,6 +4,7 @@ import { UpdateVacunaDto } from './dto/update-vacuna.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Vacuna } from './entities/vacuna.entity';
 import { Repository } from 'typeorm';
+import * as moment from 'moment';
 
 @Injectable()
 export class VacunasService {
@@ -11,7 +12,13 @@ export class VacunasService {
     @InjectRepository(Vacuna)
     private readonly vacunaRepository: Repository<Vacuna>,
   ) {}
-  async create(body) {
+  async create(body,req) {
+    // console.log(req.user);
+
+    body.fechaVacuna = moment().format('YYYY-MM-DD');
+    body.mascota = { id: body.mascotaId };
+    body.user = { id: req.user.userId };
+    // console.log('body', body);
     const vacuna = this.vacunaRepository.create(body);
     return await this.vacunaRepository.save(vacuna);
   }
@@ -33,6 +40,6 @@ export class VacunasService {
     if (!vacuna) {
       throw new Error('Vacuna not found');
     }
-    return await this.vacunaRepository.remove(vacuna);
+    return await this.vacunaRepository.softDelete(vacuna);
   }
 }
