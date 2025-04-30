@@ -13,6 +13,7 @@ import { Sale } from '../../sales/entities/sale.entity';
 import { Detail } from '../../details/entities/detail.entity';
 import { Documento } from '../../documentos/entities/documento.entity';
 import { Vacuna } from '../../vacunas/entities/vacuna.entity';
+import { Desparacitacione } from '../../desparacitaciones/entities/desparacitacione.entity';
 
 @Entity('mascotas')
 // @Unique(['nombre'])
@@ -68,4 +69,9 @@ export class Mascota {
   documentos: Documento[];
   @OneToMany(() => Vacuna, (vacuna) => vacuna.mascota)
   vacunas: Vacuna[];
+  @OneToMany(
+    () => Desparacitacione,
+    (desparacitacione) => desparacitacione.mascota,
+  )
+  desparacitaciones: Desparacitacione[];
 }
