@@ -1,26 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { CreateDesparacitacioneDto } from './dto/create-desparacitacione.dto';
-import { UpdateDesparacitacioneDto } from './dto/update-desparacitacione.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import * as moment from 'moment';
+import { Desparacitacione } from './entities/desparacitacione.entity';
 
 @Injectable()
 export class DesparacitacionesService {
-  create(createDesparacitacioneDto: CreateDesparacitacioneDto) {
-    return 'This action adds a new desparacitacione';
+  constructor(
+    @InjectRepository(Desparacitacione)
+    private readonly desparasitacionRepository: Repository<Desparacitacione>,
+  ) {}
+
+  async create(body, req) {
+    body.fecha = moment().format('YYYY-MM-DD');
+    body.mascota = { id: body.mascotaId };
+    body.user = { id: req.user.userId };
+
+    const desparasitacion = this.desparasitacionRepository.create(body);
+    return await this.desparasitacionRepository.save(desparasitacion);
   }
 
-  findAll() {
-    return `This action returns all desparacitaciones`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} desparacitacione`;
-  }
-
-  update(id: number, updateDesparacitacioneDto: UpdateDesparacitacioneDto) {
-    return `This action updates a #${id} desparacitacione`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} desparacitacione`;
+  async remove(id: number) {
+    const desparasitacion = await this.desparasitacionRepository.findOne({
+      where: { id },
+    });
+    if (!desparasitacion) {
+      throw new Error('Desparasitación no encontrada');
+    }
+    return await this.desparasitacionRepository.softDelete(id);
   }
 }

@@ -17,7 +17,9 @@ export class Desparacitacione {
   @Column({ nullable: true })
   fecha: string;
   @Column({ nullable: true })
-  paso: string;
+  peso: string;
+  @Column({ nullable: true })
+  medicamentos: string;
   @CreateDateColumn()
   createdAt: Date;
   @UpdateDateColumn()
