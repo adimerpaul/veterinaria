@@ -40,6 +40,7 @@ export class VacunasService {
     if (!vacuna) {
       throw new Error('Vacuna not found');
     }
-    return await this.vacunaRepository.softDelete(vacuna);
+    // console.log('vacuna', vacuna);
+    return await this.vacunaRepository.softDelete(id);
   }
 }

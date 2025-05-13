@@ -29,8 +29,8 @@ export class UsersController {
   }
 
   @Post('login')
-  login(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.login(createUserDto);
+  login(@Body() body) {
+    return this.usersService.login(body);
   }
 
   @UseGuards(AuthGuard('jwt'))
