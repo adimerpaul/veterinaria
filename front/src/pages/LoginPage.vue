@@ -9,6 +9,11 @@
                 <div class="row flex flex-center">
                   <div class="col-12 text-center q-pt-lg">
                     <!--                  <q-img src="logo.png" class="q-ma-md" width="150px"/>-->
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
                   </div>
                   <div class="col-12 col-md-2"></div>
                   <div class="col-12 col-md-8 text-h6 text-bold">
