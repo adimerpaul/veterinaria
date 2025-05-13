@@ -13,6 +13,7 @@ import { PermisosModule } from './permisos/permisos.module';
 import { UserPermisosModule } from './user-permisos/user-permisos.module';
 import { VacunasModule } from './vacunas/vacunas.module';
 import { DesparacitacionesModule } from './desparacitaciones/desparacitaciones.module';
+import { HistorialesModule } from './historiales/historiales.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -39,6 +40,7 @@ import { DesparacitacionesModule } from './desparacitaciones/desparacitaciones.m
     UserPermisosModule,
     VacunasModule,
     DesparacitacionesModule,
+    HistorialesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

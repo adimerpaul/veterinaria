@@ -14,6 +14,7 @@ import { Detail } from '../../details/entities/detail.entity';
 import { Documento } from '../../documentos/entities/documento.entity';
 import { Vacuna } from '../../vacunas/entities/vacuna.entity';
 import { Desparacitacione } from '../../desparacitaciones/entities/desparacitacione.entity';
+import { Historiale } from '../../historiales/entities/historiale.entity';
 
 @Entity('mascotas')
 // @Unique(['nombre'])
@@ -74,4 +75,7 @@ export class Mascota {
     (desparacitacione) => desparacitacione.mascota,
   )
   desparacitaciones: Desparacitacione[];
+  // historelaes
+  @OneToMany(() => Historiale, (historiale) => historiale.mascota)
+  historiales: Historiale[];
 }
