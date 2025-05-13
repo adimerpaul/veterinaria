@@ -38,8 +38,12 @@
             align="justify"
             narrow-indicator
           >
-            <q-tab name="mascota" :class="{'bg-blue text-white': tab === 'mascota'}">
+            <q-tab name="mascota" :class="{'bg-primary text-white': tab === 'mascota'}">
               <q-btn flat dense no-caps icon="pets" label="Mascota" :color="tab === 'mascota' ? 'white' : 'black'" />
+            </q-tab>
+<!--            tab historial-->
+            <q-tab name="historial" :class="{'bg-blue text-white': tab === 'historial'}">
+              <q-btn flat dense no-caps icon="history" label="Historial clinico" :color="tab === 'historial' ? 'white' : 'black'" />
             </q-tab>
             <q-tab name="ventas" :class="{'bg-indigo text-white': tab === 'ventas'}">
               <q-btn flat dense no-caps icon="shopping_cart" label="Ventas" :color="tab === 'ventas' ? 'white' : 'black'" />
@@ -65,6 +69,9 @@
           <q-tab-panels v-model="tab">
             <q-tab-panel name="mascota" animated>
               <MascotaUpdate :mascota="mascota" :razas="razas" @getMascota="getMascota"/>
+            </q-tab-panel>
+            <q-tab-panel name="historial" animated>
+              <MascotaHistorial :mascota="mascota" @getMascota="getMascota"/>
             </q-tab-panel>
             <q-tab-panel name="ventas" animated>
               <MascotaSales :mascota="mascota" @getMascota="getMascota"/>
@@ -101,9 +108,11 @@ import MascotaCertificados from "pages/mascotas/MascotaCertificados.vue";
 import MascotaLaboratorios from "pages/mascotas/MascotaLaboratorios.vue";
 import MascotaVacunas from "pages/mascotas/MascotaVacunas.vue";
 import MascotaDesparacitacion from "pages/mascotas/MascotaDesparacitacion.vue";
+import MascotaHistorial from "pages/mascotas/MascotaHistorial.vue";
 
 export default {
   components: {
+    MascotaHistorial,
     MascotaDesparacitacion,
     MascotaVacunas,
     MascotaLaboratorios, MascotaCertificados, MascotaComplementos, MascotaSales, MascotaUpdate},
