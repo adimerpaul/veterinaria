@@ -14,23 +14,45 @@
           <th>Diagnóstico</th>
           <th>Pronóstico</th>
           <th>Fecha</th>
+          <th>Usuario</th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="(h, i) in mascota.historiales" :key="h.id">
           <td>
-<!--            <q-btn @click="editarHistorial(h)" icon="edit" flat dense color="blue" size="sm" />-->
+            <q-btn-dropdown label="Opciones" color="primary"  dense size="sm" no-caps>
+              <q-item clickable v-ripple @click="editarHistorial(h)" v-close-popup>
+                <q-item-section avatar>
+                  <q-icon name="edit" />
+                </q-item-section>
+                <q-item-section>
+                  Editar
+                </q-item-section>
+              </q-item>
+<!--              item eleminar-->
+              <q-item clickable v-ripple @click="eliminarHistorial(h)" v-close-popup>
+                <q-item-section avatar>
+                  <q-icon name="delete" />
+                </q-item-section>
+                <q-item-section>
+                  Eliminar
+                </q-item-section>
+              </q-item>
+            </q-btn-dropdown>
           </td>
           <td>{{ i + 1 }}</td>
           <td>{{ h.peso }}</td>
           <td>{{ h.diagnostico }}</td>
           <td>{{ h.pronostico }}</td>
           <td>{{ $filters.dateDmYHis(h.fecha) }}</td>
+          <td>
+            {{h.user?.username}}
+          </td>
         </tr>
         </tbody>
       </q-markup-table>
     </template>
-    <pre>{{mascota.historiales}}</pre>
+<!--    <pre>{{mascota.historiales}}</pre>-->
 
     <q-dialog v-model="dialog">
       <q-card style="width: 800px">
@@ -174,6 +196,24 @@ export default {
       this.dialog = true;
       this.editando = true;
       this.historial = { ...hist, mascotaId: this.mascota.id };
+    },
+    eliminarHistorial(hist) {
+      this.$q.dialog({
+        title: 'Eliminar Historial',
+        message: '¿Está seguro de eliminar este historial?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.loading = true;
+        this.$axios.delete(`/historiales/${hist.id}`).then(() => {
+          this.$emit('getMascota');
+          this.$alert.success('Historial eliminado correctamente');
+        }).catch(() => {
+          this.$alert.error('Error al eliminar el historial');
+        }).finally(() => {
+          this.loading = false;
+        });
+      });
     },
     guardarHistorial() {
       this.loading = true;
