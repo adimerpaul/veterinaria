@@ -8,28 +8,29 @@
       <q-markup-table wrap-cells dense flat bordered>
         <thead>
         <tr class="bg-primary text-white">
+          <th>Acciones</th>
           <th>#</th>
           <th>Peso</th>
           <th>Diagnóstico</th>
           <th>Pronóstico</th>
           <th>Fecha</th>
-          <th>Acciones</th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="(h, i) in mascota.historiales" :key="h.id">
+          <td>
+<!--            <q-btn @click="editarHistorial(h)" icon="edit" flat dense color="blue" size="sm" />-->
+          </td>
           <td>{{ i + 1 }}</td>
           <td>{{ h.peso }}</td>
           <td>{{ h.diagnostico }}</td>
           <td>{{ h.pronostico }}</td>
-          <td>{{ h.createdAt.substring(0, 10) }}</td>
-          <td>
-            <q-btn @click="editarHistorial(h)" icon="edit" flat dense color="blue" size="sm" />
-          </td>
+          <td>{{ $filters.dateDmYHis(h.fecha) }}</td>
         </tr>
         </tbody>
       </q-markup-table>
     </template>
+    <pre>{{mascota.historiales}}</pre>
 
     <q-dialog v-model="dialog">
       <q-card style="width: 800px">
