@@ -17,7 +17,12 @@ export class HistorialesController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  create(@Body() body) {
+  create(
+      @Body() body,
+      @Req() req
+  ) {
+    const user = req.user
+    body.user = {id:user.userId}
     return this.historialesService.create(body);
   }
 

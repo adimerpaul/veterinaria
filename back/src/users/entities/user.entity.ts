@@ -14,6 +14,7 @@ import { Documento } from '../../documentos/entities/documento.entity';
 import { UserPermiso } from '../../user-permisos/entities/user-permiso.entity';
 import { Vacuna } from '../../vacunas/entities/vacuna.entity';
 import { Desparacitacione } from '../../desparacitaciones/entities/desparacitacione.entity';
+import {Historiale} from "../../historiales/entities/historiale.entity";
 
 @Entity({ name: 'users' })
 @Unique(['username'])
@@ -65,6 +66,10 @@ export class User {
 
   @OneToMany(() => Vacuna, (vacuna) => vacuna.user)
   vacunas: Vacuna[];
+
+  // historiales
+  @OneToMany(()=> Historiale,(historial)=>historial.user)
+  historiales: Historiale[];
 
   @OneToMany(
     () => Desparacitacione,

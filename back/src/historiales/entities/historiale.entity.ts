@@ -8,6 +8,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { Mascota } from '../../mascotas/entities/mascota.entity';
+import {User} from "../../users/entities/user.entity";
 
 @Entity('historiales')
 export class Historiale {
@@ -82,6 +83,12 @@ export class Historiale {
 
   @Column({ type: 'text', nullable: true })
   pronostico: string;
+  @Column({
+    nullable: true,
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  fecha: Date;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -94,4 +101,7 @@ export class Historiale {
 
   @ManyToOne(() => Mascota, (mascota) => mascota.historiales)
   mascota: Mascota;
+  
+  @ManyToOne(()=>User,(user)=>user.historiales)
+  user: User
 }
