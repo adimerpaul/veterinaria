@@ -45,7 +45,7 @@ export class Historiale {
   cf: string;
 
   @Column({ nullable: true })
-  parto: string;
+  parvo: string;
 
   @Column({ nullable: true })
   hexa: string;

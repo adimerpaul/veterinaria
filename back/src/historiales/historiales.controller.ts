@@ -1,30 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Put,
+  Body,
+  Param,
+  Delete,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { HistorialesService } from './historiales.service';
-import { CreateHistorialeDto } from './dto/create-historiale.dto';
-import { UpdateHistorialeDto } from './dto/update-historiale.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('historiales')
 export class HistorialesController {
   constructor(private readonly historialesService: HistorialesService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Post()
-  create(@Body() createHistorialeDto: CreateHistorialeDto) {
-    return this.historialesService.create(createHistorialeDto);
+  create(@Body() body) {
+    return this.historialesService.create(body);
   }
 
-  @Get()
-  findAll() {
-    return this.historialesService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.historialesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateHistorialeDto: UpdateHistorialeDto) {
-    return this.historialesService.update(+id, updateHistorialeDto);
+  @UseGuards(AuthGuard('jwt'))
+  @Put(':id')
+  update(@Param('id') id: string, @Body() body) {
+    return this.historialesService.update(+id, body);
   }
 
   @Delete(':id')
