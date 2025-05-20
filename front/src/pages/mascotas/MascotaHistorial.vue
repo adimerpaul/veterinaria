@@ -7,7 +7,7 @@
     <template v-if="mascota.historiales.length">
       <q-markup-table wrap-cells dense flat bordered>
         <thead>
-        <tr class="bg-primary text-white">
+        <tr class="bg-blue text-white">
           <th>Acciones</th>
           <th>#</th>
           <th>Peso</th>
@@ -20,7 +20,7 @@
         <tbody>
         <tr v-for="(h, i) in mascota.historiales" :key="h.id">
           <td>
-            <q-btn-dropdown label="Opciones" color="primary"  dense size="sm" no-caps>
+            <q-btn-dropdown label="Opciones" color="blue"  dense size="sm" no-caps>
               <q-item clickable v-ripple @click="editarHistorial(h)" v-close-popup>
                 <q-item-section avatar>
                   <q-icon name="edit" />
