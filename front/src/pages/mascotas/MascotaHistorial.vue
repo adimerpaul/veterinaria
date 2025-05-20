@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-right">
-      <q-btn @click="abrirDialogoHistorial" label="Registrar Historial" color="primary" icon="add_circle_outline" no-caps />
+      <q-btn @click="abrirDialogoHistorial" label="Registrar Historial" color="green" icon="add_circle_outline" no-caps />
     </div>
 
     <template v-if="mascota.historiales.length">
@@ -26,7 +26,7 @@
                   <q-icon name="edit" />
                 </q-item-section>
                 <q-item-section>
-                  Editar
+                  Ver
                 </q-item-section>
               </q-item>
 <!--              item eleminar-->
@@ -36,6 +36,15 @@
                 </q-item-section>
                 <q-item-section>
                   Eliminar
+                </q-item-section>
+              </q-item>
+<!--              agregar tratamiento-->
+              <q-item clickable v-ripple @click="abrirDialogoTratamiento(h)" v-close-popup>
+                <q-item-section avatar>
+                  <q-icon name="add" />
+                </q-item-section>
+                <q-item-section>
+                  Agregar Tratamiento
                 </q-item-section>
               </q-item>
             </q-btn-dropdown>
@@ -142,9 +151,41 @@
         </q-card-section>
       </q-card>
     </q-dialog>
+    <q-dialog v-model="dialogTratamiento">
+      <q-card style="width: 800px">
+        <q-card-section>
+          <q-form @submit.prevent="guardarTratamiento">
+            <div class="text-h6 text-center">
+              {{ tratamiento.id ? 'Editar Tratamiento' : 'Registrar Tratamiento' }}
+            </div>
+            <div class="row">
+              <div class="col-12 col-md-6">
+                <q-input v-model="tratamiento.observaciones" label="Observaciones" outlined dense hint="" />
+              </div>
+              <div class="col-12 col-md-6">
+                <q-input v-model="tratamiento.comentario" label="Comentario" outlined dense hint="" />
+              </div>
+<!--              <div class="col-12 col-md-6">-->
+<!--                <q-input v-model="tratamiento.fecha" label="Fecha" type="date" outlined dense hint="" />-->
+<!--              </div>-->
+              <div class="col-12 col-md-6">
+                <q-input v-model="tratamiento.costo" label="Costo" type="number" outlined dense hint="" />
+              </div>
+              <div class="col-12 text-right">
+                <q-btn flat label="Cancelar" color="negative" v-close-popup />
+                <q-btn type="submit" label="Guardar" color="positive" :loading="loading" />
+              </div>
+
+            </div>
+          </q-form>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 <script>
+import moment from "moment";
+
 export default {
   name: 'MascotaHistorial',
   props: {
@@ -158,10 +199,34 @@ export default {
       dialog: false,
       loading: false,
       historial: {},
-      editando: false
+      editando: false,
+      dialogTratamiento: false,
+      tratamiento: {}
     }
   },
   methods: {
+    guardarTratamiento(){
+      this.loading = true;
+      this.$axios.post('/tratamientos', this.tratamiento).then(() => {
+        this.$emit('getMascota');
+        this.$alert.success('Tratamiento guardado correctamente');
+        this.dialogTratamiento = false;
+      }).catch(() => {
+        this.$alert.error('Error al guardar el tratamiento');
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
+    abrirDialogoTratamiento(){
+      this.dialogTratamiento = true;
+      this.tratamiento = {
+        observaciones: '',
+        comentario: '',
+        fecha: moment().format('YYYY-MM-DD'),
+        costo: '',
+        historialId: this.historial.id
+      }
+    },
     abrirDialogoHistorial() {
       this.dialog = true;
       this.editando = false;
