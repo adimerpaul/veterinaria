@@ -9,10 +9,11 @@
         <thead>
         <tr class="bg-blue text-white">
           <th>Acciones</th>
-          <th>#</th>
+<!--          <th>#</th>-->
           <th>Peso</th>
           <th>Diagnóstico</th>
           <th>Pronóstico</th>
+          <th>Tratamientos</th>
           <th>Fecha</th>
           <th>Usuario</th>
         </tr>
@@ -49,10 +50,18 @@
               </q-item>
             </q-btn-dropdown>
           </td>
-          <td>{{ i + 1 }}</td>
+<!--          <td>{{ i + 1 }}</td>-->
           <td>{{ h.peso }}</td>
           <td>{{ h.diagnostico }}</td>
           <td>{{ h.pronostico }}</td>
+          <td>
+<!--            {{ h.tratamientos.length }}-->
+            <ul>
+              <li v-for="(t, i) in h.tratamientos" :key="t.id">
+                {{ $filters.dateDmYHis(t.fecha) }}
+              </li>
+            </ul>
+          </td>
           <td>{{ $filters.dateDmYHis(h.fecha) }}</td>
           <td>
             {{h.user?.username}}
@@ -61,7 +70,7 @@
         </tbody>
       </q-markup-table>
     </template>
-<!--    <pre>{{mascota.historiales}}</pre>-->
+    <pre>{{mascota.historiales}}</pre>
 
     <q-dialog v-model="dialog">
       <q-card style="width: 800px">
@@ -171,6 +180,7 @@
               <div class="col-12 col-md-6">
                 <q-input v-model="tratamiento.costo" label="Costo" type="number" outlined dense hint="" />
               </div>
+<!--              <pre>{{tratamiento}}</pre>-->
               <div class="col-12 text-right">
                 <q-btn flat label="Cancelar" color="negative" v-close-popup />
                 <q-btn type="submit" label="Guardar" color="positive" :loading="loading" />
@@ -217,14 +227,14 @@ export default {
         this.loading = false;
       });
     },
-    abrirDialogoTratamiento(){
+    abrirDialogoTratamiento(h){
       this.dialogTratamiento = true;
       this.tratamiento = {
         observaciones: '',
         comentario: '',
         fecha: moment().format('YYYY-MM-DD'),
         costo: '',
-        historialId: this.historial.id
+        historialId: h.id
       }
     },
     abrirDialogoHistorial() {
