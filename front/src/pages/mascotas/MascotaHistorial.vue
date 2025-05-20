@@ -59,6 +59,10 @@
             <ul>
               <li v-for="(t, i) in h.tratamientos" :key="t.id">
                 {{ $filters.dateDmYHis(t.fecha) }}
+<!--                icon eliminar-->
+                <span>
+                  <q-icon name="delete" @click="eliminarTratamiento(t)" class="cursor-pointer" size="xs" color="red" />
+                </span>
               </li>
             </ul>
           </td>
@@ -215,6 +219,24 @@ export default {
     }
   },
   methods: {
+    eliminarTratamiento(t) {
+      this.$q.dialog({
+        title: 'Eliminar Tratamiento',
+        message: '¿Está seguro de eliminar este tratamiento?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.loading = true;
+        this.$axios.delete(`/tratamientos/${t.id}`).then(() => {
+          this.$emit('getMascota');
+          this.$alert.success('Tratamiento eliminado correctamente');
+        }).catch(() => {
+          this.$alert.error('Error al eliminar el tratamiento');
+        }).finally(() => {
+          this.loading = false;
+        });
+      });
+    },
     guardarTratamiento(){
       this.loading = true;
       this.$axios.post('/tratamientos', this.tratamiento).then(() => {
