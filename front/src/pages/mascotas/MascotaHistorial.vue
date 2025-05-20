@@ -184,6 +184,36 @@
               <div class="col-12 col-md-6">
                 <q-input v-model="tratamiento.costo" label="Costo" type="number" outlined dense hint="" />
               </div>
+              <div class="col-12 col-md-6">
+
+              </div>
+              <div class="col-12 col-md-6">
+                <q-select v-model="medicamento" label="Medicamento" outlined dense hint="" :options="medicamentos" option-label="nombre" option-value="id" emit-value map-options>
+                  <template v-slot:option="scope">
+                    <q-item v-bind="scope.itemProps">
+                      <q-item-section>
+                        <q-item-label>{{ scope.opt.nombre }}</q-item-label>
+                      </q-item-section>
+                      <q-item-section side>
+                        <q-btn @click.stop="agregarMedicamento(scope.opt)" icon="add" color="green" flat />
+                      </q-item-section>
+                    </q-item>
+                  </template>
+<!--                  <template v-slot:selected-item="scope">-->
+<!--                    <q-item v-bind="scope.itemProps">-->
+<!--                      <q-item-section>-->
+<!--                        <q-item-label>{{ scope.opt.nombre }}</q-item-label>-->
+<!--                      </q-item-section>-->
+<!--                      <q-item-section side>-->
+<!--                        <q-btn @click.stop="agregarMedicamento(scope.opt)" icon="add" color="green" flat />-->
+<!--                      </q-item-section>-->
+<!--                    </q-item>-->
+<!--                  </template>-->
+                </q-select>
+              </div>
+              <div class="col-12 col-md-6">
+
+              </div>
 <!--              <pre>{{tratamiento}}</pre>-->
               <div class="col-12 text-right">
                 <q-btn flat label="Cancelar" color="negative" v-close-popup />
@@ -215,8 +245,17 @@ export default {
       historial: {},
       editando: false,
       dialogTratamiento: false,
-      tratamiento: {}
+      tratamiento: {},
+      medicamentos: [],
+      medicamento: ''
     }
+  },
+  mounted() {
+    this.$axios.get('/productos/all').then(res => {
+      this.medicamentos = res.data;
+    }).catch(() => {
+      this.$alert.error('Error al cargar los medicamentos');
+    });
   },
   methods: {
     eliminarTratamiento(t) {
