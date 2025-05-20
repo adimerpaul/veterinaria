@@ -93,6 +93,7 @@ export class MascotasService {
         'desparacitaciones',
         'desparacitaciones.user',
         'historiales.user',
+        'historiales.tratamientos',
       ],
     });
 

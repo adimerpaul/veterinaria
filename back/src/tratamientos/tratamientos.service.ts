@@ -1,11 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTratamientoDto } from './dto/create-tratamiento.dto';
 import { UpdateTratamientoDto } from './dto/update-tratamiento.dto';
+import { Tratamiento } from './entities/tratamiento.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class TratamientosService {
-  create(createTratamientoDto: CreateTratamientoDto) {
-    return 'This action adds a new tratamiento';
+  constructor(
+    @InjectRepository(Tratamiento)
+    private tratamientosRepository: Repository<Tratamiento>,
+  ) {}
+  async create(body, req) {
+    // console.log(body);
+    body.user = { id: req.user.userId };
+    body.fecha = new Date();
+    body.historiale = { id: body.historialId };
+    if (body.costo === '') {
+      body.costo = 0;
+    }
+    const tratamiento = this.tratamientosRepository.create(body);
+    return await this.tratamientosRepository.save(tratamiento);
   }
 
   findAll() {

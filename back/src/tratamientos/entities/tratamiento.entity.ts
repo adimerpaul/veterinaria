@@ -4,7 +4,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Historiale } from '../../historiales/entities/historiale.entity';
 
-@Entity({ name: 'tratmientos' })
+@Entity({ name: 'tratamientos' })
 export class Tratamiento {
   @PrimaryGeneratedColumn()
   id: number;
