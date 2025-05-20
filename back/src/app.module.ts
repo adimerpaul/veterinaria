@@ -14,6 +14,8 @@ import { UserPermisosModule } from './user-permisos/user-permisos.module';
 import { VacunasModule } from './vacunas/vacunas.module';
 import { DesparacitacionesModule } from './desparacitaciones/desparacitaciones.module';
 import { HistorialesModule } from './historiales/historiales.module';
+import { TratamientosModule } from './tratamientos/tratamientos.module';
+import { TratamientoMedicamentosModule } from './tratamiento-medicamentos/tratamiento-medicamentos.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -41,6 +43,8 @@ import { HistorialesModule } from './historiales/historiales.module';
     VacunasModule,
     DesparacitacionesModule,
     HistorialesModule,
+    TratamientosModule,
+    TratamientoMedicamentosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

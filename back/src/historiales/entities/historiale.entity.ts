@@ -8,7 +8,8 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { Mascota } from '../../mascotas/entities/mascota.entity';
-import {User} from "../../users/entities/user.entity";
+import { User } from '../../users/entities/user.entity';
+import { Tratamiento } from '../../tratamientos/entities/tratamiento.entity';
 
 @Entity('historiales')
 export class Historiale {
@@ -101,7 +102,10 @@ export class Historiale {
 
   @ManyToOne(() => Mascota, (mascota) => mascota.historiales)
   mascota: Mascota;
-  
-  @ManyToOne(()=>User,(user)=>user.historiales)
-  user: User
+
+  @ManyToOne(() => User, (user) => user.historiales)
+  user: User;
+
+  @ManyToOne(() => Tratamiento, (tratamiento) => tratamiento.historiale)
+  tratamientos: Tratamiento[];
 }
