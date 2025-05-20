@@ -1,8 +1,18 @@
 // import {Entity} from "typeorm";
 
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Historiale } from '../../historiales/entities/historiale.entity';
+import { TratamientoMedicamento } from '../../tratamiento-medicamentos/entities/tratamiento-medicamento.entity';
 
 @Entity({ name: 'tratamientos' })
 export class Tratamiento {
@@ -26,4 +36,19 @@ export class Tratamiento {
 
   @ManyToOne(() => Historiale, (historiale) => historiale.tratamientos)
   historiale: Historiale;
+
+  @OneToMany(
+    () => TratamientoMedicamento,
+    (tratamientoMedicamento) => tratamientoMedicamento.tratamiento,
+  )
+  tratamientoMedicamentos: TratamientoMedicamento[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

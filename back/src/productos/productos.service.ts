@@ -58,4 +58,7 @@ export class ProductosService {
       id,
     };
   }
+  async findAllProductos() {
+    return await this.productosRepository.find();
+  }
 }

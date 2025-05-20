@@ -23,19 +23,26 @@ export class TratamientosService {
     return await this.tratamientosRepository.save(tratamiento);
   }
 
-  findAll() {
-    return `This action returns all tratamientos`;
-  }
+  // findAll() {
+  //   return `This action returns all tratamientos`;
+  // }
+  //
+  // findOne(id: number) {
+  //   return `This action returns a #${id} tratamiento`;
+  // }
+  //
+  // update(id: number, updateTratamientoDto: UpdateTratamientoDto) {
+  //   return `This action updates a #${id} tratamiento`;
+  // }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tratamiento`;
-  }
-
-  update(id: number, updateTratamientoDto: UpdateTratamientoDto) {
-    return `This action updates a #${id} tratamiento`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} tratamiento`;
+  async remove(id: number) {
+    const tratamiento = await this.tratamientosRepository.findOne({
+      where: { id },
+    });
+    if (!tratamiento) {
+      return 'No se encontró el tratamiento';
+    }
+    await this.tratamientosRepository.softDelete(id);
+    return 'Tratamiento eliminado';
   }
 }
