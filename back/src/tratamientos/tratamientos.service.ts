@@ -12,13 +12,13 @@ export class TratamientosService {
     private tratamientosRepository: Repository<Tratamiento>,
   ) {}
   async create(body, req) {
-    // console.log(body);
     body.user = { id: req.user.userId };
     body.fecha = new Date();
     body.historiale = { id: body.historialId };
     if (body.costo === '') {
       body.costo = 0;
     }
+    console.log(body);
     const tratamiento = this.tratamientosRepository.create(body);
     return await this.tratamientosRepository.save(tratamiento);
   }

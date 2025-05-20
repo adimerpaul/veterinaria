@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  ManyToOne,
+  ManyToOne, OneToMany,
 } from 'typeorm';
 import { Mascota } from '../../mascotas/entities/mascota.entity';
 import { User } from '../../users/entities/user.entity';
@@ -106,6 +106,6 @@ export class Historiale {
   @ManyToOne(() => User, (user) => user.historiales)
   user: User;
 
-  @ManyToOne(() => Tratamiento, (tratamiento) => tratamiento.historiale)
+  @OneToMany(() => Tratamiento, (tratamiento) => tratamiento.historiale)
   tratamientos: Tratamiento[];
 }
