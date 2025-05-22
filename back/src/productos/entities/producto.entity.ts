@@ -34,6 +34,8 @@ export class Producto {
   stock: number;
   @Column({ default: true })
   activo: boolean;
+  @Column({ nullable: true, default: 'imagenes\\default.png' })
+  imagen: string;
   @CreateDateColumn()
   @Exclude()
   createdAt: Date;

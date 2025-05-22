@@ -1,11 +1,12 @@
 import {
-    Column,
-    CreateDateColumn,
-    DeleteDateColumn,
-    Entity, ManyToOne,
-    OneToMany,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn,
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Tratamiento } from '../../tratamientos/entities/tratamiento.entity';
 
