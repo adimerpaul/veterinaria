@@ -43,6 +43,7 @@
             <td>Opciones</td>
             <td>Codigo</td>
             <td>Nombre</td>
+            <td>Imagen</td>
             <td>Precio Compra</td>
             <td>Precio Venta</td>
             <td>Stock</td>
@@ -65,6 +66,16 @@
             </td>
             <td>{{ producto.codigo }}</td>
             <td>{{ producto.nombre }}</td>
+            <td>
+<!--              {{`${$url}uploads/${producto.imagen}`}}-->
+              <q-img
+                @click="verImagen(producto.imagen)"
+                v-if="producto.imagen"
+                :src="`${$url}uploads/${producto.imagen}`"
+                style="width: 40px; height: 40px;"
+                class="q-mb-sm"
+              />
+            </td>
             <td>{{ producto.precioCompra }}</td>
             <td>{{ producto.precioVenta }}</td>
             <td>{{ producto.stock }}</td>
@@ -76,21 +87,24 @@
           </tr>
           </tbody>
         </q-markup-table>
-<!--        <pre>{{ productos }}</pre>-->
+        <pre>{{ productos }}</pre>
+<!--        [-->
 <!--        {-->
-<!--        "id": 592,-->
-<!--        "codigo": "taphepa",-->
-<!--        "nombre": "Tapon de Heparina",-->
-<!--        "presentacion": "unidad",-->
-<!--        "contenido": "",-->
-<!--        "precioCompra": "1.20",-->
-<!--        "precioVenta": "5.00",-->
+<!--        "id": 19,-->
+<!--        "codigo": "mace",-->
+<!--        "nombre": "Acedan",-->
+<!--        "presentacion": "caja",-->
+<!--        "contenido": "10ml",-->
+<!--        "tipo": "Producto",-->
+<!--        "precioCompra": "15.00",-->
+<!--        "precioVenta": "45.00",-->
 <!--        "stock": 1,-->
 <!--        "activo": true,-->
-<!--        "createdAt": "2025-02-28T10:21:37.873Z",-->
-<!--        "updatedAt": "2025-02-28T10:21:37.873Z",-->
+<!--        "imagen": "imagenes\\19.png",-->
+<!--        "createdAt": "2025-02-28T10:21:37.836Z",-->
+<!--        "updatedAt": "2025-05-21T10:10:15.447Z",-->
 <!--        "deletedAt": null-->
-<!--        }-->
+<!--        },-->
       </q-card-section>
     </q-card>
     <q-dialog v-model="productoDialog" persistent position="right" maximized>
@@ -149,6 +163,15 @@ export default {
     this.productosGet();
   },
   methods: {
+    verImagen(imagen) {
+      this.$q.dialog({
+        title: 'Imagen',
+        message: `<img src="${this.$url}uploads/${imagen}" style="width: 100%; height: auto;" />`,
+        html: true,
+        persistent: true,
+        ok: { label: 'Cerrar', color: 'primary' }
+      });
+    },
     getColor(tipo) {
       switch (tipo) {
         case 'Cirugía':

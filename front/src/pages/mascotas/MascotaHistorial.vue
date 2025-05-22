@@ -74,7 +74,7 @@
         </tbody>
       </q-markup-table>
     </template>
-    <pre>{{mascota.historiales}}</pre>
+<!--    <pre>{{mascota.historiales}}</pre>-->
 
     <q-dialog v-model="dialog">
       <q-card style="width: 800px">
@@ -187,8 +187,21 @@
               <div class="col-12 col-md-6">
 
               </div>
-              <div class="col-12 col-md-6">
-                <q-select v-model="medicamento" label="Medicamento" outlined dense hint="" :options="medicamentos" option-label="nombre" option-value="id" emit-value map-options>
+              <div class="col-12 col-md-12">
+                <q-select
+                  v-model="medicamento"
+                  label="Medicamento"
+                  outlined
+                  dense
+                  hint=""
+                  :options="medicamentos"
+                  option-label="nombre"
+                  option-value="id"
+                  use-input
+                  @filter="filterFn"
+                  emit-value
+                  clearable
+                  map-options>
                   <template v-slot:option="scope">
                     <q-item v-bind="scope.itemProps">
                       <q-item-section>
@@ -247,17 +260,33 @@ export default {
       dialogTratamiento: false,
       tratamiento: {},
       medicamentos: [],
+      medicamentosAll: [],
       medicamento: ''
     }
   },
   mounted() {
     this.$axios.get('/productos/all').then(res => {
       this.medicamentos = res.data;
+      this.medicamentosAll = res.data;
     }).catch(() => {
       this.$alert.error('Error al cargar los medicamentos');
     });
   },
   methods: {
+    filterFn(val, update) {
+      if (val === '') {
+        update(() => {
+          this.medicamentos = this.medicamentosAll;
+        });
+        return;
+      }
+      const needle = val.toLowerCase();
+      update(() => {
+        this.medicamentos = this.medicamentosAll.filter((item) => {
+          return item.nombre.toLowerCase().indexOf(needle) > -1;
+        });
+      });
+    },
     eliminarTratamiento(t) {
       this.$q.dialog({
         title: 'Eliminar Tratamiento',
