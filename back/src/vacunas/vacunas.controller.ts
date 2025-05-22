@@ -7,7 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
-  Req,
+  Req, Query,
 } from '@nestjs/common';
 import { VacunasService } from './vacunas.service';
 import { CreateVacunaDto } from './dto/create-vacuna.dto';
@@ -43,5 +43,9 @@ export class VacunasController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.vacunasService.remove(+id);
+  }
+  @Get('proximas')
+  async getProximasVacunas(@Query('dias') dias: number = 7) {
+    return this.vacunasService.findProximasVacunas(dias);
   }
 }

@@ -71,6 +71,12 @@
             <div class="text-h6 text-center">Registrar Vacuna</div>
             <div class="q-pa-xs">
               <q-input v-model="vacuna.fechaProximaVacuna" label="Fecha Proxima Vacuna" type="date" outlined dense clearable :rules="[val => !!val || 'Campo requerido']"/>
+              <div>
+                <label class="text-bold">Dias para la proxima vacuna</label>
+                <div class="text-h6">
+                  {{ moment(vacuna.fechaProximaVacuna).diff(moment(), 'days') }} dias
+                </div>
+              </div>
               <q-input v-model="vacuna.nombreVacuna" label="Nombre Vacuna" outlined dense clearable :rules="[val => !!val || 'Campo requerido']"/>
               <q-input v-model="vacuna.observaciones" label="Observaciones" outlined dense clearable/>
             </div>
@@ -97,6 +103,7 @@ export default {
   },
   data() {
     return {
+      moment : moment,
       loading: false,
       dialogVacuna: false,
       vacuna: {

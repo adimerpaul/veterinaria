@@ -12,7 +12,7 @@ export class VacunasService {
     @InjectRepository(Vacuna)
     private readonly vacunaRepository: Repository<Vacuna>,
   ) {}
-  async create(body,req) {
+  async create(body, req) {
     // console.log(req.user);
 
     body.fechaVacuna = moment().format('YYYY-MM-DD');
@@ -42,5 +42,21 @@ export class VacunasService {
     }
     // console.log('vacuna', vacuna);
     return await this.vacunaRepository.softDelete(id);
+  }
+  async findProximasVacunas(dias: number = 7) {
+    const hoy = moment().startOf('day');
+    const limite = moment().add(dias, 'days').endOf('day');
+
+    return await this.vacunaRepository
+        .createQueryBuilder('vacuna')
+        .leftJoinAndSelect('vacuna.mascota', 'mascota')
+        .leftJoinAndSelect('vacuna.user', 'user')
+        .where('vacuna.fechaProximaVacuna BETWEEN :hoy AND :limite', {
+          hoy: hoy.format('YYYY-MM-DD'),
+          limite: limite.format('YYYY-MM-DD'),
+        })
+        .orderBy('vacuna.fechaProximaVacuna', 'ASC')
+        .getMany();
+
   }
 }

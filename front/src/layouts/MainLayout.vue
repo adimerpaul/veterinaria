@@ -108,6 +108,7 @@ const linksList = [
   { title: 'Crear Ventas', icon: 'shopping_bag', link: '/ventas/add', can: 3 },
   { title: 'Mascotas', icon: 'pets', link: '/mascotas', can: 6 },
   { title: 'Crear Mascota', icon: 'add_circle', link: '/mascotas/create', can: 5 },
+  { title: 'Proxima Vacunas', icon: 'calendar_today', link: '/proximas-vacunas', can: 'Todos' },
 ]
 
 
