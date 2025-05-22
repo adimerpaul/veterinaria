@@ -53,12 +53,21 @@ export class ProductosService {
   }
 
   async remove(id: number) {
-    await this.productosRepository.delete(id);
+    await this.productosRepository.softDelete(id);
     return {
       id,
     };
   }
   async findAllProductos() {
     return await this.productosRepository.find();
+  }
+  async cambiarImagen(id: number, filename: string) {
+    const producto = await this.productosRepository.findOne({ where: { id } });
+    if (!producto) {
+      throw new Error('Producto no encontrado');
+    }
+
+    producto.imagen = filename;
+    return await this.productosRepository.save(producto);
   }
 }

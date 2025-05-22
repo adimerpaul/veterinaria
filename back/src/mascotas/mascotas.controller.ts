@@ -102,7 +102,7 @@ export class MascotasController {
       const compressedPath = `./uploads/${compressedFilename}`;
 
       await sharp(file.path)
-        .resize(500) // Cambia el tamaño (puedes ajustar este valor)
+        .resize(350) // Cambia el tamaño (puedes ajustar este valor)
         .jpeg({ quality: 70 }) // Reduce la calidad al 70% (ajústalo según necesidad)
         .toFile(compressedPath);
 
