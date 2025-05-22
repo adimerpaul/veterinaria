@@ -56,10 +56,21 @@
               <q-btn-dropdown dense size="10px" label="Opciones" no-caps dropdown-icon="more_vert" color="orange" :loading="loading">
                 <q-list>
                   <q-item clickable v-ripple @click="productoEdit(producto)" v-close-popup>
+                    <q-item-section avatar> <q-icon name="edit" /> </q-item-section>
                     <q-item-section>Editar</q-item-section>
                   </q-item>
                   <q-item clickable v-ripple @click="productoDelete(producto.id)" v-close-popup>
+                    <q-item-section avatar> <q-icon name="delete" /> </q-item-section>
                     <q-item-section>Eliminar</q-item-section>
+                  </q-item>
+<!--                  opcion cambiar imagen-->
+                  <q-item clickable v-ripple @click="verImagen(producto.imagen)" v-close-popup>
+                    <q-item-section avatar> <q-icon name="image" /> </q-item-section>
+                    <q-item-section>Ver Imagen</q-item-section>
+                  </q-item>
+                  <q-item clickable v-ripple @click="cambiarImagen(producto.id)" v-close-popup>
+                    <q-item-section avatar> <q-icon name="photo_camera" /> </q-item-section>
+                    <q-item-section>Cambiar Imagen</q-item-section>
                   </q-item>
                 </q-list>
               </q-btn-dropdown>
@@ -72,7 +83,7 @@
                 @click="verImagen(producto.imagen)"
                 v-if="producto.imagen"
                 :src="`${$url}uploads/${producto.imagen}`"
-                style="width: 40px; height: 40px;"
+                style="width: 35px; height: 35px;"
                 class="q-mb-sm"
               />
             </td>
@@ -87,7 +98,7 @@
           </tr>
           </tbody>
         </q-markup-table>
-        <pre>{{ productos }}</pre>
+<!--        <pre>{{ productos }}</pre>-->
 <!--        [-->
 <!--        {-->
 <!--        "id": 19,-->
@@ -163,6 +174,36 @@ export default {
     this.productosGet();
   },
   methods: {
+    cambiarImagen(id) {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.onchange = () => {
+        const file = input.files[0]; // <-- Solo un archivo
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('photo', file); // <- importante que el campo se llame "photo"
+
+        this.loading = true;
+        this.$axios.post(`productos/${id}/imagen`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+          .then(() => {
+            this.$alert.success('Imagen actualizada');
+            this.productosGet();
+          })
+          .catch(err => {
+            this.$alert.error(err.response?.data?.message || 'Error al subir imagen');
+          })
+          .finally(() => {
+            this.loading = false;
+          });
+      };
+      input.click();
+    },
     verImagen(imagen) {
       this.$q.dialog({
         title: 'Imagen',
