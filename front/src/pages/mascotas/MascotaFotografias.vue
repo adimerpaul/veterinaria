@@ -24,10 +24,10 @@
           <td>{{ i + 1 }}</td>
           <td>{{ $filters.date(foto.fecha, 'DD/MM/YYYY') }}</td>
           <td>
-            <pre>
-              {{`${$url}uploads/${foto.imagen}`}}
-            </pre>
-            <q-img :src="foto.imagen" style="width: 80px; height: 80px" />
+<!--            <pre>-->
+<!--              {{`${$url}uploads/${foto.imagen}`}}-->
+<!--            </pre>-->
+            <q-img :src="`${$url}uploads/${foto.imagen}`" style="width: 80px; height: 80px" />
           </td>
           <td>{{ foto.descripcion }}</td>
           <td>{{ foto.user?.username || 'Sin usuario' }}</td>
@@ -42,7 +42,7 @@
         </q-card-section>
       </q-card>
     </template>
-    <pre>{{mascota}}</pre>
+<!--    <pre>{{mascota}}</pre>-->
 
     <!-- Diálogo -->
     <q-dialog v-model="dialogFotografia">
