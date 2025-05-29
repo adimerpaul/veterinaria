@@ -26,7 +26,7 @@ export class TratamientoMedicamento {
   @Column({ nullable: true, type: 'decimal', precision: 10, scale: 2 })
   total: number;
 
-  @Column({ nullable: true, type: 'decimal', precision: 10, scale: 2 })
+  @Column({ nullable: true })
   fecha: Date;
 
   @ManyToOne(

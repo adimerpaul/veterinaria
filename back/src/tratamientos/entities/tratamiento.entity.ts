@@ -37,10 +37,10 @@ export class Tratamiento {
   @ManyToOne(() => Historiale, (historiale) => historiale.tratamientos)
   historiale: Historiale;
 
-  @OneToMany(
-    () => TratamientoMedicamento,
-    (tratamientoMedicamento) => tratamientoMedicamento.tratamiento,
-  )
+  @OneToMany(() => TratamientoMedicamento, (tm) => tm.tratamiento, {
+    cascade: true,
+    eager: true,
+  })
   tratamientoMedicamentos: TratamientoMedicamento[];
 
   @CreateDateColumn()
