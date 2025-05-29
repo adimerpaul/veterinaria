@@ -63,6 +63,10 @@
             <q-tab name="desparacitacion" :class="{'bg-indigo text-white': tab === 'desparacitacion'}">
               <q-btn flat dense no-caps icon="pest_control" label="Desparacitacion" :color="tab === 'desparacitacion' ? 'white' : 'black'" />
             </q-tab>
+<!--            btab fotografias-->
+            <q-tab name="fotos" :class="{'bg-grey text-white': tab === 'fotos'}">
+              <q-btn flat dense no-caps icon="photo_camera" label="Fotografias" :color="tab === 'fotos' ? 'white' : 'black'" />
+            </q-tab>
           </q-tabs>
         </q-card>
         <q-card flat bordered>
@@ -90,6 +94,9 @@
             </q-tab-panel>
             <q-tab-panel name="desparacitacion" animated>
               <MascotaDesparacitacion :mascota="mascota" @getMascota="getMascota"/>
+            </q-tab-panel>
+            <q-tab-panel name="fotos" animated>
+<!--              <MascotaFotografias :mascota="mascota" @getMascota="getMascota"/>-->
             </q-tab-panel>
           </q-tab-panels>
 <!--          <pre>{{ mascota }}</pre>-->
