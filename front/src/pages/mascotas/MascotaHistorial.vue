@@ -55,6 +55,14 @@
                   Imprimir Historial
                 </q-item-section>
               </q-item>
+              <q-item clickable v-ripple @click="abrirWhatsapp(h)" v-close-popup>
+                <q-item-section avatar>
+                  <q-icon name="chat" />
+                </q-item-section>
+                <q-item-section>
+                  Enviar WhatsApp
+                </q-item-section>
+              </q-item>
             </q-btn-dropdown>
           </td>
 <!--          <td>{{ i + 1 }}</td>-->
@@ -80,7 +88,6 @@
                         Eliminar
                       </q-item-section>
                     </q-item>
-<!--                    imprimir btn-->
                     <q-item clickable v-ripple @click="imprimirTratamiento(t)" v-close-popup>
                       <q-item-section avatar>
                         <q-icon name="print" />
@@ -467,6 +474,16 @@ export default {
         costo: '',
         historialId: h.id
       }
+    },
+    abrirWhatsapp(t) {
+      // console.log(t)
+      const mensaje = `Hola, ${this.mascota.propietario_nombre || 'dueño'}\n\n` +
+        `Le informamos que se ha registrado un tratamiento para su mascota ${this.mascota.nombre}.\n` +
+        `Detalles del tratamiento:\n` +
+        `Fecha: ${moment(t.fecha).format('DD/MM/YYYY')}\n` +
+        `Observaciones: ${t.observaciones || '-'}`;
+      const url = `https://api.whatsapp.com/send?phone=${this.mascota.propietario_telefono}&text=${encodeURIComponent(mensaje)}`;
+      window.open(url, '_blank');
     },
     imprimirHistorial(hist) {
       const doc = new jsPDF();
