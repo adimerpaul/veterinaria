@@ -1,11 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { CreateFotoDto } from './dto/create-foto.dto';
 import { UpdateFotoDto } from './dto/update-foto.dto';
+import { Foto } from './entities/foto.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class FotosService {
-  create(createFotoDto: CreateFotoDto) {
-    return 'This action adds a new foto';
+  constructor(
+    @InjectRepository(Foto)
+    private readonly fotoRepository: Repository<Foto>
+  ) {}
+  async create(body) {
+    console.log('Creating foto with body:', body);
+    const { imagen, fecha, observaciones, mascotaId, userId } = body;
+
+    const foto = this.fotoRepository.create({
+      imagen,
+      fecha,
+      observaciones,
+      mascota: { id: mascotaId },
+      user: { id: userId },
+    });
+
+    return this.fotoRepository.save(foto);
   }
 
   findAll() {
@@ -20,7 +38,11 @@ export class FotosService {
     return `This action updates a #${id} foto`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} foto`;
+  async remove(id: number) {
+    const foto = await this.fotoRepository.findOne({ where: { id } });
+    if (!foto) {
+      throw new Error(`Foto with id ${id} not found`);
+    }
+    return this.fotoRepository.remove(foto);
   }
 }

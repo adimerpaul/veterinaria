@@ -18,6 +18,8 @@ export class Foto {
   fecha: Date;
   @Column({ nullable: true })
   observaciones: string;
+  @Column({ nullable: true })
+  imagen: string;
   @CreateDateColumn()
   createdAt: Date;
   @UpdateDateColumn()
