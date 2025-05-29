@@ -182,13 +182,25 @@
               <q-input v-model="historial.laboratoti" label="Laboratorio" outlined dense hint="" />
               </div>
               <div class="col-12 col-md-6">
-              <q-input v-model="historial.ecografia" label="Ecografía" outlined dense hint="" />
+                <q-input v-model="historial.ecografia" label="Ecografía" outlined dense clearable>
+                  <template v-slot:append>
+                    <q-btn flat round dense icon="mic" @click="startRecognition('ecografia')" />
+                  </template>
+                </q-input>
               </div>
               <div class="col-12 col-md-6">
-              <q-input v-model="historial.diagnostico" label="Diagnóstico" outlined dense hint="" />
+                <q-input v-model="historial.diagnostico" label="Diagnóstico" outlined dense clearable>
+                  <template v-slot:append>
+                    <q-btn flat round dense icon="mic" @click="startRecognition('diagnostico')" />
+                  </template>
+                </q-input>
               </div>
               <div class="col-12 col-md-6">
-              <q-input v-model="historial.pronostico" label="Pronóstico" outlined dense hint="" />
+                <q-input v-model="historial.pronostico" label="Pronóstico" outlined dense clearable>
+                  <template v-slot:append>
+                    <q-btn flat round dense icon="mic" @click="startRecognition('pronostico')" />
+                  </template>
+                </q-input>
               </div>
             </div>
             <div class="text-right">
@@ -344,10 +356,32 @@ export default {
       tratamiento: {},
       medicamentos: [],
       medicamentosAll: [],
-      medicamento: ''
+      medicamento: '',
+      recognition: null,
+      activeField: null
     }
   },
   mounted() {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      this.recognition = new SpeechRecognition();
+      this.recognition.lang = 'es-ES';
+      this.recognition.interimResults = false;
+      this.recognition.continuous = false;
+
+      this.recognition.onresult = (event) => {
+        const text = event.results[0][0].transcript;
+        if (this.activeField && this.historial[this.activeField] !== undefined) {
+          this.historial[this.activeField] += text;
+        }
+      };
+
+      this.recognition.onerror = (event) => {
+        console.error('Error de reconocimiento de voz:', event.error);
+      };
+    } else {
+      console.warn('Reconocimiento de voz no soportado en este navegador.');
+    }
     this.$axios.get('/productos/all').then(res => {
       this.medicamentos = res.data;
       this.medicamentosAll = res.data;
@@ -356,6 +390,17 @@ export default {
     });
   },
   methods: {
+    startRecognition(field) {
+      if (this.recognition) {
+        this.activeField = field;
+        this.recognition.start();
+      } else {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Reconocimiento de voz no soportado por el navegador.',
+        });
+      }
+    },
     agregarMedicamento(medicamento) {
       if (this.tratamiento.medicamentos && this.tratamiento.medicamentos.length > 0) {
         const exists = this.tratamiento.medicamentos.find(m => m.id === medicamento.id);
