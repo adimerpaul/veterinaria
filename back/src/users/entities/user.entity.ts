@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   Unique,
@@ -16,6 +17,8 @@ import { Vacuna } from '../../vacunas/entities/vacuna.entity';
 import { Desparacitacione } from '../../desparacitaciones/entities/desparacitacione.entity';
 import { Historiale } from '../../historiales/entities/historiale.entity';
 import { Tratamiento } from '../../tratamientos/entities/tratamiento.entity';
+import { Mascota } from '../../mascotas/entities/mascota.entity';
+import { Foto } from '../../fotos/entities/foto.entity';
 
 @Entity({ name: 'users' })
 @Unique(['username'])
@@ -80,4 +83,7 @@ export class User {
 
   @OneToMany(() => Tratamiento, (tratamiento) => tratamiento.user)
   tratamientos: Tratamiento[];
+
+  @OneToMany(() => Foto, (foto) => foto.user)
+  fotos: Foto[];
 }

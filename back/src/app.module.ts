@@ -16,6 +16,7 @@ import { DesparacitacionesModule } from './desparacitaciones/desparacitaciones.m
 import { HistorialesModule } from './historiales/historiales.module';
 import { TratamientosModule } from './tratamientos/tratamientos.module';
 import { TratamientoMedicamentosModule } from './tratamiento-medicamentos/tratamiento-medicamentos.module';
+import { FotosModule } from './fotos/fotos.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -45,6 +46,7 @@ import { TratamientoMedicamentosModule } from './tratamiento-medicamentos/tratam
     HistorialesModule,
     TratamientosModule,
     TratamientoMedicamentosModule,
+    FotosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -94,6 +94,7 @@ export class MascotasService {
         'desparacitaciones.user',
         'historiales.user',
         'historiales.tratamientos',
+        'fotos.user',
       ],
     });
 
