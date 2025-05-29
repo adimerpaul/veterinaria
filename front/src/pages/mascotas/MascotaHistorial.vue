@@ -42,7 +42,7 @@
 <!--              agregar tratamiento-->
               <q-item clickable v-ripple @click="abrirDialogoTratamiento(h)" v-close-popup>
                 <q-item-section avatar>
-                  <q-icon name="add" />
+                  <q-icon name="add_circle_outline" />
                 </q-item-section>
                 <q-item-section>
                   Agregar Tratamiento
@@ -205,10 +205,17 @@
                   <template v-slot:option="scope">
                     <q-item v-bind="scope.itemProps">
                       <q-item-section>
-                        <q-item-label>{{ scope.opt.nombre }}</q-item-label>
+                        <q-item-label>
+                          {{ scope.opt.nombre }}
+                          <span class="text-bold">{{ scope.opt.tipo }}</span>
+                          <span>{{ scope.opt.precioVenta }} Bs</span>
+<!--                          <pre>-->
+<!--                            {{ scope.opt }}-->
+<!--                          </pre>-->
+                        </q-item-label>
                       </q-item-section>
                       <q-item-section side>
-                        <q-btn @click.stop="agregarMedicamento(scope.opt)" icon="add" color="green" flat />
+                        <q-btn @click.stop="agregarMedicamento(scope.opt)" icon="add_circle_outline" color="green" flat />
                       </q-item-section>
                     </q-item>
                   </template>
@@ -224,13 +231,53 @@
 <!--                  </template>-->
                 </q-select>
               </div>
-              <div class="col-12 col-md-6">
+              <div class="col-12">
+                <q-markup-table dense wrap-cells flat bordered >
+                  <thead>
+                  <tr class="bg-blue text-white">
+                    <th>Medicamento</th>
+                    <th>Tipo</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr v-for="(m, i) in tratamiento.medicamentos" :key="i">
+                    <td>{{ m.nombre }}</td>
+                    <td>{{ m.tipo }}</td>
+                    <td>
+                      <q-input v-model.number="m.cantidad" type="number" outlined dense hint="" />
+                    </td>
+                    <td>
+                      <q-input v-model.number="m.precio" type="number" outlined dense hint="" />
+                    </td>
+                    <td>
+                      <q-btn icon="delete" color="red" flat @click="tratamiento.medicamentos.splice(i, 1)" />
+                    </td>
+                  </tr>
+                  </tbody>
+                  <tfoot>
+                  <tr>
+                    <td colspan="3" class="text-right">Total:</td>
+                    <td>
+                      {{ tratamiento.medicamentos?.reduce((acc, m) => acc + (m.precio * m.cantidad), 0).toFixed(2) }} Bs
+                    </td>
+                    <td></td>
+                  </tr>
+                  </tfoot>
+                </q-markup-table>
 
               </div>
 <!--              <pre>{{tratamiento}}</pre>-->
               <div class="col-12 text-right">
                 <q-btn flat label="Cancelar" color="negative" v-close-popup />
                 <q-btn type="submit" label="Guardar" color="positive" :loading="loading" />
+              </div>
+              <div class="col-12">
+                <pre>
+                  {{ tratamiento }}
+                </pre>
               </div>
 
             </div>
@@ -273,6 +320,24 @@ export default {
     });
   },
   methods: {
+    agregarMedicamento(medicamento) {
+      if (this.tratamiento.medicamentos && this.tratamiento.medicamentos.length > 0) {
+        const exists = this.tratamiento.medicamentos.find(m => m.id === medicamento.id);
+        if (exists) {
+          this.$alert.error('El medicamento ya está agregado');
+          return;
+        }
+      } else {
+        this.tratamiento.medicamentos = [];
+      }
+      // this.tratamiento.medicamentos.push(medicamento);
+      this.tratamiento.medicamentos.push({
+        cantidad: 1,
+        precio: medicamento.precioVenta,
+        ...medicamento
+      });
+      this.medicamento = '';
+    },
     filterFn(val, update) {
       if (val === '') {
         update(() => {
@@ -282,8 +347,11 @@ export default {
       }
       const needle = val.toLowerCase();
       update(() => {
+        // this.medicamentos = this.medicamentosAll.filter((item) => {
+        //   return item.nombre.toLowerCase().indexOf(needle) > -1;
+        // }); filtrar tambien por tipo
         this.medicamentos = this.medicamentosAll.filter((item) => {
-          return item.nombre.toLowerCase().indexOf(needle) > -1;
+          return item.nombre.toLowerCase().indexOf(needle) > -1 || item.tipo.toLowerCase().indexOf(needle) > -1;
         });
       });
     },
@@ -307,6 +375,7 @@ export default {
     },
     guardarTratamiento(){
       this.loading = true;
+      console.log(this.tratamiento)
       this.$axios.post('/tratamientos', this.tratamiento).then(() => {
         this.$emit('getMascota');
         this.$alert.success('Tratamiento guardado correctamente');
