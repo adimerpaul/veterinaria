@@ -96,7 +96,7 @@
               <MascotaDesparacitacion :mascota="mascota" @getMascota="getMascota"/>
             </q-tab-panel>
             <q-tab-panel name="fotos" animated>
-<!--              <MascotaFotografias :mascota="mascota" @getMascota="getMascota"/>-->
+              <MascotaFotografias :mascota="mascota" @getMascota="getMascota"/>
             </q-tab-panel>
           </q-tab-panels>
 <!--          <pre>{{ mascota }}</pre>-->
@@ -116,9 +116,11 @@ import MascotaLaboratorios from "pages/mascotas/MascotaLaboratorios.vue";
 import MascotaVacunas from "pages/mascotas/MascotaVacunas.vue";
 import MascotaDesparacitacion from "pages/mascotas/MascotaDesparacitacion.vue";
 import MascotaHistorial from "pages/mascotas/MascotaHistorial.vue";
+import MascotaFotografias from "pages/mascotas/MascotaFotografias.vue";
 
 export default {
   components: {
+    MascotaFotografias,
     MascotaHistorial,
     MascotaDesparacitacion,
     MascotaVacunas,

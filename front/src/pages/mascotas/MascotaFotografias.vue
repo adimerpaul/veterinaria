@@ -1,30 +1,36 @@
 <template>
   <div>
     <div class="text-right">
-      <q-btn @click="dialogDesparasitacionClick" label="Registrar Desparasitación" color="green" icon="add_circle_outline" no-caps />
+      <q-btn @click="dialogFotografiaClick" label="Registrar Fotografía" color="green" icon="add_a_photo" no-caps />
     </div>
-    <template v-if="mascota.desparacitaciones.length > 0">
+
+    <template v-if="mascota.fotos?.length > 0">
       <q-markup-table wrap-cells dense flat bordered>
         <thead>
         <tr class="bg-black text-white">
-          <td>Opción</td>
-          <td>#</td>
+          <th>Opción</th>
+          <th>#</th>
           <th>Fecha</th>
-          <th>Medicamntos</th>
-          <th>Paso</th>
+          <th>Imagen</th>
+          <th>Descripción</th>
           <th>Usuario</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(desparasitacion, i) in mascota.desparacitaciones" :key="desparasitacion.id">
+        <tr v-for="(foto, i) in mascota.fotos" :key="foto.id">
           <td>
-            <q-btn @click="eliminarDesparasitacion(desparasitacion)" color="red" icon="delete" no-caps dense size="10px" label="Eliminar" />
+            <q-btn @click="eliminarFotografia(foto)" color="red" icon="delete" dense size="10px" label="Eliminar" no-caps />
           </td>
           <td>{{ i + 1 }}</td>
-          <td>{{ desparasitacion.fecha }}</td>
-          <td>{{ desparasitacion.medicamentos }}</td>
-          <td>{{ desparasitacion.peso }}</td>
-          <td>{{ desparasitacion.user?.username }}</td>
+          <td>{{ $filters.date(foto.fecha, 'DD/MM/YYYY') }}</td>
+          <td>
+            <pre>
+              {{`${$url}uploads/${foto.imagen}`}}
+            </pre>
+            <q-img :src="foto.imagen" style="width: 80px; height: 80px" />
+          </td>
+          <td>{{ foto.descripcion }}</td>
+          <td>{{ foto.user?.username || 'Sin usuario' }}</td>
         </tr>
         </tbody>
       </q-markup-table>
@@ -32,23 +38,24 @@
     <template v-else>
       <q-card flat bordered>
         <q-card-section>
-          <div class="text-h6 text-center">No hay desparasitaciones registradas</div>
+          <div class="text-h6 text-center">No hay fotografías registradas</div>
         </q-card-section>
       </q-card>
     </template>
+    <pre>{{mascota}}</pre>
 
-    <q-dialog v-model="dialogDesparasitacion">
-      <q-card style="max-width: 760px">
+    <!-- Diálogo -->
+    <q-dialog v-model="dialogFotografia">
+      <q-card style="max-width: 600px">
         <q-card-section>
-          <q-form @submit.prevent="desparasitacionCreate">
-            <div class="text-h6 text-center">Registrar Desparasitación</div>
-            <div class="q-pa-xs">
-              <q-input v-model="desparasitacion.fecha" label="Fecha" type="date" outlined dense clearable :rules="[val => !!val || 'Campo requerido']"/>
-              <q-input v-model="desparasitacion.peso" label="Peso" outlined dense clearable :rules="[val => !!val || 'Campo requerido']"/>
-              <q-input v-model="desparasitacion.medicamentos" label="Medicamentos" outlined dense clearable/>
-            </div>
-            <div class="text-right">
-              <q-btn @click="dialogDesparasitacion = false" label="Cancelar" color="red" icon="cancel" no-caps :loading="loading" />
+          <q-form @submit.prevent="fotografiaCreate">
+            <div class="text-h6 text-center">Registrar Fotografía</div>
+            <q-input v-model="fotografia.fecha" label="Fecha" type="date" outlined dense :rules="[val => !!val || 'Campo requerido']" />
+            <q-input v-model="fotografia.descripcion" label="Descripción" outlined dense />
+            <q-file outlined dense v-model="imagenFile" label="Seleccionar imagen" accept="image/*" />
+
+            <div class="text-right q-mt-md">
+              <q-btn @click="dialogFotografia = false" label="Cancelar" color="red" icon="cancel" no-caps :loading="loading" />
               <q-btn type="submit" color="green" icon="save" no-caps :loading="loading" label="Guardar" />
             </div>
           </q-form>
@@ -59,69 +66,81 @@
 </template>
 
 <script>
-import moment from "moment/moment.js";
+import moment from "moment";
 
 export default {
-  name: 'MascotaDesparasitacion',
+  name: 'MascotaFotografias',
   props: {
     mascota: {
       type: Object,
       required: true,
-    },
+    }
   },
   data() {
     return {
       loading: false,
-      dialogDesparasitacion: false,
-      desparasitacion: {
+      dialogFotografia: false,
+      imagenFile: null,
+      fotografia: {
         fecha: moment().format('YYYY-MM-DD'),
-        paso: '',
-        mascotaId: this.mascota.id,
+        descripcion: '',
+        mascotaId: null,
       },
-    }
+    };
   },
   methods: {
-    eliminarDesparasitacion(desparasitacion) {
-      this.$alert.confirm('¿Está seguro de eliminar la desparasitación?', 'Eliminar Registro').onOk(() => {
-        this.loading = true;
-        this.$axios.delete(`/desparacitaciones/${desparasitacion.id}`)
-          .then(() => {
-            this.$emit('getMascota');
-            this.$alert.success('Registro eliminado correctamente', 'Eliminar Registro');
-          })
-          .catch(error => {
-            this.$alert.error('Error al eliminar', 'Eliminar Registro');
-            console.error(error);
-          })
-          .finally(() => {
-            this.loading = false;
-          });
+    dialogFotografiaClick() {
+      this.dialogFotografia = true;
+      this.fotografia = {
+        fecha: moment().format('YYYY-MM-DD'),
+        descripcion: '',
+        mascotaId: this.mascota.id
+      };
+      this.imagenFile = null;
+    },
+    fotografiaCreate() {
+      if (!this.imagenFile) {
+        this.$alert.error('Debe seleccionar una imagen');
+        return;
+      }
+
+      this.loading = true;
+      const formData = new FormData();
+      formData.append('fecha', this.fotografia.fecha);
+      formData.append('descripcion', this.fotografia.descripcion || '');
+      formData.append('imagen', this.imagenFile);
+      const user = JSON.parse(localStorage.getItem('user'));
+      formData.append('userId', user?.id || 0);
+      formData.append('mascotaId', this.mascota.id);
+
+
+      this.$axios.post('/fotos', formData).then(() => {
+        this.dialogFotografia = false;
+        this.$emit('getMascota');
+        this.$alert.success('Fotografía registrada correctamente');
+      }).catch(() => {
+        this.$alert.error('Error al registrar fotografía');
+      }).finally(() => {
+        this.loading = false;
       });
     },
-    desparasitacionCreate() {
-      this.loading = true;
-      this.$axios.post('/desparacitaciones', this.desparasitacion)
-        .then(() => {
-          this.$emit('getMascota');
-          this.dialogDesparasitacion = false;
-          this.$alert.success('Desparasitación registrada correctamente', 'Registro');
-        })
-        .catch(error => {
-          this.$alert.error('Error al registrar', 'Registro');
-          console.error(error);
-        })
-        .finally(() => {
-          this.loading = false;
+    eliminarFotografia(foto) {
+      this.$alert.confirm('¿Está seguro de eliminar esta fotografía?', 'Eliminar Foto')
+        .onOk(() => {
+          this.loading = true;
+          this.$axios.delete(`/fotos/${foto.id}`)
+            .then(() => {
+              this.$emit('getMascota');
+              this.$alert.success('Foto eliminada correctamente');
+            })
+            .catch(() => {
+              this.$alert.error('Error al eliminar foto');
+            })
+            .finally(() => {
+              this.loading = false;
+            });
         });
-    },
-    dialogDesparasitacionClick() {
-      this.dialogDesparasitacion = true;
-      this.desparasitacion = {
-        fecha: moment().format('YYYY-MM-DD'),
-        paso: '',
-        mascotaId: this.mascota.id,
-      }
-    },
-  },
-}
+    }
+  }
+};
 </script>
