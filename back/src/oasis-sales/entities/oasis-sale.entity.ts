@@ -38,6 +38,8 @@ export class OasisSale {
   facturado: boolean;
   @Column({ nullable: true })
   nombre: string;
+  @Column({ nullable: true, type: 'text' })
+  comentario: string;
   @Column({ nullable: true })
   ci: string;
   @Column({ nullable: true, type: 'decimal', precision: 10, scale: 2 })

@@ -1,26 +1,70 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { OasisSale } from './entities/oasis-sale.entity';
+import { OasisSalesDetalle } from '../oasis-sales-detalles/entities/oasis-sales-detalle.entity';
 import { CreateOasisSaleDto } from './dto/create-oasis-sale.dto';
-import { UpdateOasisSaleDto } from './dto/update-oasis-sale.dto';
 
 @Injectable()
 export class OasisSalesService {
-  create(createOasisSaleDto: CreateOasisSaleDto) {
-    return 'This action adds a new oasisSale';
+  constructor(
+    @InjectRepository(OasisSale)
+    private oasisSaleRepo: Repository<OasisSale>,
+
+    @InjectRepository(OasisSalesDetalle)
+    private oasisDetalleRepo: Repository<OasisSalesDetalle>,
+  ) {}
+
+  async create(createOasisSaleDto) {
+    const { productos, total, comentario, nombre, ci } =
+      createOasisSaleDto;
+
+    const venta = this.oasisSaleRepo.create({
+      total,
+      comentario,
+      nombre,
+      ci,
+      user: { id: createOasisSaleDto.userId },
+      fecha: new Date(),
+      anulado: false,
+    });
+
+    const savedVenta = await this.oasisSaleRepo.save(venta);
+
+    const detalles = productos.map((p) => {
+      const detalle = new OasisSalesDetalle();
+      detalle.productoName = p.nombre;
+      detalle.precio = p.precioVenta;
+      detalle.cantidad = p.cantidadVenta;
+      detalle.subtotal = p.precioVenta * p.cantidadVenta;
+      detalle.fecha = new Date();
+      detalle.oasisSale = savedVenta;
+      return detalle;
+    });
+
+    await this.oasisDetalleRepo.save(detalles);
+
+    return { sale: savedVenta, detalles };
   }
 
-  findAll() {
-    return `This action returns all oasisSales`;
+  async findAll() {
+    return this.oasisSaleRepo.find({
+      relations: ['user', 'oasisSalesDetalles'],
+      order: { fecha: 'DESC' },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} oasisSale`;
+  async findOne(id: number) {
+    return this.oasisSaleRepo.findOne({
+      where: { id },
+      relations: ['user', 'oasisSalesDetalles'],
+    });
   }
 
-  update(id: number, updateOasisSaleDto: UpdateOasisSaleDto) {
-    return `This action updates a #${id} oasisSale`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} oasisSale`;
+  async remove(id: number) {
+    const venta = await this.oasisSaleRepo.findOne({ where: { id } });
+    if (!venta) throw new Error('No se encontró la venta');
+    await this.oasisSaleRepo.softDelete(id);
+    return 'Venta eliminada';
   }
 }
