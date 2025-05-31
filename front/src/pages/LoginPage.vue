@@ -101,6 +101,7 @@ function login() {
       proxy.$store.isLogged = true
       proxy.$store.user = user
       localStorage.setItem('tokenClinica', token)
+      localStorage.setItem('user', JSON.stringify(user))
       proxy.$alert.success('Bienvenido ' + user.name)
       proxy.$router.push('/')
     })
