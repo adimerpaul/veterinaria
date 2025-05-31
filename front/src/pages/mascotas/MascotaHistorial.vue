@@ -533,6 +533,7 @@ export default {
     imprimirHistorial(hist) {
       const doc = new jsPDF();
       const mascota = this.mascota;
+      // console.log(mascota)
       const tratamientos = hist.tratamientos || [];
 
       const bold = (text, x, y) => {
@@ -558,23 +559,23 @@ export default {
       doc.text(direccion, 45, 28);
       doc.setFontSize(10); // vuelve al tamaño normal para lo siguiente
       bold('Celular:', 105, 30);
-      doc.text(mascota.propietario_telefono || '-', 140, 30);
+      doc.text(mascota?.propietario_telefono || '-', 140, 30);
 
       // Datos del paciente
       bold('Especie:', 15, 35);
-      doc.text(mascota.especie, 45, 35);
+      doc.text(mascota?.especie, 45, 35);
       bold('Raza:', 105, 35);
-      doc.text(mascota.raza || '-', 140, 35);
+      doc.text(mascota?.raza || '-', 140, 35);
 
       bold('Edad:', 15, 40);
-      doc.text(mascota.edad, 45, 40);
+      doc.text(mascota?.edad, 45, 40);
       bold('Sexo:', 105, 40);
-      doc.text(mascota.sexo, 140, 40);
+      doc.text(mascota?.sexo, 140, 40);
 
       bold('Peso:', 15, 45);
       doc.text(`${hist.peso || '-'} kg`, 45, 45);
       bold('Color:', 105, 45);
-      doc.text(mascota.color || '-', 140, 45);
+      doc.text(mascota?.color || '-', 140, 45);
 
       bold('Anamnesis:', 15, 50);
       doc.text(hist.anamnesis || '-', 45, 50);
@@ -583,7 +584,7 @@ export default {
       let lineY = 55;
       const addField = (label, value, x) => {
         bold(`${label}:`, x, lineY);
-        doc.text(value?.toString() || '-', x + 30, lineY);
+        doc.text(value?.toString() || '-', x + 30, lineY, { maxWidth: 50 });
       };
       addField('TR', hist.tr, 15);
       addField('FC', hist.fc, 50);
@@ -611,12 +612,12 @@ export default {
       lineY += 5;
       addField('Desparasitación', hist.desparacitacion, 15);
       addField('Rayos X', hist.rayox, 75);
-      addField('Laboratorio', hist.laboratoti, 115);
+      addField('Laboratorio', hist.laboratoti, 145);
 
       lineY += 5;
       addField('Ecografía', hist.ecografia, 15);
       addField('Diagnóstico', hist.diagnostico, 75);
-      addField('Pronóstico', hist.pronostico, 115);
+      addField('Pronóstico', hist.pronostico, 145);
 
       // Tratamientos
       lineY += 10;
