@@ -43,7 +43,7 @@
             <td>Opciones</td>
             <td>Codigo</td>
             <td>Nombre</td>
-            <td>Imagen</td>
+<!--            <td>Imagen</td>-->
             <td>Precio Compra</td>
             <td>Precio Venta</td>
             <td>Stock</td>
@@ -68,14 +68,14 @@
             </td>
             <td>{{ producto.codigo }}</td>
             <td>{{ producto.nombre }}</td>
-            <td>
-              <q-img
-                v-if="producto.imagen"
-                :src="`${$url}uploads/${producto.imagen}`"
-                style="width: 35px; height: 35px;"
-                class="q-mb-sm"
-              />
-            </td>
+<!--            <td>-->
+<!--              <q-img-->
+<!--                v-if="producto.imagen"-->
+<!--                :src="`${$url}uploads/${producto.imagen}`"-->
+<!--                style="width: 35px; height: 35px;"-->
+<!--                class="q-mb-sm"-->
+<!--              />-->
+<!--            </td>-->
             <td>{{ producto.precioCompra }}</td>
             <td>{{ producto.precioVenta }}</td>
             <td>{{ producto.stock }}</td>
@@ -115,6 +115,8 @@
         </q-card-section>
       </q-card>
     </q-dialog>
+    <div id="myElement" style="display: none"></div>
+
   </q-page>
 </template>
 

@@ -193,6 +193,77 @@ Oruro</div!-->
       })
     })
   }
+  static notaOasisVenta(factura) {
+    return new Promise((resolve, reject) => {
+      try {
+        const ClaseConversor = conversor.conversorNumerosALetras;
+        const miConversor = new ClaseConversor();
+
+        const env = useCounterStore().env;
+        const total = parseFloat(factura.sale?.total || 0);
+        const totalEntero = Math.floor(total);
+        const centavos = Math.round((total - totalEntero) * 100);
+        const totalTexto = miConversor.convertToText(totalEntero);
+
+        const opts = {
+          errorCorrectionLevel: 'M',
+          type: 'png',
+          quality: 0.95,
+          width: 100,
+          margin: 1,
+          color: {
+            dark: '#000000',
+            light: '#FFF'
+          }
+        };
+
+        QRCode.toDataURL(`Monto: ${total.toFixed(2)}`, opts).then(url => {
+          let cadena = `${this.head()}
+  <div style='padding-left: 0.5cm;padding-right: 0.5cm'>
+    <img src="../../logo.png" alt="logo" style="width: 50px; height: 50px; display: block; margin-left: auto; margin-right: auto;">
+    <div class='titulo'>NOTA DE VENTA OASIS</div>
+    <div class='titulo2'>${env.razon}<br>${env.direccion}<br>Tel. ${env.telefono}<br>Oruro</div>
+    <hr>
+    <table>
+      <tr><td class='titder'>CLIENTE:</td><td class='contenido'>${factura.sale.nombre ?? ''}</td></tr>
+      <tr><td class='titder'>CI:</td><td class='contenido'>${factura.sale.ci ?? ''}</td></tr>
+      <tr><td class='titder'>FECHA:</td><td class='contenido'>${this.formatDate(factura.sale.fecha)}</td></tr>
+    </table>
+    <hr><div class='titulo'>DETALLE</div>`;
+
+          (factura.detalles || []).forEach(r => {
+            cadena += `<div style='font-size: 12px'><b>${r.productoName}</b></div>`;
+            cadena += `<div>
+            <span style='font-size: 16px;font-weight: bold'>${r.cantidad}</span> × ${parseFloat(r.precio).toFixed(2)}
+            <span style='float:right'>${parseFloat(r.precio * r.cantidad).toFixed(2)}</span>
+          </div>`;
+          });
+
+          cadena += `<hr>
+    <table style='font-size: 10px;'>
+      <tr><td class='titder' style='width: 60%'>TOTAL Bs</td><td class='conte2'>${total.toFixed(2)}</td></tr>
+    </table>
+    <br>
+    <div>Son ${totalTexto} ${centavos.toString().padStart(2, '0')} /100 Bolivianos</div><hr>
+    <div class='titulo2' style='font-size: 9px'>Gracias por su compra</div>
+    <div style='display: flex;justify-content: center;'>
+      <img src="${url}" style="width: 75px; height: 75px;">
+    </div>
+  </div>
+</body>
+</html>`;
+          console.log(cadena)
+          document.getElementById('myElement').innerHTML = cadena;
+          const d = new Printd();
+          d.print(document.getElementById('myElement'));
+          resolve(url);
+        }).catch(err => reject(err));
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
 
   static cotizacion (detalle, cliente, total, descuento, imprimir = true) {
     // console.log('detalle', detalle)

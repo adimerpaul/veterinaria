@@ -111,6 +111,8 @@ const linksList = [
   { title: 'Proxima Vacunas', icon: 'calendar_today', link: '/proximas-vacunas', can: 'Todos' },
   // oasisproductos
   { title: 'Productos Oasis', icon: 'category', link: '/oasisproductos', can: 'Todos' },
+  // oasisventas/add
+  { title: 'Crear Venta Oasis', icon: 'shopping_bag', link: '/oasisventas/add', can: 'Todos' },
 ]
 
 
