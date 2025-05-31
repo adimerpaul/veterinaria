@@ -19,6 +19,8 @@ export class Sale {
   id: number;
   @Column({ nullable: true, default: 'Venta' })
   tipo: string;
+  @Column({ nullable: true, default: 'Efectivo' })
+  pago: string;
   @Column({ nullable: true, default: '' })
   comentarioDoctor: string;
   @Column({

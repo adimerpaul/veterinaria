@@ -132,7 +132,10 @@ export default {
       documentos: [
         'CERTIFICADO DE AUTORIZACION QUIRURGICA',
         'AUTORIZACION DE EUTANASIA',
-        // 'ANESTECIA Y RESTRO DE RECUPERACION'
+        'CERTIFICADO DE ALTA VOLUNTARIA',
+        'AUTORIZACION DE INTERNACION',
+        'CERTIFICADO DE DERIVACION DEL PACIENTE',
+        'CONSENTIMIENTO INFORMADO DE SEDACIÓN PARA ESTÉTICA',
       ],
       documento: '',
       html: '',
@@ -194,6 +197,19 @@ export default {
       if (value === 'AUTORIZACION DE EUTANASIA') {
         this.html = Html.autorizacionEutanasia(this.mascota)
       }
+      if (value === 'CERTIFICADO DE ALTA VOLUNTARIA') {
+        this.html = Html.certificadoAltaVoluntaria(this.mascota)
+      }
+      if (value === 'AUTORIZACION DE INTERNACION') {
+        this.html = Html.autorizacionInternacion(this.mascota)
+      }
+      if (value === 'CERTIFICADO DE DERIVACION DEL PACIENTE') {
+        this.html = Html.certificadoDerivacionPaciente(this.mascota)
+      }
+      if (value === 'CONSENTIMIENTO INFORMADO DE SEDACIÓN PARA ESTÉTICA') {
+        this.html = Html.consentimientoSedacionEstetica(this.mascota)
+      }
+
     },
   },
 }

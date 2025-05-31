@@ -153,10 +153,14 @@
             <div class="row">
               <div class="col-12 q-pa-xs">
                 <div class="row">
-                  <div class="col-8">
+                  <div class="col-6">
                     <q-select input-debounce="300" clearable use-input v-model="mascota" label="Mascota" outlined dense :options="mascotas" :option-label="m => m.id+'|'+m.nombre+'|'+m.propietario_nombre" :option-value="m => m.id"
                               @filter="mascotasFilter" :rules="[val => !!val || 'Campo requerido']">
                     </q-select>
+                  </div>
+                  <div class="col-2 flex flex-center">
+<!--                    pago select-->
+                    <q-select v-model="venta.pago" label="Pago" outlined dense :options="['Efectivo', 'Qr', 'Transferencia']" />
                   </div>
                   <div class="col-2 flex flex-center">
                     <q-btn :loading="loading" dense color="green" label="Crear" no-caps icon="add_circle_outline" to="/mascotas/create" />
@@ -465,10 +469,11 @@ function realizarVenta() {
   }
   dialogVenta.value = true;
   // venta.value = { nombre: "SN", };
+  venta.value = { comentarioDoctor: "", pago: "Efectivo" };
   mascota.value = {
     "id": 1,
     "nombre": "SN",
-    "propietario_nombre": "SN"
+    "propietario_nombre": "SN",
   };
 }
 function mascotasFilter(val, update) {
@@ -502,6 +507,7 @@ function realizarVentaPost() {
     total: parseFloat(totalVenta.value),
     productos: carrito.value,
     comentarioDoctor: venta.value.comentarioDoctor,
+    pago: venta.value.pago,
   }).then(async (res) => {
     // carrito.value = [];
     // venta.value = {nombre: "", fecha: new Date().toISOString().slice(0, 10)};

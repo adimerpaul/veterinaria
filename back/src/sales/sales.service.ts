@@ -136,6 +136,7 @@ export class SalesService {
         total,
         anulado: false,
         comentarioDoctor: body.comentarioDoctor,
+        pago: body.pago,
         mascota,
         user: userEntity,
       });
