@@ -84,7 +84,10 @@
           <q-card-section>
             <div class="div">
               <div class="text-h6 row items-center">
-                <div>Carrito</div>
+                <div>
+                  Carrito
+                  <q-btn icon="history" color="blue" dense @click="recuperarTratamiento" :loading="loading" size="10px" label="Recuperar Tratamiento" no-caps />
+                </div>
                 <q-space />
                 <q-btn icon="delete" color="red" dense @click="carrito = []" :loading="loading" size="10px" label="Limpiar" no-caps />
               </div>
@@ -241,6 +244,62 @@
         </q-card-section>
       </q-card>
     </q-dialog>
+<!--    recuperarTratamientoDialog-->
+    <q-dialog v-model="recuperarTratamientoDialog">
+      <q-card flat bordered style="width: 650px;">
+        <q-card-section class="q-pb-none row items-center">
+          <div class="text-bold">
+            Recuperar Tratamiento
+          </div>
+          <q-space />
+          <q-btn flat dense round icon="close" @click="recuperarTratamientoDialog = false" />
+        </q-card-section>
+        <q-card-section>
+          <div class="text-caption">Seleccione una fecha para recuperar el tratamiento</div>
+<!--          recuperarTratamientoFecha-->
+          <q-input v-model="recuperarTratamientoFecha" type="date" outlined dense :rules="[val => !!val || 'Campo requerido']" >
+            <template v-slot:append>
+              <q-btn dense color="green" label="Buscar" no-caps icon="search" @click="buscarTratamiento" :loading="loading" />
+            </template>
+          </q-input>
+          <div class="text-caption q-mt-md">
+            Tratamientos realizados el {{ recuperarTratamientoFecha }}:
+          </div>
+          <q-markup-table flat bordered dense>
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Fecha</th>
+              <th>Doctor</th>
+              <th>Costo</th>
+              <th>Medicamentos</th>
+              <th>Opciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(item, index) in historialTratamientos" :key="index">
+              <td>{{ item.id }}</td>
+              <td>{{ item.fecha.slice(0, 10) }}</td>
+              <td>{{ item.user?.username || 'Desconocido' }}</td>
+              <td>{{ item.costo }} Bs</td>
+              <td>
+                <div style="max-width: 200px; white-space: normal; line-height: 1.2">
+                  <span v-for="(med, idx) in item.tratamientoMedicamentos" :key="idx">
+                    {{ med.medicamento }} ({{ med.cantidad }} x {{ med.precio }} Bs) <br />
+                  </span>
+                </div>
+              </td>
+              <td>
+                <q-btn label="Recuperar" no-caps dense color="green" icon="add_circle_outline" @click="agregarAcarritoTratemiento(item)"/>
+              </td>
+            </tr>
+            </tbody>
+          </q-markup-table>
+
+        </q-card-section>
+      </q-card>
+
+    </q-dialog>
   </q-page>
   <div id="myElement"></div>
 </template>
@@ -249,6 +308,7 @@
 import {ref, computed, getCurrentInstance, onMounted} from "vue";
 import { useRouter } from 'vue-router';
 import {Imprimir} from "src/addons/Imprimir.js";
+import moment from "moment";
 
 const router = useRouter();
 
@@ -267,11 +327,59 @@ const tipos = ['Todos','Cirugía', 'Laboratorio', 'Peluqueria', 'Producto', 'Tra
 const mascotas = ref([]);
 const historialCompra = ref([]);
 const mascota = ref(null);
+const recuperarTratamientoDialog = ref(false);
+const recuperarTratamientoFecha = ref(moment().format('YYYY-MM-DD'));
+const historialTratamientos = ref([])
 
 onMounted(() => {
   getProductos();
   mascotasGet();
 });
+function agregarAcarritoTratemiento(tratamiento) {
+  if (!tratamiento?.tratamientoMedicamentos || tratamiento.tratamientoMedicamentos.length === 0) {
+    proxy.$alert.error("Este tratamiento no tiene medicamentos.");
+    return;
+  }
+
+  tratamiento.tratamientoMedicamentos.forEach((med) => {
+    const existingItem = carrito.value.find(p => p.nombre === med.medicamento);
+    if (existingItem) {
+      existingItem.cantidadVenta += med.cantidad;
+    } else {
+      carrito.value.push({
+        nombre: med.medicamento,
+        cantidadVenta: med.cantidad,
+        precioVenta: med.precio,
+        tipo: 'Tratamiento', // Opcional: para usar getColor()
+      });
+    }
+  });
+
+  proxy.$alert.success("Tratamiento agregado al carrito.");
+  recuperarTratamientoDialog.value = false;
+}
+function buscarTratamiento() {
+  if (!recuperarTratamientoFecha.value) {
+    proxy.$alert.error("Seleccione una fecha", "Error");
+    return;
+  }
+  loading.value = true;
+  proxy.$axios.get("tratamientos", {
+    params:{
+     fecha: recuperarTratamientoFecha.value
+    }
+  }).then(res => {
+    // console.log(res.data);
+    historialTratamientos.value = res.data;
+  }).finally(() => {
+    loading.value = false;
+  });
+}
+function recuperarTratamiento(){
+  recuperarTratamientoDialog.value = true;
+  recuperarTratamientoFecha.value = moment().format('YYYY-MM-DD');
+  buscarTratamiento()
+}
 function mascotasGet() {
   proxy.$axios.get("mascotas", { params: { filter: '' } })
     .then(res => {
