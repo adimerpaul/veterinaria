@@ -275,6 +275,7 @@
               <th>#</th>
               <th>Fecha</th>
               <th>Doctor</th>
+              <th>Mascota</th>
               <th>Costo</th>
               <th>Medicamentos</th>
               <th>Opciones</th>
@@ -285,6 +286,11 @@
               <td>{{ item.id }}</td>
               <td>{{ item.fecha.slice(0, 10) }}</td>
               <td>{{ item.user?.username || 'Desconocido' }}</td>
+              <td>
+                <div style="max-width: 150px; wrap-option: wrap; line-height: 0.9">
+                  {{ item.historiale?.mascota?.nombre || 'Desconocido' }} ({{ item.historiale?.mascota?.propietario_nombre || 'Desconocido' }})
+                </div>
+              </td>
               <td>{{ item.costo }} Bs</td>
               <td>
                 <div style="max-width: 200px; white-space: normal; line-height: 1.2">
@@ -299,7 +305,106 @@
             </tr>
             </tbody>
           </q-markup-table>
-
+<!--          <pre>{{historialTratamientos}}</pre>-->
+<!--          [-->
+<!--          {-->
+<!--          "id": 32,-->
+<!--          "observaciones": "",-->
+<!--          "comentario": "",-->
+<!--          "fecha": "2025-05-31T08:19:13.000Z",-->
+<!--          "costo": 0,-->
+<!--          "user": {-->
+<!--          "id": 1,-->
+<!--          "name": "ING. ADIMER PAUL CHAMBI AJATA",-->
+<!--          "role": "Admin",-->
+<!--          "username": "Adimer",-->
+<!--          "password": "$2b$10$hLxScAvuENNvqjNTwS1p6u/TUd0Ej9Oae9iCAzZSHBqMlCI.fLO0a",-->
+<!--          "agencia": "Clinica",-->
+<!--          "createdAt": "2025-03-12T09:47:07.189Z",-->
+<!--          "updatedAt": "2025-04-29T08:36:19.000Z",-->
+<!--          "deletedAt": null-->
+<!--          },-->
+<!--          "historiale": {-->
+<!--          "id": 13,-->
+<!--          "peso": 0,-->
+<!--          "anamnesis": "",-->
+<!--          "tr": "",-->
+<!--          "fc": "",-->
+<!--          "fr": "",-->
+<!--          "tllc": "",-->
+<!--          "thc": "",-->
+<!--          "apetito": "",-->
+<!--          "pulso": "",-->
+<!--          "cf": "",-->
+<!--          "parvo": "0",-->
+<!--          "hexa": "0",-->
+<!--          "octa": "0",-->
+<!--          "rabica": "0",-->
+<!--          "triple": "0",-->
+<!--          "moucosidada": "",-->
+<!--          "esterelizado": "",-->
+<!--          "desparacitacion": "",-->
+<!--          "rayox": "",-->
+<!--          "laboratoti": "",-->
+<!--          "ecografia": "",-->
+<!--          "diagnostico": "",-->
+<!--          "pronostico": "",-->
+<!--          "fecha": "2025-05-31T08:18:58.000Z",-->
+<!--          "createdAt": "2025-05-31T08:18:58.652Z",-->
+<!--          "updatedAt": "2025-05-31T08:18:58.652Z",-->
+<!--          "deletedAt": null,-->
+<!--          "mascota": {-->
+<!--          "id": 19,-->
+<!--          "nombre": "ccc",-->
+<!--          "apellido": null,-->
+<!--          "especie": "",-->
+<!--          "raza": "",-->
+<!--          "sexo": "Macho",-->
+<!--          "fecha_nac": "2025-03-18",-->
+<!--          "edad": null,-->
+<!--          "senas_particulares": "",-->
+<!--          "photo": "defaultPet.jpg",-->
+<!--          "color": "",-->
+<!--          "propietario_nombre": "cc",-->
+<!--          "propietario_ci": null,-->
+<!--          "propietario_direccion": "",-->
+<!--          "propietario_telefono": "",-->
+<!--          "propietario_ciudad": "Oruro",-->
+<!--          "propietario_celular": "",-->
+<!--          "createdAt": "2025-03-18T22:42:02.174Z",-->
+<!--          "updatedAt": "2025-03-18T22:42:02.174Z",-->
+<!--          "deletedAt": null-->
+<!--          }-->
+<!--          },-->
+<!--          "tratamientoMedicamentos": [-->
+<!--          {-->
+<!--          "id": 11,-->
+<!--          "medicamento": "Corte de Uñas",-->
+<!--          "precio": "52.00",-->
+<!--          "cantidad": "1.00",-->
+<!--          "total": "52.00",-->
+<!--          "fecha": "2025-05-31T08:19:13.000Z",-->
+<!--          "createdAt": "2025-05-31T08:19:13.053Z",-->
+<!--          "updatedAt": "2025-05-31T08:19:13.053Z",-->
+<!--          "deletedAt": null-->
+<!--          },-->
+<!--          {-->
+<!--          "id": 12,-->
+<!--          "medicamento": "Cepillado",-->
+<!--          "precio": "195.00",-->
+<!--          "cantidad": "1.00",-->
+<!--          "total": "195.00",-->
+<!--          "fecha": "2025-05-31T08:19:13.000Z",-->
+<!--          "createdAt": "2025-05-31T08:19:13.055Z",-->
+<!--          "updatedAt": "2025-05-31T08:19:13.055Z",-->
+<!--          "deletedAt": null-->
+<!--          }-->
+<!--          ],-->
+<!--          "createdAt": "2025-05-31T08:19:13.050Z",-->
+<!--          "updatedAt": "2025-05-31T08:19:13.050Z",-->
+<!--          "deletedAt": null-->
+<!--          }-->
+<!--          ]-->
         </q-card-section>
       </q-card>
 
