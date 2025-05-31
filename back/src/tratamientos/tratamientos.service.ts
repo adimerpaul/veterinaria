@@ -49,6 +49,8 @@ export class TratamientosService {
     return await this.tratamientosRepository
       .createQueryBuilder('tratamiento')
       .leftJoinAndSelect('tratamiento.user', 'user')
+      .leftJoinAndSelect('tratamiento.historiale', 'historiale')
+      .leftJoinAndSelect('historiale.mascota', 'mascota')
       .leftJoinAndSelect('tratamiento.tratamientoMedicamentos', 'tratamientoMedicamentos')
       .where('DATE(tratamiento.fecha) = :fecha', { fecha })
       .orderBy('tratamiento.fecha', 'DESC')

@@ -125,6 +125,7 @@
             <th>Usuario</th>
             <th>Detalle</th>
             <th>Comentario Doctor</th>
+            <th>Pago</th>
           </tr>
           </thead>
           <tbody>
@@ -183,6 +184,9 @@
               <div style="max-width: 350px; wrap-option: wrap;line-height: 0.9;">
                 {{ venta.comentarioDoctor }}
               </div>
+            </td>
+            <td>
+              {{ venta.pago}}
             </td>
           </tr>
           </tbody>
