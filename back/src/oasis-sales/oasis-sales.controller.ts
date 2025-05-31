@@ -42,4 +42,10 @@ export class OasisSalesController {
   remove(@Param('id') id: string) {
     return this.service.remove(+id);
   }
+  // anular
+  @UseGuards(AuthGuard('jwt'))
+  @Post(':id/anular')
+  anular(@Param('id') id: string, @Req() req) {
+    return this.service.anular(+id, req.user.userId);
+  }
 }

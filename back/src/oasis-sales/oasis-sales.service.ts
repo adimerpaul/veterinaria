@@ -67,4 +67,19 @@ export class OasisSalesService {
     await this.oasisSaleRepo.softDelete(id);
     return 'Venta eliminada';
   }
+  // anular
+  async anular(id: number, userId: number) {
+    const venta = await this.oasisSaleRepo.findOne({ where: { id } });
+    if (!venta) throw new Error('No se encontró la venta');
+
+    if (venta.anulado) {
+      throw new Error('La venta ya está anulada');
+    }
+
+    venta.anulado = true;
+    // venta.userAnulacion = { id: userId };
+    await this.oasisSaleRepo.save(venta);
+
+    return 'Venta anulada correctamente';
+  }
 }
