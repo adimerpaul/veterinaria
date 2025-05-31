@@ -12,7 +12,7 @@
               </q-input>
             </div>
             <div class="col-4 col-md-2">
-              <q-select v-model="filterTipo" label="Tipo" outlined dense :options="tipos" />
+<!--              <q-select v-model="filterTipo" label="Tipo" outlined dense :options="tipos" />-->
             </div>
             <div class="col-4 col-md-2 flex flex-center">
               <q-btn color="primary" label="Buscar" type="submit" no-caps icon="search" :loading="loading" />
@@ -47,7 +47,7 @@
             <td>Precio Compra</td>
             <td>Precio Venta</td>
             <td>Stock</td>
-            <td>Tipo</td>
+<!--            <td>Tipo</td>-->
           </tr>
           </thead>
           <tbody>
@@ -63,24 +63,13 @@
                     <q-item-section avatar> <q-icon name="delete" /> </q-item-section>
                     <q-item-section>Eliminar</q-item-section>
                   </q-item>
-<!--                  opcion cambiar imagen-->
-                  <q-item clickable v-ripple @click="verImagen(producto.imagen)" v-close-popup>
-                    <q-item-section avatar> <q-icon name="image" /> </q-item-section>
-                    <q-item-section>Ver Imagen</q-item-section>
-                  </q-item>
-                  <q-item clickable v-ripple @click="cambiarImagen(producto.id)" v-close-popup>
-                    <q-item-section avatar> <q-icon name="photo_camera" /> </q-item-section>
-                    <q-item-section>Cambiar Imagen</q-item-section>
-                  </q-item>
                 </q-list>
               </q-btn-dropdown>
             </td>
             <td>{{ producto.codigo }}</td>
             <td>{{ producto.nombre }}</td>
             <td>
-<!--              {{`${$url}uploads/${producto.imagen}`}}-->
               <q-img
-                @click="verImagen(producto.imagen)"
                 v-if="producto.imagen"
                 :src="`${$url}uploads/${producto.imagen}`"
                 style="width: 35px; height: 35px;"
@@ -90,51 +79,34 @@
             <td>{{ producto.precioCompra }}</td>
             <td>{{ producto.precioVenta }}</td>
             <td>{{ producto.stock }}</td>
-            <td>
-              <q-chip dense :color="getColor(producto.tipo)" size="10px">
-                {{ producto.tipo }}
-              </q-chip>
-            </td>
+<!--            <td>-->
+<!--              <q-chip dense :color="getColor(producto.tipo)" size="10px">-->
+<!--                {{ producto.tipo }}-->
+<!--              </q-chip>-->
+<!--            </td>-->
           </tr>
           </tbody>
         </q-markup-table>
-<!--        <pre>{{ productos }}</pre>-->
-<!--        [-->
-<!--        {-->
-<!--        "id": 19,-->
-<!--        "codigo": "mace",-->
-<!--        "nombre": "Acedan",-->
-<!--        "presentacion": "caja",-->
-<!--        "contenido": "10ml",-->
-<!--        "tipo": "Producto",-->
-<!--        "precioCompra": "15.00",-->
-<!--        "precioVenta": "45.00",-->
-<!--        "stock": 1,-->
-<!--        "activo": true,-->
-<!--        "imagen": "imagenes\\19.png",-->
-<!--        "createdAt": "2025-02-28T10:21:37.836Z",-->
-<!--        "updatedAt": "2025-05-21T10:10:15.447Z",-->
-<!--        "deletedAt": null-->
-<!--        },-->
       </q-card-section>
     </q-card>
+
     <q-dialog v-model="productoDialog" persistent position="right" maximized>
       <q-card style="min-width: 350px">
         <q-card-section class="q-pb-none row items-center">
           <div class="text-bold text-sub">
-            {{ actionProducto }} Producto
+            {{ actionProducto }} Oasis Producto
           </div>
           <q-space />
           <q-btn icon="close" flat round dense @click="productoDialog = false" />
         </q-card-section>
         <q-card-section>
           <q-form @submit.prevent="producto.id ? productoPut() : productoPost()">
-            <q-input v-model="producto.codigo" label="Codigo" outlined dense hint="" />
-            <q-input v-model="producto.nombre" label="Nombre" outlined dense hint="" />
-            <q-input v-model="producto.precioCompra" label="Precio Compra" outlined dense type="number" step="0.01" hint="" />
-            <q-input v-model="producto.precioVenta" label="Precio Venta" outlined dense type="number" step="0.01" hint="" />
-            <q-input v-model="producto.stock" label="Stock" outlined dense type="number" hint="" />
-            <q-select v-model="producto.tipo" label="Tipo" outlined dense :options="tipos" hint="" />
+            <q-input v-model="producto.codigo" label="Codigo" outlined dense />
+            <q-input v-model="producto.nombre" label="Nombre" outlined dense />
+            <q-input v-model="producto.precioCompra" label="Precio Compra" outlined dense type="number" step="0.01" />
+            <q-input v-model="producto.precioVenta" label="Precio Venta" outlined dense type="number" step="0.01" />
+            <q-input v-model="producto.stock" label="Stock" outlined dense type="number" />
+<!--            <q-select v-model="producto.tipo" label="Tipo" outlined dense :options="tipos" />-->
             <div class="text-right">
               <q-btn color="negative" label="Cancelar" @click="productoDialog = false" no-caps :loading="loading" />
               <q-btn color="primary" label="Guardar" type="submit" no-caps class="q-ml-sm" :loading="loading" />
@@ -148,18 +120,11 @@
 
 <script>
 export default {
-  name: "ProductosPage",
+  name: 'OasisProductosPage',
   data() {
     return {
-      tipos: [
-        'Cirugía',
-        'Laboratorio',
-        'Peluqueria',
-        'Producto',
-        'Tratamiento'
-      ],
+      tipos: ['Cirugía', 'Laboratorio', 'Peluqueria', 'Producto', 'Tratamiento'],
       productos: [],
-      productosAll: [],
       producto: {},
       productoDialog: false,
       loading: false,
@@ -174,101 +139,37 @@ export default {
     this.productosGet();
   },
   methods: {
-    cambiarImagen(id) {
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/*';
-      input.onchange = () => {
-        const file = input.files[0]; // <-- Solo un archivo
-        if (!file) return;
-
-        const formData = new FormData();
-        formData.append('photo', file); // <- importante que el campo se llame "photo"
-
-        this.loading = true;
-        this.$axios.post(`productos/${id}/imagen`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-          .then(() => {
-            this.$alert.success('Imagen actualizada');
-            this.productosGet();
-          })
-          .catch(err => {
-            this.$alert.error(err.response?.data?.message || 'Error al subir imagen');
-          })
-          .finally(() => {
-            this.loading = false;
-          });
-      };
-      input.click();
-    },
-    verImagen(imagen) {
-      this.$q.dialog({
-        title: 'Imagen',
-        message: `<img src="${this.$url}uploads/${imagen}" style="width: 100%; height: auto;" />`,
-        html: true,
-        persistent: true,
-        ok: { label: 'Cerrar', color: 'primary' }
-      });
-    },
     getColor(tipo) {
       switch (tipo) {
-        case 'Cirugía':
-          return 'red';
-        case 'Laboratorio':
-          return 'blue';
-        case 'Peluqueria':
-          return 'green';
-        case 'Producto':
-          return 'orange';
-        case 'Tratamiento':
-          return 'purple';
-        default:
-          return 'grey';
-      }
-    },
-    productosFilter() {
-      if (this.filter) {
-        this.productos = this.productosAll.filter(producto => {
-          return producto.nombre.toLowerCase().includes(this.filter.toLowerCase());
-        });
-      } else {
-        this.productos = this.productosAll;
+        case 'Cirugía': return 'red';
+        case 'Laboratorio': return 'blue';
+        case 'Peluqueria': return 'green';
+        case 'Producto': return 'orange';
+        case 'Tratamiento': return 'purple';
+        default: return 'grey';
       }
     },
     productoNew() {
-      this.producto = {
-        medicamento: '',
-        forma_farmaceutica: '',
-        concentracion: '',
-        precio: 0,
-        stock: 0,
-        tipo: 'Producto',
-        imagen: null, // Valor por defecto
-        categoria_id: null // Valor por defecto
-      };
-      this.actionProducto = "Nuevo";
+      this.producto = { codigo: '', nombre: '', precioCompra: 0, precioVenta: 0, stock: 0, tipo: 'Producto' };
+      this.actionProducto = 'Nuevo';
       this.productoDialog = true;
     },
     productosGet() {
       this.loading = true;
-      this.$axios
-        .get("productos", {
-          params: {
-            filter: this.filter,
-            page: this.currentPage,
-            limit: 20, // Puedes cambiar el límite por página
-            tipo: this.filterTipo === 'Todos' ? '' : this.filterTipo
-          }
-        })
+      this.$axios.get('oasis-productos', {
+        params: {
+          filter: this.filter,
+          page: this.currentPage,
+          limit: 20,
+          tipo: this.filterTipo === 'Todos' ? '' : this.filterTipo
+        }
+      })
         .then(res => {
           this.productos = res.data.data;
           this.totalPages = res.data.last_page;
         })
-        .catch(error => {
-          this.$alert.error(error.response?.data?.message || "Error al cargar productos");
+        .catch(err => {
+          this.$alert.error(err.response?.data?.message || 'Error al cargar');
         })
         .finally(() => {
           this.loading = false;
@@ -276,31 +177,29 @@ export default {
     },
     productoPost() {
       this.loading = true;
-      this.$axios
-        .post("productos", this.producto)
+      this.$axios.post('oasis-productos', this.producto)
         .then(() => {
           this.productoDialog = false;
           this.productosGet();
-          this.$alert.success("Producto creado correctamente");
+          this.$alert.success('Creado correctamente');
         })
-        .catch(error => {
-          this.$alert.error(error.response?.data?.message || "Error al crear producto");
+        .catch(err => {
+          this.$alert.error(err.response?.data?.message || 'Error al crear');
         })
         .finally(() => {
-          // this.loading = false;
+          this.loading = false;
         });
     },
     productoPut() {
       this.loading = true;
-      this.$axios
-        .put(`productos/${this.producto.id}`, this.producto)
+      this.$axios.put(`oasis-productos/${this.producto.id}`, this.producto)
         .then(() => {
           this.productoDialog = false;
           this.productosGet();
-          this.$alert.success("Producto actualizado correctamente");
+          this.$alert.success('Actualizado correctamente');
         })
-        .catch(error => {
-          this.$alert.error(error.response?.data?.message || "Error al actualizar producto");
+        .catch(err => {
+          this.$alert.error(err.response?.data?.message || 'Error al actualizar');
         })
         .finally(() => {
           this.loading = false;
@@ -308,28 +207,25 @@ export default {
     },
     productoEdit(producto) {
       this.producto = { ...producto };
-      this.actionProducto = "Editar";
+      this.actionProducto = 'Editar';
       this.productoDialog = true;
     },
     productoDelete(id) {
-      this.$alert
-        .dialog("¿Desea eliminar el producto?")
-        .onOk(() => {
-          this.loading = true;
-          this.$axios
-            .delete(`productos/${id}`)
-            .then(() => {
-              this.productosGet();
-              this.$alert.success("Producto eliminado correctamente");
-            })
-            .catch(error => {
-              this.$alert.error(error.response?.data?.message || "Error al eliminar producto");
-            })
-            .finally(() => {
-              this.loading = false;
-            });
-        });
+      this.$alert.dialog('¿Eliminar producto?').onOk(() => {
+        this.loading = true;
+        this.$axios.delete(`oasis-productos/${id}`)
+          .then(() => {
+            this.productosGet();
+            this.$alert.success('Eliminado correctamente');
+          })
+          .catch(err => {
+            this.$alert.error(err.response?.data?.message || 'Error al eliminar');
+          })
+          .finally(() => {
+            this.loading = false;
+          });
+      });
     }
   }
-};
+}
 </script>
