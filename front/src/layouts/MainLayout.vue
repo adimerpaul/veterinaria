@@ -104,14 +104,12 @@ const linksList = [
   { title: 'Principal', icon: 'dashboard', link: '/', can: 'Todos' },
   { title: 'Usuarios', icon: 'group', link: '/usuarios', can: 1 },
   { title: 'Productos', icon: 'category', link: '/productos', can: 2 },
-  { title: 'Ventas', icon: 'point_of_sale', link: '/ventas', can: 4 },
   { title: 'Crear Ventas', icon: 'shopping_bag', link: '/ventas/add', can: 3 },
-  { title: 'Mascotas', icon: 'pets', link: '/mascotas', can: 6 },
+  { title: 'Ventas', icon: 'point_of_sale', link: '/ventas', can: 4 },
   { title: 'Crear Mascota', icon: 'add_circle', link: '/mascotas/create', can: 5 },
+  { title: 'Mascotas', icon: 'pets', link: '/mascotas', can: 6 },
   { title: 'Proxima Vacunas', icon: 'calendar_today', link: '/proximas-vacunas', can: 'Todos' },
-  // oasisproductos
   { title: 'Productos Oasis', icon: 'category', link: '/oasisproductos', can: 'Todos' },
-  // oasisventas/add
   { title: 'Crear Venta Oasis', icon: 'shopping_bag', link: '/oasisventas/add', can: 'Todos' },
 ]
 
