@@ -45,9 +45,15 @@ export class TratamientosService {
     return await this.tratamientosRepository.save(tratamiento);
   }
 
-  // findAll() {
-  //   return `This action returns all tratamientos`;
-  // }
+  async findAllByFecha(fecha: string) {
+    return await this.tratamientosRepository
+      .createQueryBuilder('tratamiento')
+      .leftJoinAndSelect('tratamiento.user', 'user')
+      .leftJoinAndSelect('tratamiento.tratamientoMedicamentos', 'tratamientoMedicamentos')
+      .where('DATE(tratamiento.fecha) = :fecha', { fecha })
+      .orderBy('tratamiento.fecha', 'DESC')
+      .getMany();
+  }
   //
   // findOne(id: number) {
   //   return `This action returns a #${id} tratamiento`;

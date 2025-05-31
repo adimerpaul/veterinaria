@@ -7,7 +7,7 @@ import {
   Param,
   Delete,
   Req,
-  UseGuards,
+  UseGuards, Query,
 } from '@nestjs/common';
 import { TratamientosService } from './tratamientos.service';
 import { CreateTratamientoDto } from './dto/create-tratamiento.dto';
@@ -25,10 +25,11 @@ export class TratamientosController {
     return this.tratamientosService.create(body, req);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.tratamientosService.findAll();
-  // }
+  @Get()
+  findAll(@Query('fecha') fecha: string) {
+    // console.log(fecha)
+    return this.tratamientosService.findAllByFecha(fecha);
+  }
   //
   // @Get(':id')
   // findOne(@Param('id') id: string) {
