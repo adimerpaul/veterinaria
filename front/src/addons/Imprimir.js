@@ -194,6 +194,7 @@ Oruro</div!-->
     })
   }
   static notaOasisVenta(factura) {
+    console.log(factura)
     return new Promise((resolve, reject) => {
       try {
         const ClaseConversor = conversor.conversorNumerosALetras;

@@ -108,9 +108,10 @@ const linksList = [
   { title: 'Ventas', icon: 'point_of_sale', link: '/ventas', can: 4 },
   { title: 'Crear Mascota', icon: 'add_circle', link: '/mascotas/create', can: 5 },
   { title: 'Mascotas', icon: 'pets', link: '/mascotas', can: 6 },
+  { title: 'Productos Oasis', icon: 'category', link: '/oasisproductos', can: 7 },
+  { title: 'Crear Venta Oasis', icon: 'shopping_bag', link: '/oasisventas/add', can: 8 },
+  { title: 'Ventas Oasis', icon: 'point_of_sale', link: '/oasissales', can: 9 },
   { title: 'Proxima Vacunas', icon: 'calendar_today', link: '/proximas-vacunas', can: 'Todos' },
-  { title: 'Productos Oasis', icon: 'category', link: '/oasisproductos', can: 'Todos' },
-  { title: 'Crear Venta Oasis', icon: 'shopping_bag', link: '/oasisventas/add', can: 'Todos' },
 ]
 
 
