@@ -24,6 +24,10 @@ export class OasisProducto {
   @Column({ nullable: true })
   presentacion: string;
   @Column({ nullable: true })
+  empresa: string;
+  @Column({ nullable: true })
+  proveedor: string;
+  @Column({ nullable: true })
   contenido: string;
   @Column({ nullable: true, default: 'Producto' })
   tipo: string;

@@ -5,7 +5,8 @@ import { In, Repository } from 'typeorm';
 import { Producto } from '../productos/entities/producto.entity';
 import { Detail } from '../details/entities/detail.entity';
 import { Sale } from '../sales/entities/sale.entity';
-
+import * as fs from 'fs';
+import * as path from 'path';
 @Injectable()
 export class MascotasService {
   constructor(
@@ -101,7 +102,30 @@ export class MascotasService {
     if (!mascota) {
       return null;
     }
-
+    if (mascota.photo) {
+      const filePath = path.join(__dirname, '../../uploads', mascota.photo);
+      try {
+        const imageData = fs.readFileSync(filePath);
+        mascota['photo64'] =
+          `data:image/jpeg;base64,${imageData.toString('base64')}`;
+      } catch (e) {
+        console.error('Error reading image file:', e);
+        mascota['photo64'] = null; // Si hay un error, asignamos null
+      }
+    }
+    if (mascota.fotos){
+      mascota.fotos.forEach((foto) => {
+        const filePath = path.join(__dirname, '../../uploads', foto.imagen);
+        try {
+          const imageData = fs.readFileSync(filePath);
+          foto['photo64'] =
+            `data:image/jpeg;base64,${imageData.toString('base64')}`;
+        } catch (e) {
+          console.error('Error reading image file:', e);
+          foto['photo64'] = null; // Si hay un error, asignamos null
+        }
+      });
+    }
     const tipos = ['Cirugía', 'Laboratorio', 'Peluqueria', 'Tratamiento'];
 
     // Obtener solo los productos que pertenecen a los tipos deseados
