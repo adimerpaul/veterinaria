@@ -13,9 +13,11 @@
             </div>
             <div class="col-4 col-md-2">
 <!--              <q-select v-model="filterTipo" label="Tipo" outlined dense :options="tipos" />-->
+              <q-btn color="primary" label="Buscar" type="submit" no-caps icon="search" :loading="loading" />
             </div>
             <div class="col-4 col-md-2 flex flex-center">
-              <q-btn color="primary" label="Buscar" type="submit" no-caps icon="search" :loading="loading" />
+<!--              boton expotar excel-->
+              <q-btn color="secondary" label="Exportar Excel" @click="exportarExcel" no-caps icon="save_alt" :loading="loading" />
             </div>
             <div class="col-12 col-md-5 text-right">
               <q-btn color="positive" label="Nuevo" @click="productoNew" no-caps icon="add_circle_outline" :loading="loading" />
@@ -47,6 +49,8 @@
             <td>Precio Compra</td>
             <td>Precio Venta</td>
             <td>Stock</td>
+            <td>Empresa</td>
+            <td>Proveedor</td>
 <!--            <td>Tipo</td>-->
           </tr>
           </thead>
@@ -79,6 +83,8 @@
             <td>{{ producto.precioCompra }}</td>
             <td>{{ producto.precioVenta }}</td>
             <td>{{ producto.stock }}</td>
+            <td>{{ producto.empresa }}</td>
+            <td>{{ producto.proveedor }}</td>
 <!--            <td>-->
 <!--              <q-chip dense :color="getColor(producto.tipo)" size="10px">-->
 <!--                {{ producto.tipo }}-->
@@ -106,6 +112,8 @@
             <q-input v-model="producto.precioCompra" label="Precio Compra" outlined dense type="number" step="0.01" />
             <q-input v-model="producto.precioVenta" label="Precio Venta" outlined dense type="number" step="0.01" />
             <q-input v-model="producto.stock" label="Stock" outlined dense type="number" />
+            <q-input v-model="producto.empresa" label="Empresa Proveedora" outlined dense />
+            <q-input v-model="producto.proveedor" label="Proveedor" outlined dense />
 <!--            <q-select v-model="producto.tipo" label="Tipo" outlined dense :options="tipos" />-->
             <div class="text-right">
               <q-btn color="negative" label="Cancelar" @click="productoDialog = false" no-caps :loading="loading" />
@@ -121,6 +129,8 @@
 </template>
 
 <script>
+import {Excel} from "src/addons/Excel.js";
+
 export default {
   name: 'OasisProductosPage',
   data() {
@@ -141,6 +151,26 @@ export default {
     this.productosGet();
   },
   methods: {
+    exportarExcel() {
+      // Prepara los datos para el Excel
+      const data = [
+        {
+          sheet: 'Productos',
+          columns: [
+            { label: 'Código', value: 'codigo' },
+            { label: 'Nombre', value: 'nombre' },
+            { label: 'Precio Compra', value: 'precioCompra' },
+            { label: 'Precio Venta', value: 'precioVenta' },
+            { label: 'Stock', value: 'stock' },
+            { label: 'Empresa', value: 'empresa' },
+            { label: 'Proveedor', value: 'proveedor' },
+            // Agrega más columnas si lo necesitas
+          ],
+          content: this.productos
+        }
+      ];
+      Excel.export(data, 'Productos');
+    },
     getColor(tipo) {
       switch (tipo) {
         case 'Cirugía': return 'red';

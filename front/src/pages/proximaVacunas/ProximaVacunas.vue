@@ -1,33 +1,6 @@
 <template>
   <q-page class="">
     <q-card>
-<!--      <q-card-section>-->
-<!--        <div class="row items-center q-col-gutter-md">-->
-<!--          <div class="col-12 col-md-8">-->
-<!--&lt;!&ndash;            <q-slider&ndash;&gt;-->
-<!--&lt;!&ndash;              v-model="dias"&ndash;&gt;-->
-<!--&lt;!&ndash;              :min="1"&ndash;&gt;-->
-<!--&lt;!&ndash;              :max="30"&ndash;&gt;-->
-<!--&lt;!&ndash;              label-always&ndash;&gt;-->
-<!--&lt;!&ndash;              color="green"&ndash;&gt;-->
-<!--&lt;!&ndash;              label="Días hacia adelante"&ndash;&gt;-->
-<!--&lt;!&ndash;              @change="getProximasVacunas"&ndash;&gt;-->
-<!--&lt;!&ndash;            />&ndash;&gt;-->
-<!--          </div>-->
-<!--          <div class="col-12 col-md-4 text-right">-->
-<!--&lt;!&ndash;            <q-btn&ndash;&gt;-->
-<!--&lt;!&ndash;              icon="send"&ndash;&gt;-->
-<!--&lt;!&ndash;              color="primary"&ndash;&gt;-->
-<!--&lt;!&ndash;              label="Enviar Recordatorios"&ndash;&gt;-->
-<!--&lt;!&ndash;              @click="enviarRecordatorios"&ndash;&gt;-->
-<!--&lt;!&ndash;              :loading="loading"&ndash;&gt;-->
-<!--&lt;!&ndash;            />&ndash;&gt;-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </q-card-section>-->
-
-<!--      <q-separator />-->
-
       <q-card-section>
         <q-markup-table flat bordered dense wrap-cells>
           <thead class="bg-primary text-white">
@@ -75,53 +48,6 @@
           </tr>
           </tbody>
         </q-markup-table>
-<!--        <pre>{{vacunas}}</pre>-->
-<!--        [-->
-<!--        {-->
-<!--        "id": 13,-->
-<!--        "fechaVacuna": "2025-05-13",-->
-<!--        "fechaProximaVacuna": "2025-05-27",-->
-<!--        "nombreVacuna": "ghjkl",-->
-<!--        "dosis": null,-->
-<!--        "observaciones": "fghjkl",-->
-<!--        "createdAt": "2025-05-13T09:49:05.074Z",-->
-<!--        "updatedAt": "2025-05-13T09:49:05.074Z",-->
-<!--        "deletedAt": null,-->
-<!--        "user": {-->
-<!--        "id": 1,-->
-<!--        "name": "ING. ADIMER PAUL CHAMBI AJATA",-->
-<!--        "role": "Admin",-->
-<!--        "username": "Adimer",-->
-<!--        "password": "$2b$10$hLxScAvuENNvqjNTwS1p6u/TUd0Ej9Oae9iCAzZSHBqMlCI.fLO0a",-->
-<!--        "agencia": "Clinica",-->
-<!--        "createdAt": "2025-03-12T09:47:07.189Z",-->
-<!--        "updatedAt": "2025-04-29T08:36:19.000Z",-->
-<!--        "deletedAt": null-->
-<!--        },-->
-<!--        "mascota": {-->
-<!--        "id": 7,-->
-<!--        "nombre": "chapi",-->
-<!--        "apellido": "",-->
-<!--        "especie": "Perro",-->
-<!--        "raza": "Dálmata",-->
-<!--        "sexo": "Macho",-->
-<!--        "fecha_nac": "2025-03-20",-->
-<!--        "edad": "3 meses",-->
-<!--        "senas_particulares": "de colore blanco y negro",-->
-<!--        "photo": "compressed-1746004712324-976691490.png",-->
-<!--        "color": "Tricolor",-->
-<!--        "propietario_nombre": "Adimer Paul Chambi Ajata",-->
-<!--        "propietario_ci": "22323",-->
-<!--        "propietario_direccion": "avenida dn y tartawoski, avenida salamanca y tartawoski",-->
-<!--        "propietario_telefono": "69603027",-->
-<!--        "propietario_ciudad": "Oruro",-->
-<!--        "propietario_celular": "",-->
-<!--        "createdAt": "2025-03-13T08:29:11.651Z",-->
-<!--        "updatedAt": "2025-05-13T09:53:45.000Z",-->
-<!--        "deletedAt": null-->
-<!--        }-->
-<!--        }-->
-<!--        ]-->
       </q-card-section>
     </q-card>
   </q-page>
@@ -150,7 +76,7 @@ export default {
 
       const mensaje = `Hola, este es un recordatorio de Clínica Veterinaria. La mascota ${nombreMascota} tiene una vacuna programada para el día ${fecha}.`;
 
-      const url = `https://wa.me/591${telefono}?text=${encodeURIComponent(mensaje)}`;
+      const url = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
       window.open(url, '_blank');
     },
     async getProximasVacunas() {
