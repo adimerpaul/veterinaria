@@ -20,6 +20,7 @@ import { FotosModule } from './fotos/fotos.module';
 import { OasisProductosModule } from './oasis-productos/oasis-productos.module';
 import { OasisSalesModule } from './oasis-sales/oasis-sales.module';
 import { OasisSalesDetallesModule } from './oasis-sales-detalles/oasis-sales-detalles.module';
+import { ReportesModule } from './reportes/reportes.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -53,6 +54,7 @@ import { OasisSalesDetallesModule } from './oasis-sales-detalles/oasis-sales-det
     OasisProductosModule,
     OasisSalesModule,
     OasisSalesDetallesModule,
+    ReportesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
