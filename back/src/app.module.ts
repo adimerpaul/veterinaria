@@ -33,7 +33,7 @@ import { OasisSalesDetallesModule } from './oasis-sales-detalles/oasis-sales-det
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       entities: ['dist/**/*.entity{.ts,.js}'],
-      synchronize: process.env.DB_SYNC === 'true',
+      synchronize: false,
       timezone: '-04:00',
     }),
     UsersModule,

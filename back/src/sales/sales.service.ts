@@ -79,7 +79,7 @@ export class SalesService {
       // Obtener la venta desde la base de datos
       const sale = await this.salesRepository.findOne({
         where: { id: id },
-        relations: ['details'],
+        relations: ['details.producto'],
       });
 
       if (!sale) {
@@ -94,6 +94,14 @@ export class SalesService {
       for (const detail of sale.details) {
         detail.anulado = true;
         await this.detailRepository.save(detail);
+        console.log(detail);
+        const producto = await this.productoRepository.findOne({
+          where: { id: detail.producto.id },
+        });
+        if (producto) {
+          producto.stock += detail.cantidad; // Revertir el stock
+          await this.productoRepository.save(producto);
+        }
       }
 
       // Guardar la venta en la base de datos
@@ -101,7 +109,7 @@ export class SalesService {
 
       return { message: 'Venta anulada exitosamente', sale: sale };
     } catch (error) {
-      return { error: error.message };
+      throw Error(`Error al anular la venta: ${error.message}`);
     }
   }
   async create(body: any, user: any) {
@@ -176,6 +184,9 @@ export class SalesService {
 
         await queryRunner.manager.save(Detail, detail);
         details.push(detail);
+        // Actualizar stock del producto
+        producto.stock -= cantidad;
+        await queryRunner.manager.save(Producto, producto);
       }
       savedSale.details = details;
 
@@ -210,7 +221,7 @@ export class SalesService {
 
     const sales = await this.salesRepository.find({
       where: whereCondition,
-      relations: ['user', 'mascota', 'details'],
+      relations: ['user', 'mascota', 'details.producto'],
       order: {
         fecha: 'DESC',
       },
