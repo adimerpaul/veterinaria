@@ -226,18 +226,18 @@
                   </template>
                 </q-input>
               </div>
-              <div class="col-12 col-md-6">
-                <q-input v-model="tratamiento.comentario" label="Comentario" outlined dense hint="">
-                  <template v-slot:append>
-                    <q-btn flat round dense icon="mic" @click="startRecognition('comentario')" />
-                  </template>
-                </q-input>
-              </div>
 <!--              <div class="col-12 col-md-6">-->
 <!--                <q-input v-model="tratamiento.fecha" label="Fecha" type="date" outlined dense hint="" />-->
 <!--              </div>-->
               <div class="col-12 col-md-6">
                 <q-input v-model="tratamiento.costo" label="Costo" type="number" outlined dense hint="" />
+              </div>
+              <div class="col-12 col-md-12">
+                <q-input v-model="tratamiento.comentario" label="Comentario" outlined dense hint="" type="textarea" rows="3">
+                  <template v-slot:append>
+                    <q-btn flat round dense icon="mic" @click="startRecognition('comentario')" />
+                  </template>
+                </q-input>
               </div>
               <div class="col-12 col-md-6">
 

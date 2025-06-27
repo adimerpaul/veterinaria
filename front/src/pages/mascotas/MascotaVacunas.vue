@@ -98,6 +98,8 @@
                   {{ moment(vacuna.fechaProximaVacuna).diff(moment(), 'days') }} dias
                 </div>
               </div>
+              <q-toggle v-model="vacuna.otro" color="primary" false-value="No" true-value="Si"
+                        :label="vacuna.otro == 'Si' ? 'Vacuna otro' : 'Vacuna normal'" />
               <q-input v-model="vacuna.nombreVacuna" label="Nombre Vacuna" outlined dense clearable :rules="[val => !!val || 'Campo requerido']"/>
               <q-input v-model="vacuna.observaciones" label="Observaciones" outlined dense clearable/>
             </div>
@@ -181,6 +183,7 @@ export default {
         fechaProximaVacuna: moment().add(2, 'weeks').format('YYYY-MM-DD'),
         nombreVacuna: '',
         observaciones: '',
+        otro: 'No',
         mascotaId: this.mascota.id,
       }
     },
