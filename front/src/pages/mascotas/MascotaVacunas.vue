@@ -101,7 +101,7 @@
               <q-toggle v-model="vacuna.otro" color="primary" false-value="No" true-value="Si"
                         :label="vacuna.otro == 'Si' ? 'Vacuna otro' : 'Vacuna normal'" />
               <q-input v-model="vacuna.nombreVacuna" label="Nombre Vacuna" outlined dense clearable :rules="[val => !!val || 'Campo requerido']"/>
-              <q-input v-model="vacuna.observaciones" label="Observaciones" outlined dense clearable/>
+              <q-input v-model="vacuna.observaciones" label="Observaciones" outlined dense clearable type="textarea" :rows="2"/>
             </div>
             <div class="text-right">
               <q-btn @click="dialogVacuna = false" label="Cancelar" color="red" icon="cancel" no-caps :loading="loading"  />

@@ -229,3 +229,57 @@ export function imprimirVacunaPDF(vacuna, mascota) {
 
   doc.save(`Vacuna-${mascota.nombre}-${vacuna.nombreVacuna}.pdf`);
 }
+export function imprimirDesparasitacionPDF(desparasitacion, mascota) {
+  const doc = new jsPDF();
+
+  // Título
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.text('CERTIFICADO DE DESPARASITACIÓN', 105, 22, { align: 'center' });
+
+  // Línea decorativa
+  doc.setDrawColor(0, 102, 204);
+  doc.setLineWidth(1);
+  doc.line(20, 26, 190, 26);
+
+  // Tabla de datos
+  autoTable(doc, {
+    startY: 32,
+    head: [['Campo', 'Detalle']],
+    body: [
+      ['Nombre de la Mascota', mascota.nombre || '-'],
+      ['Propietario', mascota.propietario_nombre || '-'],
+      ['Fecha', desparasitacion.fecha ? moment(desparasitacion.fecha).format('DD/MM/YYYY') : '-'],
+      ['Peso', desparasitacion.peso || '-'],
+      ['Medicamentos', desparasitacion.medicamentos || '-'],
+      ['Veterinario', desparasitacion.user?.name || '-'],
+    ],
+    styles: {
+      fontSize: 12,
+      cellPadding: 4,
+      valign: 'middle',
+    },
+    headStyles: {
+      fillColor: [0, 102, 204],
+      textColor: 255,
+      fontStyle: 'bold',
+      halign: 'center',
+    },
+    bodyStyles: {
+      halign: 'left',
+    },
+    columnStyles: {
+      0: { cellWidth: 60, fontStyle: 'bold' },
+      1: { cellWidth: 110 },
+    },
+    theme: 'grid',
+    margin: { left: 20, right: 20 }
+  });
+
+  // Pie de página
+  doc.setFontSize(10);
+  doc.setTextColor(100);
+  doc.text('Clínica Veterinaria - Documento generado automáticamente', 105, 285, { align: 'center' });
+
+  doc.save(`Desparasitacion-${mascota.nombre}-${desparasitacion.fecha}.pdf`);
+}

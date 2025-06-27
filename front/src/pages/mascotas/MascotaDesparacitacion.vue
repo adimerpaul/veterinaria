@@ -6,7 +6,7 @@
     <template v-if="mascota.desparacitaciones.length > 0">
       <q-markup-table wrap-cells dense flat bordered>
         <thead>
-        <tr class="bg-black text-white">
+        <tr class="bg-indigo text-white">
           <td>Opción</td>
           <td>#</td>
           <th>Fecha</th>
@@ -18,7 +18,18 @@
         <tbody>
         <tr v-for="(desparasitacion, i) in mascota.desparacitaciones" :key="desparasitacion.id">
           <td>
-            <q-btn @click="eliminarDesparasitacion(desparasitacion)" color="red" icon="delete" no-caps dense size="10px" label="Eliminar" />
+<!--            <q-btn @click="eliminarDesparasitacion(desparasitacion)" color="red" icon="delete" no-caps dense size="10px" label="Eliminar" />-->
+<!--            opciones-->
+            <q-btn-dropdown color="indigo" label="Opciones" no-caps dense>
+              <q-list>
+                <q-item clickable @click="imprimirDesparasitacion(desparasitacion)">
+                  <q-item-section>Imprimir</q-item-section>
+                </q-item>
+                <q-item clickable @click="eliminarDesparasitacion(desparasitacion)">
+                  <q-item-section>Eliminar</q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
           </td>
           <td>{{ i + 1 }}</td>
           <td>{{ desparasitacion.fecha }}</td>
@@ -45,7 +56,18 @@
             <div class="q-pa-xs">
               <q-input v-model="desparasitacion.fecha" label="Fecha" type="date" outlined dense clearable :rules="[val => !!val || 'Campo requerido']"/>
               <q-input v-model="desparasitacion.peso" label="Peso" outlined dense clearable :rules="[val => !!val || 'Campo requerido']"/>
-              <q-input v-model="desparasitacion.medicamentos" label="Medicamentos" outlined dense clearable/>
+<!--              <q-input v-model="desparasitacion.medicamentos" label="Medicamentos" outlined dense clearable/>-->
+              <q-input
+                v-model="desparasitacion.medicamentos"
+                label="Medicamentos"
+                outlined
+                dense
+                clearable
+              >
+                <template v-slot:append>
+                  <q-btn flat icon="mic" @click="startRecognition" :loading="recognitionActive" />
+                </template>
+              </q-input>
             </div>
             <div class="text-right">
               <q-btn @click="dialogDesparasitacion = false" label="Cancelar" color="red" icon="cancel" no-caps :loading="loading" />
@@ -60,6 +82,7 @@
 
 <script>
 import moment from "moment/moment.js";
+import {imprimirDesparasitacionPDF} from "src/utils/pdf.js";
 
 export default {
   name: 'MascotaDesparasitacion',
@@ -72,6 +95,7 @@ export default {
   data() {
     return {
       loading: false,
+      recognitionActive: false,
       dialogDesparasitacion: false,
       desparasitacion: {
         fecha: moment().format('YYYY-MM-DD'),
@@ -80,7 +104,47 @@ export default {
       },
     }
   },
+  mounted() {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      this.recognition = new SpeechRecognition();
+      this.recognition.lang = 'es-ES';
+      this.recognition.interimResults = false;
+      this.recognition.continuous = false;
+
+      this.recognition.onresult = (event) => {
+        const text = event.results[0][0].transcript;
+        this.desparasitacion.medicamentos += (this.desparasitacion.medicamentos ? ' ' : '') + text;
+        this.recognitionActive = false;
+      };
+
+      this.recognition.onstart = () => {
+        this.recognitionActive = true;
+      };
+
+      this.recognition.onend = () => {
+        this.recognitionActive = false;
+      };
+
+      this.recognition.onerror = () => {
+        this.recognitionActive = false;
+      };
+    }
+  },
   methods: {
+    imprimirDesparasitacion(desparasitacion) {
+      imprimirDesparasitacionPDF(desparasitacion, this.mascota);
+    },
+    startRecognition() {
+      if (this.recognition) {
+        this.recognition.start();
+      } else {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Reconocimiento de voz no soportado por el navegador.',
+        });
+      }
+    },
     eliminarDesparasitacion(desparasitacion) {
       this.$alert.confirm('¿Está seguro de eliminar la desparasitación?', 'Eliminar Registro').onOk(() => {
         this.loading = true;
@@ -119,6 +183,7 @@ export default {
       this.desparasitacion = {
         fecha: moment().format('YYYY-MM-DD'),
         paso: '',
+        medicamentos: '',
         mascotaId: this.mascota.id,
       }
     },

@@ -61,7 +61,7 @@
               <q-btn flat dense no-caps icon="vaccines" label="Vacunas" :color="tab === 'vacunas' ? 'white' : 'black'" />
             </q-tab>
             <q-tab name="desparacitacion" :class="{'bg-indigo text-white': tab === 'desparacitacion'}">
-              <q-btn flat dense no-caps icon="pest_control" label="Desparacitacion" :color="tab === 'desparacitacion' ? 'white' : 'black'" />
+              <q-btn flat dense no-caps icon="pest_control" label="Desparasitación" :color="tab === 'desparacitacion' ? 'white' : 'black'" />
             </q-tab>
 <!--            btab fotografias-->
             <q-tab name="fotos" :class="{'bg-grey text-white': tab === 'fotos'}">
