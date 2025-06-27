@@ -24,6 +24,8 @@ export class Vacuna {
   dosis: string;
   @Column({ nullable: true })
   observaciones: string;
+  @Column({ nullable: true, default: 'No' })
+  otro: string;
   @CreateDateColumn()
   createdAt: Date;
   @UpdateDateColumn()
