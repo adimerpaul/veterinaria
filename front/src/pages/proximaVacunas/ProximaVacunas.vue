@@ -1,7 +1,29 @@
 <template>
-  <q-page class="">
-    <q-card>
+  <q-page class="q-pa-xs">
+    <q-card flat bordered>
       <q-card-section>
+        <div class="row q-mb-md">
+          <div class="col-6 col-md-3">
+            <q-input
+              v-model.number="dias"
+              type="number"
+              label="Días a consultar"
+              dense
+              outlined
+              min="1"
+            />
+          </div>
+          <div class="col-6 col-md-2 flex flex-center">
+            <q-btn
+              color="primary"
+              label="Consultar"
+              icon="search"
+              no-caps
+              @click="getProximasVacunas"
+              :loading="loading"
+            />
+          </div>
+        </div>
         <q-markup-table flat bordered dense wrap-cells>
           <thead class="bg-primary text-white">
           <tr>
@@ -26,6 +48,7 @@
                 @click="enviarPorWhatsapp(vacuna)"
                 v-if="vacuna.mascota?.propietario_telefono"
               />
+              <q-chip v-else color="grey" label="Sin Teléfono" size="sm" class="q-mr-sm" />
             </td>
             <td>
               <q-avatar size="40px" class="q-mr-sm">
