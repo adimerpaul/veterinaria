@@ -47,10 +47,14 @@ export function imprimirTratamientoPDF(t,mascota) {
 }
 
 export function imprimirHistorialPDF(hist,mascota) {
+  // console.log(mascota)
   const doc = new jsPDF();
   // const mascota = this.mascota;
   // console.log(mascota)
   const tratamientos = hist.tratamientos || [];
+
+  // img add
+  doc.addImage(mascota.photo64, 'PNG', 10, 5, 15, 15);
 
   const bold = (text, x, y) => {
     doc.setFont(undefined, 'bold');
@@ -159,6 +163,28 @@ export function imprimirHistorialPDF(hist,mascota) {
       4: { halign: 'right' }
     }
   });
+
+  if (mascota.fotos && mascota.fotos.length > 0) {
+    const startY = doc.lastAutoTable.finalY + 10;
+    let x = 15;
+    let y = startY+5;
+    const imgWidth = 30;
+    const imgHeight = 20;
+    const gapX = 10;
+    const gapY = 10;
+    const imagesPerRow = 4;
+
+    mascota.fotos.forEach((foto, index) => {
+      if (foto.photo64) {
+        doc.addImage(foto.photo64, 'PNG', x, y, imgWidth, imgHeight);
+        x += imgWidth + gapX;
+        if ((index + 1) % imagesPerRow === 0) {
+          x = 15;
+          y += imgHeight + gapY;
+        }
+      }
+    });
+  }
 
   doc.setFontSize(10);
   doc.setFont(undefined, 'bold');

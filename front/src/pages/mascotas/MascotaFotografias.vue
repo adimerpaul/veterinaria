@@ -12,7 +12,7 @@
           <th>#</th>
           <th>Fecha</th>
           <th>Imagen</th>
-          <th>Descripción</th>
+          <th>Observaciones</th>
           <th>Usuario</th>
         </tr>
         </thead>
@@ -27,9 +27,11 @@
 <!--            <pre>-->
 <!--              {{`${$url}uploads/${foto.imagen}`}}-->
 <!--            </pre>-->
-            <q-img :src="`${$url}uploads/${foto.imagen}`" style="width: 80px; height: 80px" />
+            <a :href="`${$url}uploads/${foto.imagen}`" target="_blank">
+              <q-img :src="`${$url}uploads/${foto.imagen}`" style="width: 80px; height: 80px" />
+            </a>
           </td>
-          <td>{{ foto.descripcion }}</td>
+          <td>{{ foto.observaciones }}</td>
           <td>{{ foto.user?.username || 'Sin usuario' }}</td>
         </tr>
         </tbody>
@@ -42,7 +44,7 @@
         </q-card-section>
       </q-card>
     </template>
-<!--    <pre>{{mascota}}</pre>-->
+<!--    <pre>{{mascota.fotos}}</pre>-->
 
     <!-- Diálogo -->
     <q-dialog v-model="dialogFotografia">
@@ -51,7 +53,7 @@
           <q-form @submit.prevent="fotografiaCreate">
             <div class="text-h6 text-center">Registrar Fotografía</div>
             <q-input v-model="fotografia.fecha" label="Fecha" type="date" outlined dense :rules="[val => !!val || 'Campo requerido']" />
-            <q-input v-model="fotografia.descripcion" label="Descripción" outlined dense />
+            <q-input v-model="fotografia.observaciones" label="Descripción" outlined dense />
             <q-file outlined dense v-model="imagenFile" label="Seleccionar imagen" accept="image/*" />
 
             <div class="text-right q-mt-md">
@@ -83,7 +85,7 @@ export default {
       imagenFile: null,
       fotografia: {
         fecha: moment().format('YYYY-MM-DD'),
-        descripcion: '',
+        observaciones: '',
         mascotaId: null,
       },
     };
@@ -93,7 +95,7 @@ export default {
       this.dialogFotografia = true;
       this.fotografia = {
         fecha: moment().format('YYYY-MM-DD'),
-        descripcion: '',
+        observaciones: '',
         mascotaId: this.mascota.id
       };
       this.imagenFile = null;
@@ -107,7 +109,7 @@ export default {
       this.loading = true;
       const formData = new FormData();
       formData.append('fecha', this.fotografia.fecha);
-      formData.append('descripcion', this.fotografia.descripcion || '');
+      formData.append('observaciones', this.fotografia.observaciones || '');
       formData.append('imagen', this.imagenFile);
       const user = JSON.parse(localStorage.getItem('user'));
       formData.append('userId', user?.id || 0);
