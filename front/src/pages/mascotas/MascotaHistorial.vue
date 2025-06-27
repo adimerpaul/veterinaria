@@ -220,10 +220,18 @@
             </div>
             <div class="row">
               <div class="col-12 col-md-6">
-                <q-input v-model="tratamiento.observaciones" label="Observaciones" outlined dense hint="" />
+                <q-input v-model="tratamiento.observaciones" label="Observaciones" outlined dense hint="" >
+                  <template v-slot:append>
+                    <q-btn flat round dense icon="mic" @click="startRecognition('observaciones')" />
+                  </template>
+                </q-input>
               </div>
               <div class="col-12 col-md-6">
-                <q-input v-model="tratamiento.comentario" label="Comentario" outlined dense hint="" />
+                <q-input v-model="tratamiento.comentario" label="Comentario" outlined dense hint="">
+                  <template v-slot:append>
+                    <q-btn flat round dense icon="mic" @click="startRecognition('comentario')" />
+                  </template>
+                </q-input>
               </div>
 <!--              <div class="col-12 col-md-6">-->
 <!--                <q-input v-model="tratamiento.fecha" label="Fecha" type="date" outlined dense hint="" />-->
@@ -405,6 +413,15 @@ export default {
     startRecognition(field) {
       if (this.recognition) {
         this.activeField = field;
+        this.recognition.onresult = (event) => {
+          const text = event.results[0][0].transcript;
+          // Detecta si el campo está en historial o tratamiento
+          if (this.historial && this.historial.hasOwnProperty(field)) {
+            this.historial[field] += text;
+          } else if (this.tratamiento && this.tratamiento.hasOwnProperty(field)) {
+            this.tratamiento[field] += text;
+          }
+        };
         this.recognition.start();
       } else {
         this.$q.notify({

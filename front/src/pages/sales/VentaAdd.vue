@@ -287,7 +287,7 @@
               <td>{{ item.fecha.slice(0, 10) }}</td>
               <td>{{ item.user?.username || 'Desconocido' }}</td>
               <td>
-                <div style="max-width: 150px; wrap-option: wrap; line-height: 0.9">
+                <div style="max-width: 150px; white-space: normal; line-height: 0.9">
                   {{ item.historiale?.mascota?.nombre || 'Desconocido' }} ({{ item.historiale?.mascota?.propietario_nombre || 'Desconocido' }})
                 </div>
               </td>
