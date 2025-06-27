@@ -72,9 +72,10 @@ export class UsersService {
     return { token, user: userPayload };
   }
   async me(req) {
+    // console.log(req.user)
     const user = await this.usersRepository.findOne({
       where: {
-        id: req.user.id,
+        id: req.user.userId,
       },
       relations: {
         userPermisos: {
