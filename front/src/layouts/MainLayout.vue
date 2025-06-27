@@ -103,7 +103,7 @@ const { proxy } = getCurrentInstance()
 const linksList = [
   { title: 'Principal', icon: 'dashboard', link: '/', can: 'Todos' },
   { title: 'Usuarios', icon: 'group', link: '/usuarios', can: 1 },
-  { title: 'Productos', icon: 'category', link: '/productos', can: 2 },
+  { title: 'Productos Clinica', icon: 'category', link: '/productos', can: 2 },
   { title: 'Crear Ventas', icon: 'shopping_bag', link: '/ventas/add', can: 3 },
   { title: 'Ventas', icon: 'point_of_sale', link: '/ventas', can: 4 },
   { title: 'Crear Mascota', icon: 'add_circle', link: '/mascotas/create', can: 5 },

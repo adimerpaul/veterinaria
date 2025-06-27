@@ -20,7 +20,28 @@
         <tbody>
         <tr v-for="(vacuna,i) in mascota.vacunas" :key="vacuna.id">
           <td>
-            <q-btn @click="eliminarVacuna(vacuna)" color="red" icon="delete" no-caps dense size="10px" label="Elimnar" />
+<!--            <q-btn @click="eliminarVacuna(vacuna)" color="red" icon="delete" no-caps dense size="10px" label="Elimnar" />-->
+<!--            btn opciones-->
+            <q-btn-dropdown dense no-caps label="Opciones" color="black" class="q-mr-sm">
+              <q-list>
+                <q-item clickable v-close-popup @click="eliminarVacuna(vacuna)">
+                  <q-item-section avatar>
+                    <q-icon name="delete" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>Eliminar</q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item clickable v-close-popup @click="imprimirVacuna(vacuna)">
+                  <q-item-section avatar>
+                    <q-icon name="print" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>Imprimir</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
           </td>
           <td>{{ i + 1 }}</td>
           <td>{{ vacuna.fechaVacuna }}</td>
@@ -92,9 +113,16 @@
 </template>
 <script>
 import moment from "moment/moment.js";
+import imprimir from "pages/imprimir/Imprimir.vue";
+import {imprimirVacunaPDF} from "src/utils/pdf.js";
 
 export default {
   name: 'MascotaVacunas',
+  computed: {
+    imprimir() {
+      return imprimir
+    }
+  },
   props: {
     mascota: {
       type: Object,
@@ -115,6 +143,9 @@ export default {
     }
   },
   methods: {
+    imprimirVacuna(vacuna) {
+      imprimirVacunaPDF(vacuna, this.mascota)
+    },
     eliminarVacuna(vacuna) {
       this.$alert.confirm('¿Está seguro de eliminar la vacuna?', 'Eliminar Vacuna').onOk(() => {
         this.loading = true;

@@ -171,3 +171,61 @@ export function imprimirHistorialPDF(hist,mascota) {
   const fechaPDF = moment(hist.fecha).format('DD_MM_YYYY');
   doc.save(`Historial-${mascota.nombre}-${fechaPDF}.pdf`);
 }
+export function imprimirVacunaPDF(vacuna, mascota) {
+  const doc = new jsPDF();
+
+  // Logo (opcional, si tienes base64 o url pública)
+  // doc.addImage('data:image/png;base64,...', 'PNG', 10, 8, 30, 30);
+
+  // Título
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.text('CERTIFICADO DE VACUNACIÓN', 105, 22, { align: 'center' });
+
+  // Línea decorativa
+  doc.setDrawColor(0, 102, 204);
+  doc.setLineWidth(1);
+  doc.line(20, 26, 190, 26);
+
+  // Datos de la mascota y vacuna en tabla
+  autoTable(doc, {
+    startY: 32,
+    head: [['Campo', 'Detalle']],
+    body: [
+      ['Nombre de la Mascota', mascota.nombre || '-'],
+      ['Propietario', mascota.propietario_nombre || '-'],
+      ['Vacuna', vacuna.nombreVacuna || '-'],
+      ['Fecha de Vacuna', vacuna.fechaVacuna ? moment(vacuna.fechaVacuna).format('DD/MM/YYYY') : '-'],
+      ['Próxima Vacuna', vacuna.fechaProximaVacuna ? moment(vacuna.fechaProximaVacuna).format('DD/MM/YYYY') : '-'],
+      ['Observaciones', vacuna.observaciones || '-'],
+      ['Veterinario', vacuna.user?.name || '-'],
+    ],
+    styles: {
+      fontSize: 12,
+      cellPadding: 4,
+      valign: 'middle',
+    },
+    headStyles: {
+      fillColor: [0, 102, 204],
+      textColor: 255,
+      fontStyle: 'bold',
+      halign: 'center',
+    },
+    bodyStyles: {
+      halign: 'left',
+    },
+    columnStyles: {
+      0: { cellWidth: 60, fontStyle: 'bold' },
+      1: { cellWidth: 110 },
+    },
+    theme: 'grid',
+    margin: { left: 20, right: 20 }
+  });
+
+  // Pie de página
+  doc.setFontSize(10);
+  doc.setTextColor(100);
+  doc.text('Clínica Veterinaria - Documento generado automáticamente', 105, 285, { align: 'center' });
+
+  doc.save(`Vacuna-${mascota.nombre}-${vacuna.nombreVacuna}.pdf`);
+}

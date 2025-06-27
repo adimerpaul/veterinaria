@@ -141,10 +141,10 @@
               <q-input v-model="historial.apetito" label="Apetito" outlined dense hint="" />
               </div>
               <div class="col-6 col-md-2">
-              <q-input v-model="historial.pulso" label="Pulso" type="number" outlined dense hint="" />
+              <q-input v-model="historial.pulso" label="Pulso" outlined dense hint="" />
               </div>
-              <div class="col-6 col-md-2">
-              <q-select v-model="historial.cf" label="CF" outlined dense hint="" :options="['D', 'R', 'B', 'C','MC']" />
+              <div class="col-6 col-md-4">
+              <q-select v-model="historial.cf" label="mc" outlined dense hint="" :options="['D', 'R', 'B', 'C','MC','O']" />
               </div>
               <div class="col-12 col-md-2">
               <q-checkbox v-model="historial.parvo" label="Parvo" outlined dense hint="" false-value="0" true-value="1" />
