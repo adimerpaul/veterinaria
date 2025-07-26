@@ -104,6 +104,7 @@
 <script setup>
 import { ref, computed, getCurrentInstance, onMounted } from 'vue';
 import { Imprimir } from 'src/addons/Imprimir.js';
+import {generarPdfVentaOasis} from "src/utils/GenerarPdfOasis.js";
 
 const { proxy } = getCurrentInstance();
 const buscarProducto = ref('');
@@ -159,7 +160,8 @@ function realizarVentaPost() {
     comentario: comentario.value
   }).then((res) => {
     proxy.$alert.success('Venta registrada');
-    Imprimir.notaOasisVenta(res.data);
+    // Imprimir.notaOasisVenta(res.data);
+    generarPdfVentaOasis(res.data)
     carrito.value = [];
     getProductos();
     dialogVenta.value = false;

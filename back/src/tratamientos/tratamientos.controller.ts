@@ -43,6 +43,13 @@ export class TratamientosController {
   ) {
     return this.tratamientosService.update(+id, updateTratamientoDto);
   }
+  @Put('pagado/:id')
+  updatePagado(
+    @Param('id') id: string,
+    @Body() updateTratamientoDto: UpdateTratamientoDto,
+  ) {
+    return this.tratamientosService.updatePagado(+id, updateTratamientoDto);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

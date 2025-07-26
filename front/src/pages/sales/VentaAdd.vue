@@ -251,7 +251,7 @@
     </q-dialog>
 <!--    recuperarTratamientoDialog-->
     <q-dialog v-model="recuperarTratamientoDialog">
-      <q-card flat bordered style="width: 650px;">
+      <q-card flat bordered style="min-width: 600px; max-width: 90vw;">
         <q-card-section class="q-pb-none row items-center">
           <div class="text-bold">
             Recuperar Tratamiento
@@ -280,6 +280,7 @@
               <th>Costo</th>
               <th>Medicamentos</th>
               <th>Opciones</th>
+              <th>Pagado</th>
             </tr>
             </thead>
             <tbody>
@@ -301,7 +302,16 @@
                 </div>
               </td>
               <td>
-                <q-btn label="Recuperar" no-caps dense color="green" icon="add_circle_outline" @click="agregarAcarritoTratemiento(item)"/>
+                <q-btn label="Recuperar" no-caps dense color="green" icon="add_circle_outline" size="10px" @click="agregarAcarritoTratemiento(item)"/>
+              </td>
+              <td>
+                <q-toggle v-model="item.pagado" :true-value="true" :false-value="false" color="green" size="20px" @update:model-value="(val) => {
+                  proxy.$axios.put(`tratamientos/pagado/${item.id}`, { pagado: val }).then(() => {
+                    proxy.$alert.success(`Tratamiento ${val ? 'marcado como pagado' : 'desmarcado como pagado'}.`);
+                  }).catch(() => {
+                    proxy.$alert.error('Error al actualizar el estado del tratamiento.');
+                  });
+                }"/>
               </td>
             </tr>
             </tbody>
@@ -431,6 +441,13 @@ function agregarAcarritoTratemiento(tratamiento) {
     proxy.$alert.error("Este tratamiento no tiene medicamentos.");
     return;
   }
+  // update   @Column({ default: false })
+  // pagado: boolean;
+  proxy.$axios.put(`tratamientos/pagado/${tratamiento.id}`, { pagado: true }).then(() => {
+    // proxy.$alert.success("Tratamiento marcado como pagado.");
+  }).catch((err) => {
+    proxy.$alert.error("Error al marcar el tratamiento como pagado.");
+  });
 
   tratamiento.tratamientoMedicamentos.forEach((med) => {
     const existingItem = carrito.value.find(p => p.nombre === med.medicamento);

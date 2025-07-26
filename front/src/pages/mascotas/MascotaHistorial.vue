@@ -187,10 +187,10 @@
               <q-input v-model="historial.moucosidada" label="Mucosa" outlined dense hint="" />
               </div>
               <div class="col-12 col-md-4">
-              <q-input v-model="historial.esterelizado" label="Esterelizado" outlined dense hint="" />
+              <q-input v-model="historial.esterelizado" label="Esterilizado" outlined dense hint="" />
               </div>
               <div class="col-12 col-md-4">
-              <q-input v-model="historial.desparacitacion" label="Desparacitación" outlined dense hint="" />
+              <q-input v-model="historial.desparacitacion" label="Desparasitación" outlined dense hint="" />
               </div>
               <div class="col-12 col-md-4">
               <q-input v-model="historial.rayox" label="Rayos X" outlined dense hint="" />

@@ -7,7 +7,9 @@ import { OasisSalesDetalle } from '../oasis-sales-detalles/entities/oasis-sales-
 import { OasisProducto } from '../oasis-productos/entities/oasis-producto.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([OasisSale,OasisSalesDetalle])],
+  imports: [
+    TypeOrmModule.forFeature([OasisSale, OasisSalesDetalle, OasisProducto]),
+  ],
   controllers: [OasisSalesController],
   providers: [OasisSalesService],
 })

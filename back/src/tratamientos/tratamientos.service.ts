@@ -52,6 +52,20 @@ export class TratamientosService {
     const tratamiento = this.tratamientosRepository.create(body);
     return await this.tratamientosRepository.save(tratamiento);
   }
+  async updatePagado(id: number, updateTratamientoDto) {
+    const tratamiento = await this.tratamientosRepository.findOne({
+      where: { id },
+    });
+
+    if (!tratamiento) {
+      return 'No se encontró el tratamiento';
+    }
+
+    // Actualizar el campo pagado
+    tratamiento.pagado = updateTratamientoDto.pagado;
+
+    return await this.tratamientosRepository.save(tratamiento);
+  }
   async update(id: number, updateTratamientoDto) {
     const tratamiento = await this.tratamientosRepository.findOne({
       where: { id },
@@ -101,12 +115,10 @@ export class TratamientosService {
       .leftJoinAndSelect('tratamiento.user', 'user')
       .leftJoinAndSelect('tratamiento.historiale', 'historiale')
       .leftJoinAndSelect('historiale.mascota', 'mascota')
-      .leftJoinAndSelect(
-        'tratamiento.tratamientoMedicamentos',
-        'tratamientoMedicamentos',
-      )
+      .leftJoinAndSelect('tratamiento.tratamientoMedicamentos', 'tratamientoMedicamentos')
       .leftJoinAndSelect('tratamientoMedicamentos.producto', 'producto')
       .where('DATE(tratamiento.fecha) = :fecha', { fecha })
+      .andWhere('producto.id IS NOT NULL') // ✅ solo si hay producto asociado
       .orderBy('tratamiento.fecha', 'DESC')
       .getMany();
   }

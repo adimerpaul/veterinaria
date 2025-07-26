@@ -31,6 +31,9 @@ export class Tratamiento {
   @Column({ nullable: true })
   costo: number;
 
+  @Column({ default: false })
+  pagado: boolean;
+
   @ManyToOne(() => User, (user) => user.tratamientos)
   user: User;
 

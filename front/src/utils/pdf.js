@@ -24,12 +24,12 @@ export function imprimirTratamientoPDF(t,mascota) {
   // Tabla de medicamentos
   autoTable(doc, {
     startY: 58,
-    head: [['Medicamento', 'Cantidad', 'Precio (Bs)', 'Total (Bs)']],
+    head: [['Medicamento', 'Cantidad']],
     body: t.tratamientoMedicamentos.map(med => [
       med.medicamento,
       med.cantidad,
-      med.precio,
-      med.total
+      // med.precio,
+      // med.total
     ]),
     styles: {
       fontSize: 10,

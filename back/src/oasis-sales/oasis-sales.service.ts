@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { OasisSale } from './entities/oasis-sale.entity';
 import { OasisSalesDetalle } from '../oasis-sales-detalles/entities/oasis-sales-detalle.entity';
 import { CreateOasisSaleDto } from './dto/create-oasis-sale.dto';
+import { OasisProducto } from '../oasis-productos/entities/oasis-producto.entity';
 
 @Injectable()
 export class OasisSalesService {
@@ -13,11 +14,13 @@ export class OasisSalesService {
 
     @InjectRepository(OasisSalesDetalle)
     private oasisDetalleRepo: Repository<OasisSalesDetalle>,
+
+    @InjectRepository(OasisProducto)
+    private oasisProductoRepo: Repository<OasisProducto>,
   ) {}
 
   async create(createOasisSaleDto) {
-    const { productos, total, comentario, nombre, ci } =
-      createOasisSaleDto;
+    const { productos, total, comentario, nombre, ci } = createOasisSaleDto;
 
     const venta = this.oasisSaleRepo.create({
       total,
@@ -31,16 +34,34 @@ export class OasisSalesService {
 
     const savedVenta = await this.oasisSaleRepo.save(venta);
 
-    const detalles = productos.map((p) => {
+    const detalles: OasisSalesDetalle[] = [];
+
+    for (const p of productos) {
+      const producto = await this.oasisProductoRepo.findOne({
+        where: { id: p.id },
+      });
+
+      if (!producto) {
+        throw new Error(`Producto con ID ${p.id} no encontrado`);
+      }
+
+      // if (producto.stock < p.cantidadVenta) {
+      //   throw new Error(`Stock insuficiente para el producto: ${producto.nombre}`);
+      // }
+
+      producto.stock -= p.cantidadVenta;
+      await this.oasisProductoRepo.save(producto);
+
       const detalle = new OasisSalesDetalle();
-      detalle.productoName = p.nombre;
-      detalle.precio = p.precioVenta;
+      detalle.productoName = producto.nombre;
+      detalle.precio = producto.precioVenta;
       detalle.cantidad = p.cantidadVenta;
-      detalle.subtotal = p.precioVenta * p.cantidadVenta;
+      detalle.subtotal = producto.precioVenta * p.cantidadVenta;
       detalle.fecha = new Date();
       detalle.oasisSale = savedVenta;
-      return detalle;
-    });
+
+      detalles.push(detalle);
+    }
 
     await this.oasisDetalleRepo.save(detalles);
 

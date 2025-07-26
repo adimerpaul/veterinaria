@@ -49,7 +49,19 @@
             <div class="text-h6 text-center">Registrar Laboratorio</div>
             <q-input v-model="form.fecha" type="date" label="Fecha" dense outlined :rules="[v => !!v || 'Campo requerido']" />
             <q-input v-model="form.observaciones" label="Observaciones" dense outlined />
-            <q-file v-model="archivo" accept=".pdf" label="Seleccionar PDF" dense outlined :rules="[v => !!v || 'Requerido']" />
+<!--            <q-file v-model="archivo" accept=".pdf" label="Seleccionar PDF" dense outlined :rules="[v => !!v || 'Requerido']" />-->
+
+            <q-file
+              v-model="archivo"
+              accept=".pdf"
+              label="Seleccionar PDF"
+              dense
+              outlined
+              :rules="[
+    v => !!v || 'Archivo requerido',
+    v => v.size <= 2 * 1024 * 1024 || 'El archivo debe ser menor a 2MB'
+  ]"
+            />
 
             <div class="text-right q-mt-md">
               <q-btn flat label="Cancelar" color="red" icon="close" v-close-popup :loading="loading" />
