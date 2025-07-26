@@ -5,6 +5,7 @@ import { Tratamiento } from './entities/tratamiento.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TratamientoMedicamento } from '../tratamiento-medicamentos/entities/tratamiento-medicamento.entity';
+import { Producto } from '../productos/entities/producto.entity';
 
 @Injectable()
 export class TratamientosService {
@@ -13,6 +14,8 @@ export class TratamientosService {
     private tratamientosRepository: Repository<Tratamiento>,
     @InjectRepository(TratamientoMedicamento)
     private tratamientoMedicamentoRepository: Repository<TratamientoMedicamento>,
+    @InjectRepository(Producto)
+    private productoRepository: Repository<Producto>,
   ) {}
   async create(body, req) {
     body.user = { id: req.user.userId };
@@ -29,7 +32,9 @@ export class TratamientosService {
     const tratamientoMedicamentos = medicamentosData.map((med) => {
       const total = parseFloat(med.precio) * parseFloat(med.cantidad);
       const tratamientoMedicamento = new TratamientoMedicamento();
+      // producto find
       tratamientoMedicamento.medicamento = med.nombre;
+      tratamientoMedicamento.producto = { id: med.id } as Producto;
       tratamientoMedicamento.precio = parseFloat(med.precio);
       tratamientoMedicamento.cantidad = parseFloat(med.cantidad);
       tratamientoMedicamento.total = total;
@@ -52,6 +57,7 @@ export class TratamientosService {
       .leftJoinAndSelect('tratamiento.historiale', 'historiale')
       .leftJoinAndSelect('historiale.mascota', 'mascota')
       .leftJoinAndSelect('tratamiento.tratamientoMedicamentos', 'tratamientoMedicamentos')
+      .leftJoinAndSelect('tratamientoMedicamentos.producto', 'producto')
       .where('DATE(tratamiento.fecha) = :fecha', { fecha })
       .orderBy('tratamiento.fecha', 'DESC')
       .getMany();
