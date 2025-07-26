@@ -132,6 +132,7 @@
               </tr>
               </tfoot>
             </q-markup-table>
+<!--            <pre>{{carrito}}</pre>-->
             <q-btn label="Realizar Venta" color="positive" class="full-width q-mt-md" no-caps @click="realizarVenta"
                    :loading="loading"
             />
@@ -158,12 +159,12 @@
                               @filter="mascotasFilter" :rules="[val => !!val || 'Campo requerido']">
                     </q-select>
                   </div>
-                  <div class="col-2 flex flex-center">
-<!--                    pago select-->
-                    <q-select v-model="venta.pago" label="Pago" outlined dense :options="['Efectivo', 'Qr', 'Transferencia']" />
+                  <div class="col-2 text-center">
+                    <q-select v-model="venta.pago" label="Pago" outlined dense :options="['Efectivo', 'Qr', 'Transferencia']" hint="" />
                   </div>
                   <div class="col-2 flex flex-center">
-                    <q-btn :loading="loading" dense color="green" label="Crear" no-caps icon="add_circle_outline" to="/mascotas/create" />
+<!--                    <q-btn :loading="loading" dense color="green" label="Crear" no-caps icon="add_circle_outline" to="/mascotas/create" />-->
+                    <q-btn dense color="green" label="Crear" no-caps icon="add_circle_outline" @click="dialogCrearMascota = true" />
                   </div>
                   <div class="col-2 flex flex-center">
                     <q-btn :loading="loading" dense color="blue" label="historial" no-caps icon="history" @click="mascotaHistorial" v-if="mascota" />
@@ -305,110 +306,46 @@
             </tr>
             </tbody>
           </q-markup-table>
-<!--          <pre>{{historialTratamientos}}</pre>-->
-<!--          [-->
-<!--          {-->
-<!--          "id": 32,-->
-<!--          "observaciones": "",-->
-<!--          "comentario": "",-->
-<!--          "fecha": "2025-05-31T08:19:13.000Z",-->
-<!--          "costo": 0,-->
-<!--          "user": {-->
-<!--          "id": 1,-->
-<!--          "name": "ING. ADIMER PAUL CHAMBI AJATA",-->
-<!--          "role": "Admin",-->
-<!--          "username": "Adimer",-->
-<!--          "password": "$2b$10$hLxScAvuENNvqjNTwS1p6u/TUd0Ej9Oae9iCAzZSHBqMlCI.fLO0a",-->
-<!--          "agencia": "Clinica",-->
-<!--          "createdAt": "2025-03-12T09:47:07.189Z",-->
-<!--          "updatedAt": "2025-04-29T08:36:19.000Z",-->
-<!--          "deletedAt": null-->
-<!--          },-->
-<!--          "historiale": {-->
-<!--          "id": 13,-->
-<!--          "peso": 0,-->
-<!--          "anamnesis": "",-->
-<!--          "tr": "",-->
-<!--          "fc": "",-->
-<!--          "fr": "",-->
-<!--          "tllc": "",-->
-<!--          "thc": "",-->
-<!--          "apetito": "",-->
-<!--          "pulso": "",-->
-<!--          "cf": "",-->
-<!--          "parvo": "0",-->
-<!--          "hexa": "0",-->
-<!--          "octa": "0",-->
-<!--          "rabica": "0",-->
-<!--          "triple": "0",-->
-<!--          "moucosidada": "",-->
-<!--          "esterelizado": "",-->
-<!--          "desparacitacion": "",-->
-<!--          "rayox": "",-->
-<!--          "laboratoti": "",-->
-<!--          "ecografia": "",-->
-<!--          "diagnostico": "",-->
-<!--          "pronostico": "",-->
-<!--          "fecha": "2025-05-31T08:18:58.000Z",-->
-<!--          "createdAt": "2025-05-31T08:18:58.652Z",-->
-<!--          "updatedAt": "2025-05-31T08:18:58.652Z",-->
-<!--          "deletedAt": null,-->
-<!--          "mascota": {-->
-<!--          "id": 19,-->
-<!--          "nombre": "ccc",-->
-<!--          "apellido": null,-->
-<!--          "especie": "",-->
-<!--          "raza": "",-->
-<!--          "sexo": "Macho",-->
-<!--          "fecha_nac": "2025-03-18",-->
-<!--          "edad": null,-->
-<!--          "senas_particulares": "",-->
-<!--          "photo": "defaultPet.jpg",-->
-<!--          "color": "",-->
-<!--          "propietario_nombre": "cc",-->
-<!--          "propietario_ci": null,-->
-<!--          "propietario_direccion": "",-->
-<!--          "propietario_telefono": "",-->
-<!--          "propietario_ciudad": "Oruro",-->
-<!--          "propietario_celular": "",-->
-<!--          "createdAt": "2025-03-18T22:42:02.174Z",-->
-<!--          "updatedAt": "2025-03-18T22:42:02.174Z",-->
-<!--          "deletedAt": null-->
-<!--          }-->
-<!--          },-->
-<!--          "tratamientoMedicamentos": [-->
-<!--          {-->
-<!--          "id": 11,-->
-<!--          "medicamento": "Corte de Uñas",-->
-<!--          "precio": "52.00",-->
-<!--          "cantidad": "1.00",-->
-<!--          "total": "52.00",-->
-<!--          "fecha": "2025-05-31T08:19:13.000Z",-->
-<!--          "createdAt": "2025-05-31T08:19:13.053Z",-->
-<!--          "updatedAt": "2025-05-31T08:19:13.053Z",-->
-<!--          "deletedAt": null-->
-<!--          },-->
-<!--          {-->
-<!--          "id": 12,-->
-<!--          "medicamento": "Cepillado",-->
-<!--          "precio": "195.00",-->
-<!--          "cantidad": "1.00",-->
-<!--          "total": "195.00",-->
-<!--          "fecha": "2025-05-31T08:19:13.000Z",-->
-<!--          "createdAt": "2025-05-31T08:19:13.055Z",-->
-<!--          "updatedAt": "2025-05-31T08:19:13.055Z",-->
-<!--          "deletedAt": null-->
-<!--          }-->
-<!--          ],-->
-<!--          "createdAt": "2025-05-31T08:19:13.050Z",-->
-<!--          "updatedAt": "2025-05-31T08:19:13.050Z",-->
-<!--          "deletedAt": null-->
-<!--          }-->
-<!--          ]-->
+<!--          <pre>-->
+<!--              {{ historialTratamientos }}-->
+<!--          </pre>-->
         </q-card-section>
       </q-card>
-
     </q-dialog>
+    <q-dialog v-model="dialogCrearMascota" persistent>
+      <q-card style="width: 800px; max-width: 90vw;">
+        <q-card-section>
+          <div class="text-h6">Registrar Mascota</div>
+        </q-card-section>
+        <q-separator />
+        <q-card-section>
+          <q-form @submit.prevent="registrarMascota">
+            <div class="row q-col-gutter-md">
+              <div class="col-6">
+                <q-input v-model="nuevaMascota.nombre" label="Nombre" outlined dense :rules="[val => !!val || 'Campo requerido']"/>
+              </div>
+              <div class="col-6">
+                <q-input v-model="nuevaMascota.propietario_nombre" label="Propietario" outlined dense :rules="[val => !!val || 'Campo requerido']"/>
+              </div>
+              <div class="col-6">
+                <q-input v-model="nuevaMascota.propietario_telefono" label="Teléfono" outlined dense/>
+              </div>
+              <div class="col-6">
+                <q-select v-model="nuevaMascota.propietario_ciudad" label="Ciudad" outlined dense :options="ciudades"/>
+              </div>
+              <div class="col-12">
+                <q-input v-model="nuevaMascota.especie" label="Especie" outlined dense/>
+              </div>
+            </div>
+            <q-card-actions align="right" class="q-mt-md">
+              <q-btn flat label="Cancelar" color="negative" @click="dialogCrearMascota = false"/>
+              <q-btn label="Guardar" type="submit" color="positive" :loading="loading"/>
+            </q-card-actions>
+          </q-form>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+
   </q-page>
   <div id="myElement"></div>
 </template>
@@ -439,11 +376,56 @@ const mascota = ref(null);
 const recuperarTratamientoDialog = ref(false);
 const recuperarTratamientoFecha = ref(moment().format('YYYY-MM-DD'));
 const historialTratamientos = ref([])
+const dialogCrearMascota = ref(false);
 
 onMounted(() => {
   getProductos();
   mascotasGet();
 });
+const nuevaMascota = ref({
+  nombre: "",
+  especie: "",
+  propietario_nombre: "",
+  propietario_telefono: "",
+  propietario_ciudad: "Oruro",
+});
+const ciudades = ref([
+  "Oruro",
+  "La Paz",
+  "Santa Cruz",
+  "Cochabamba",
+  "Sucre",
+  "Tarija",
+  "Potosí",
+  "Beni",
+  "Pando",
+  "Chuquisaca"
+]);
+async function registrarMascota() {
+  try {
+    loading.value = true;
+    const res = await proxy.$axios.post('/mascotas', nuevaMascota.value);
+    proxy.$alert.success('Mascota registrada correctamente');
+    dialogCrearMascota.value = false;
+
+    // Recargar lista y seleccionar
+    await mascotasGet();
+    mascota.value = res.data;
+  //   limpiar mascota
+    nuevaMascota.value = {
+      nombre: "",
+      especie: "",
+      propietario_nombre: "",
+      propietario_telefono: "",
+      propietario_ciudad: "Oruro",
+    };
+    // console.log(res.data);
+  } catch (err) {
+    proxy.$alert.error('No se pudo registrar la mascota');
+  } finally {
+    loading.value = false;
+  }
+}
 function agregarAcarritoTratemiento(tratamiento) {
   if (!tratamiento?.tratamientoMedicamentos || tratamiento.tratamientoMedicamentos.length === 0) {
     proxy.$alert.error("Este tratamiento no tiene medicamentos.");
@@ -456,8 +438,10 @@ function agregarAcarritoTratemiento(tratamiento) {
       existingItem.cantidadVenta += med.cantidad;
     } else {
       carrito.value.push({
+        id: med.producto?.id,
         nombre: med.medicamento,
-        cantidadVenta: med.cantidad,
+        // cantidadVenta: med.cantidad,
+        cantidadVenta: parseInt(med.cantidad),
         precioVenta: med.precio,
         tipo: 'Tratamiento', // Opcional: para usar getColor()
       });

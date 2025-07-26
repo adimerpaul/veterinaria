@@ -95,7 +95,10 @@ export class MascotasService {
         'desparacitaciones.user',
         'historiales.user',
         'historiales.tratamientos',
+        'historiales.tratamientos.tratamientoMedicamentos',
+        'historiales.tratamientos.tratamientoMedicamentos.producto',
         'fotos.user',
+        'laboratorios.user',
       ],
     });
 

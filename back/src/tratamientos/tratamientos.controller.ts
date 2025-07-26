@@ -7,7 +7,7 @@ import {
   Param,
   Delete,
   Req,
-  UseGuards, Query,
+  UseGuards, Query, Put,
 } from '@nestjs/common';
 import { TratamientosService } from './tratamientos.service';
 import { CreateTratamientoDto } from './dto/create-tratamiento.dto';
@@ -36,13 +36,13 @@ export class TratamientosController {
   //   return this.tratamientosService.findOne(+id);
   // }
   //
-  // @Patch(':id')
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updateTratamientoDto: UpdateTratamientoDto,
-  // ) {
-  //   return this.tratamientosService.update(+id, updateTratamientoDto);
-  // }
+  @Put(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateTratamientoDto: UpdateTratamientoDto,
+  ) {
+    return this.tratamientosService.update(+id, updateTratamientoDto);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

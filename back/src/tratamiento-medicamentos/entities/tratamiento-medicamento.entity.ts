@@ -9,6 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Tratamiento } from '../../tratamientos/entities/tratamiento.entity';
+import { Producto } from '../../productos/entities/producto.entity';
 
 @Entity({ name: 'tratamiento_medicamentos' })
 export class TratamientoMedicamento {
@@ -43,4 +44,7 @@ export class TratamientoMedicamento {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @ManyToOne(() => Producto, (producto) => producto.tratamientoMedicamentos)
+  producto: Producto;
 }

@@ -16,7 +16,10 @@ export class TratamientoMedicamentosService {
     return `This action returns a #${id} tratamientoMedicamento`;
   }
 
-  update(id: number, updateTratamientoMedicamentoDto: UpdateTratamientoMedicamentoDto) {
+  update(
+    id: number,
+    updateTratamientoMedicamentoDto: UpdateTratamientoMedicamentoDto,
+  ) {
     return `This action updates a #${id} tratamientoMedicamento`;
   }
 

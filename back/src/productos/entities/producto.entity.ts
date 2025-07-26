@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { Detail } from '../../details/entities/detail.entity';
+import { TratamientoMedicamento } from '../../tratamiento-medicamentos/entities/tratamiento-medicamento.entity';
 
 @Entity('productos')
 // @Unique(['nombre'])
@@ -48,4 +49,10 @@ export class Producto {
   // detail
   @OneToMany(() => Detail, (detail) => detail.producto)
   details: Detail[];
+
+  @OneToMany(() => TratamientoMedicamento, (tm) => tm.producto, {
+    cascade: true,
+    eager: true,
+  })
+  tratamientoMedicamentos: TratamientoMedicamento[];
 }

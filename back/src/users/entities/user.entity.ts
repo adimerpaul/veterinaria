@@ -19,6 +19,8 @@ import { Historiale } from '../../historiales/entities/historiale.entity';
 import { Tratamiento } from '../../tratamientos/entities/tratamiento.entity';
 import { Mascota } from '../../mascotas/entities/mascota.entity';
 import { Foto } from '../../fotos/entities/foto.entity';
+import { LaboratoriosController } from '../../laboratorios/laboratorios.controller';
+import { Laboratorio } from '../../laboratorios/entities/laboratorio.entity';
 
 @Entity({ name: 'users' })
 @Unique(['username'])
@@ -86,4 +88,7 @@ export class User {
 
   @OneToMany(() => Foto, (foto) => foto.user)
   fotos: Foto[];
+
+  @OneToMany(() => Laboratorio, (laboratorio) => laboratorio.user)
+  laboratorios: LaboratoriosController[];
 }

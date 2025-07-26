@@ -185,8 +185,11 @@ export class SalesService {
         await queryRunner.manager.save(Detail, detail);
         details.push(detail);
         // Actualizar stock del producto
-        producto.stock -= cantidad;
-        await queryRunner.manager.save(Producto, producto);
+        // solo descontari si hay el producto y es mayo que cero
+        // if (cantidad <= producto.stock && producto.stock > 0) {
+          producto.stock -= cantidad;
+          await queryRunner.manager.save(Producto, producto);
+        // }
       }
       savedSale.details = details;
 
