@@ -132,6 +132,7 @@
               </tr>
               </tfoot>
             </q-markup-table>
+<!--            <pre>{{carrito}}</pre>-->
             <q-btn label="Realizar Venta" color="positive" class="full-width q-mt-md" no-caps @click="realizarVenta"
                    :loading="loading"
             />
@@ -305,6 +306,9 @@
             </tr>
             </tbody>
           </q-markup-table>
+<!--          <pre>-->
+<!--              {{ historialTratamientos }}-->
+<!--          </pre>-->
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -434,8 +438,10 @@ function agregarAcarritoTratemiento(tratamiento) {
       existingItem.cantidadVenta += med.cantidad;
     } else {
       carrito.value.push({
+        id: med.producto?.id,
         nombre: med.medicamento,
-        cantidadVenta: med.cantidad,
+        // cantidadVenta: med.cantidad,
+        cantidadVenta: parseInt(med.cantidad),
         precioVenta: med.precio,
         tipo: 'Tratamiento', // Opcional: para usar getColor()
       });
