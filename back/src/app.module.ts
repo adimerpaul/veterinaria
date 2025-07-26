@@ -21,6 +21,7 @@ import { OasisProductosModule } from './oasis-productos/oasis-productos.module';
 import { OasisSalesModule } from './oasis-sales/oasis-sales.module';
 import { OasisSalesDetallesModule } from './oasis-sales-detalles/oasis-sales-detalles.module';
 import { ReportesModule } from './reportes/reportes.module';
+import { LaboratoriosModule } from './laboratorios/laboratorios.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -34,7 +35,7 @@ import { ReportesModule } from './reportes/reportes.module';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       entities: ['dist/**/*.entity{.ts,.js}'],
-      synchronize: false,
+      synchronize: false, // simepra false arriba las ventas CUIDADO!
       timezone: '-04:00',
     }),
     UsersModule,
@@ -55,6 +56,7 @@ import { ReportesModule } from './reportes/reportes.module';
     OasisSalesModule,
     OasisSalesDetallesModule,
     ReportesModule,
+    LaboratoriosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

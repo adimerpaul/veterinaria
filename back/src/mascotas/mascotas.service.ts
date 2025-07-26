@@ -98,6 +98,7 @@ export class MascotasService {
         'historiales.tratamientos.tratamientoMedicamentos',
         'historiales.tratamientos.tratamientoMedicamentos.producto',
         'fotos.user',
+        'laboratorios.user',
       ],
     });
 
