@@ -96,6 +96,15 @@
                         Imprimir
                       </q-item-section>
                     </q-item>
+<!--                    btn modificar-->
+                    <q-item clickable v-ripple @click="abrirDialogoTratamientoUpdate(t)" v-close-popup>
+                      <q-item-section avatar>
+                        <q-icon name="edit" />
+                      </q-item-section>
+                      <q-item-section>
+                        Modificar
+                      </q-item-section>
+                    </q-item>
                   </q-list>
                 </q-btn-dropdown>
               </li>
@@ -145,6 +154,14 @@
               </div>
               <div class="col-6 col-md-4">
               <q-select v-model="historial.cf" label="mc" outlined dense hint="" :options="['D', 'R', 'B', 'C','MC','O']" />
+              </div>
+              <!--              anamnesis-->
+              <div class="col-12 col-md-6">
+                <q-input v-model="historial.anamnesis" label="Anamnesis" outlined dense hint="" type="textarea" rows="3">
+                  <template v-slot:append>
+                    <q-btn flat round dense icon="mic" @click="startRecognition('anamnesis')" />
+                  </template>
+                </q-input>
               </div>
               <div class="col-12 col-md-2">
               <q-checkbox v-model="historial.parvo" label="Parvo" outlined dense hint="" false-value="0" true-value="1" />
@@ -338,7 +355,8 @@
 <!--              <pre>{{tratamiento}}</pre>-->
               <div class="col-12 text-right">
                 <q-btn flat label="Cancelar" color="negative" v-close-popup />
-                <q-btn type="submit" label="Guardar" color="positive" :loading="loading" />
+                <q-btn type="submit" label="Guardar" color="positive" :loading="loading" v-if="!tratamiento.id" />
+                <q-btn type="submit" label="Actualizar" color="orange" :loading="loading" v-else />
               </div>
 <!--              <div class="col-12">-->
 <!--                <pre>-->
@@ -488,17 +506,42 @@ export default {
       });
     },
     guardarTratamiento(){
-      this.loading = true;
-      console.log(this.tratamiento)
-      this.$axios.post('/tratamientos', this.tratamiento).then(() => {
-        this.$emit('getMascota');
-        this.$alert.success('Tratamiento guardado correctamente');
-        this.dialogTratamiento = false;
-      }).catch(() => {
-        this.$alert.error('Error al guardar el tratamiento');
-      }).finally(() => {
-        this.loading = false;
-      });
+      if (this.tratamiento.id) {
+        this.loading = true;
+        this.$axios.put(`/tratamientos/${this.tratamiento.id}`, this.tratamiento).then(() => {
+          this.$emit('getMascota');
+          this.$alert.success('Tratamiento actualizado correctamente');
+          this.dialogTratamiento = false;
+        }).catch(() => {
+          this.$alert.error('Error al actualizar el tratamiento');
+        }).finally(() => {
+          this.loading = false;
+        });
+      } else {
+        this.loading = true;
+        this.$axios.post('/tratamientos', this.tratamiento).then(() => {
+          this.$emit('getMascota');
+          this.$alert.success('Tratamiento guardado correctamente');
+          this.dialogTratamiento = false;
+        }).catch(() => {
+          this.$alert.error('Error al guardar el tratamiento');
+        }).finally(() => {
+          this.loading = false;
+        });
+      }
+    },
+    abrirDialogoTratamientoUpdate(t) {
+      console.log(t)
+      this.dialogTratamiento = true;
+      this.tratamiento = { ...t, fecha: moment(t.fecha).format('YYYY-MM-DD') };
+      this.tratamiento.medicamentos = t.tratamientoMedicamentos.map(m => ({
+        ...m,
+        id: m.producto.id, // Asegura que el id del medicamento sea el correcto
+        nombre: m.producto.nombre,
+        tipo: m.producto.tipo,
+        cantidad: m.cantidad || 1, // Asegura que la cantidad tenga un valor por defecto
+        precio: m.precio || 0 // Asegura que el precio tenga un valor por defecto
+      }));
     },
     abrirDialogoTratamiento(h){
       this.dialogTratamiento = true;
