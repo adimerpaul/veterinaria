@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="mascota.productosEspeciales.length > 0">
+    <template v-if="productosEspeciales.length > 0">
       <q-markup-table wrap-cells dense flat bordered>
         <thead>
         <tr class="bg-green text-white">
@@ -15,7 +15,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(venta,i) in mascota.productosEspeciales" :key="venta.id">
+        <tr v-for="(venta,i) in productosEspeciales" :key="venta.id">
           <td>{{ i + 1 }}</td>
           <td>
             <!--          <q-btn style="width: 80px" icon="remove_circle_outline" color="negative" dense @click="anular(venta.id)" label="Anular" no-caps size="10px"-->
@@ -46,7 +46,7 @@
         <tfoot>
         <tr>
           <td colspan="3" class="text-right text-bold">Total</td>
-          <td class="text-right text-bold">{{ mascota.productosEspeciales.reduce((acc, venta) => acc + parseFloat(venta.subtotal), 0).toFixed(2) }}</td>
+          <td class="text-right text-bold">{{ productosEspeciales.reduce((acc, venta) => acc + parseFloat(venta.subtotal), 0).toFixed(2) }}</td>
           <td></td>
           <td></td>
           <td></td>
@@ -457,7 +457,28 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      loading: false,
+      productosEspeciales: [],
+    }
+  },
+  mounted() {
+    this.complementosGet();
+  },
   methods: {
+    async complementosGet() {
+      this.loading = true;
+      this.$axios.get(`/mascotas/${this.mascota.id}/productos-especiales`)
+        .then(response => {
+          this.productosEspeciales = response.data;
+        })
+        .catch(error => {
+          console.error("Error fetching productos especiales:", error);
+          this.$alert.error("Error al cargar los complementos de la mascota.");
+        });
+      this.loading = false;
+    },
     getColor(tipo) {
       switch (tipo) {
         case 'Cirugía':
