@@ -373,32 +373,21 @@ function imprimirVenta(venta) {
   Imprimir.notaOasisVenta(imprimir);
 }
 function excelExport() {
-  // let data = [
-  //   {
-  //     sheet: "Adults",
-  //     columns: [
-  //       { label: "User", value: "user" }, // Top level data
-  //       { label: "Age", value: (row) => row.age + " years" }, // Custom format
-  //       { label: "Phone", value: (row) => (row.more ? row.more.phone || "" : "") }, // Run functions
-  //     ],
-  //     content: [
-  //       { user: "Andrea", age: 20, more: { phone: "11111111" } },
-  //       { user: "Luis", age: 21, more: { phone: "12345678" } },
-  //     ],
-  //   },
-  // ]
   const data = [{
     sheet: "Ventas",
     columns: [
       { label: "Fecha", value: (row) => moment(row.fecha).format("DD/MM/YYYY HH:mm") },
       { label: "Cliente", value: (row) => row.nombre },
-      { label: "Mascota", value: (row) => row.mascota?.nombre },
-      { label: "Usuario", value: (row) => row.user?.username },
+      { label: "Mascota", value: (row) => row.mascota?.nombre || '' },
+      { label: "Usuario", value: (row) => row.user?.username || '' },
       { label: "Total", value: (row) => row.total },
-      { label: "Comentario Doctor", value: (row) => row.comentarioDoctor },
-      { label: "Detalles", value: (row) => row.details.map(detail =>{
+      { label: "Comentario Doctor", value: (row) => row.comentarioDoctor || '' },
+      {
+        label: "Detalles",
+        value: (row) => (row.details || []).map(detail => {
           return `${detail.cantidad} ${detail.productoName}`;
-        }).join(", ") },
+        }).join(", ")
+      },
     ],
     content: ventas.value.map(venta => {
       return {
@@ -408,11 +397,11 @@ function excelExport() {
         user: venta.user,
         total: venta.total,
         comentarioDoctor: venta.comentarioDoctor,
-        details: venta.details
+        details: venta.oasisSalesDetalles || []
       };
     }),
   }]
-  Excel.export(data,"Ventas");
+  Excel.export(data, "Ventas");
 }
 
 function anular(id) {
