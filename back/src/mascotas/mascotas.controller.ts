@@ -137,4 +137,15 @@ export class MascotasController {
   findDocumentos(@Param('id') id: string) {
     return this.mascotasService.findDocumentos(+id);
   }
+  @Get(':id/base64')
+  async getBase64(@Param('id') id: string) {
+    const mascota = await this.mascotasService.findOne(+id);
+    if (mascota && mascota.photo) {
+      const filePath = `./uploads/${mascota.photo}`;
+      const fileBuffer = fs.readFileSync(filePath);
+      const base64Image = fileBuffer.toString('base64');
+      return `data:image/jpeg;base64,${base64Image}`;
+    }
+    return null; // O puedes devolver una imagen por defecto
+  }
 }

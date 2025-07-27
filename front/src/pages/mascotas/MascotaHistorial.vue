@@ -564,59 +564,13 @@ export default {
       window.open(url, '_blank');
     },
     imprimirHistorial(hist) {
-      imprimirHistorialPDF(hist, this.mascota);
-    },
-    abrirDialogoHistorial() {
-      this.dialog = true;
-      this.editando = false;
-      this.historial = {
-        peso: '',
-        anamnesis: '',
-        tr: '',
-        fc: '',
-        fr: '',
-        tllc: '',
-        thc: '',
-        apetito: '',
-        pulso: '',
-        cf: '',
-        parvo: '0',
-        hexa: '0',
-        octa: '0',
-        rabica: '0',
-        triple: '0',
-        moucosidada: '',
-        esterelizado: '',
-        desparacitacion: '',
-        rayox: '',
-        laboratoti: '',
-        ecografia: '',
-        diagnostico: '',
-        pronostico: '',
-        mascotaId: this.mascota.id
-      }
-    },
-    editarHistorial(hist) {
-      this.dialog = true;
-      this.editando = true;
-      this.historial = { ...hist, mascotaId: this.mascota.id };
-    },
-    eliminarHistorial(hist) {
-      this.$q.dialog({
-        title: 'Eliminar Historial',
-        message: '¿Está seguro de eliminar este historial?',
-        cancel: true,
-        persistent: true
-      }).onOk(() => {
-        this.loading = true;
-        this.$axios.delete(`/historiales/${hist.id}`).then(() => {
-          this.$emit('getMascota');
-          this.$alert.success('Historial eliminado correctamente');
-        }).catch(() => {
-          this.$alert.error('Error al eliminar el historial');
-        }).finally(() => {
-          this.loading = false;
-        });
+      // imprimirHistorialPDF(hist, this.mascota);
+      this.loading = true;
+      this.$axios.get(`/mascotas/${this.mascota.id}/base64`).then(res => {
+        this.mascota.photo64 = res.data;
+        imprimirHistorialPDF(hist, this.mascota);
+      }).finally(() => {
+        this.loading = false;
       });
     },
     guardarHistorial() {

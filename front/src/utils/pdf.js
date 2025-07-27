@@ -54,7 +54,9 @@ export function imprimirHistorialPDF(hist,mascota) {
   const tratamientos = hist.tratamientos || [];
 
   // img add
-  doc.addImage(mascota.photo64, 'PNG', 3, 3, 18, 18);
+  if (mascota.photo64) {
+    doc.addImage(mascota.photo64, 'PNG', 3, 3, 18, 18);
+  }
 
   const bold = (text, x, y) => {
     doc.setFont(undefined, 'bold');
