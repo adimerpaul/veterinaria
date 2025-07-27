@@ -125,4 +125,8 @@ export class MascotasController {
   remove(@Param('id') id: string) {
     return this.mascotasService.remove(+id);
   }
+  @Get(':id/sales')
+  findSales(@Param('id') id: string) {
+    return this.mascotasService.findSales(+id);
+  }
 }
