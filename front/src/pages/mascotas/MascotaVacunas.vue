@@ -180,7 +180,7 @@ export default {
     dialogVacunaClick() {
       this.dialogVacuna = true;
       this.vacuna = {
-        fechaProximaVacuna: moment().add(2, 'weeks').format('YYYY-MM-DD'),
+        fechaProximaVacuna: moment().add(16, 'days').format('YYYY-MM-DD'),
         nombreVacuna: '',
         observaciones: '',
         otro: 'No',
