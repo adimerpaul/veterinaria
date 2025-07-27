@@ -2,7 +2,7 @@
   <div>
     <div class="row">
       <div class="col-12 text-right">
-        <q-btn label="Crear certificado" color="green" icon="add_circle_outline" no-caps @click="dialogOpen" />
+        <q-btn label="Crear certificado" color="green" icon="add_circle_outline" no-caps @click="dialogOpen" :loading="loading"/>
       </div>
     </div>
 <!--    "documentos": [-->
@@ -26,7 +26,7 @@
 <!--  }-->
 <!--  }-->
 <!--  ],-->
-    <template v-if="mascota.documentos.length > 0">
+    <template v-if="documentos.length > 0">
       <q-markup-table wrap-cells dense flat bordered>
         <thead>
         <tr class="bg-red text-white">
@@ -41,7 +41,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(documento, index) in mascota.documentos" :key="documento.id">
+        <tr v-for="(documento, index) in documentos" :key="documento.id">
           <td>{{ documento.id }}</td>
           <td>
             <q-btn-dropdown dense color="primary" size="sm" label="Opciones" no-caps>
@@ -87,7 +87,7 @@
             <div class="col-12">
               <q-select
                 v-model="documento"
-                :options="documentos"
+                :options="documentosOption"
                 label="Tipo de documento"
                 outlined
                 @update:modelValue="selectedDocument"
@@ -129,7 +129,7 @@ export default {
   data() {
     return {
       dialog: false,
-      documentos: [
+      documentosOption: [
         'CERTIFICADO DE AUTORIZACION QUIRURGICA',
         'AUTORIZACION DE EUTANASIA',
         'CERTIFICADO DE ALTA VOLUNTARIA',
@@ -138,13 +138,28 @@ export default {
         'CONSENTIMIENTO INFORMADO DE SEDACIÓN PARA ESTÉTICA',
       ],
       documento: '',
+      loading: false,
+      documentos: [],
       html: '',
       moment: moment,
       opcion : '',
       documentoId : '',
     }
   },
+  mounted() {
+    this.documentosGet()
+  },
   methods: {
+    documentosGet() {
+      this.loading = true
+      this.$axios.get(`mascotas/${this.mascota.id}/documentos`).then(response => {
+        this.documentos = response.data
+      }).catch(error => {
+        console.error(error)
+      }).finally(() => {
+        this.loading = false
+      })
+    },
     imprimirCertificado(documento) {
       const url = '/imprimir/'+documento.id
       window.open(url, '_blank')
