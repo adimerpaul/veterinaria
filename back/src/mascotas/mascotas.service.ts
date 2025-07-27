@@ -194,4 +194,28 @@ export class MascotasService {
 
     return productosEspacialesMascotas;
   }
+  async findDocumentos(id: number) {
+    const mascota = await this.mascotasRepository.findOne({
+      where: { id },
+      relations: ['documentos', 'documentos.user'],
+    });
+
+    if (!mascota || !mascota.documentos) {
+      return []; // Retorna un array vacío si no hay documentos
+    }
+
+    // Procesar los documentos para incluir la imagen en base64
+    // mascota.documentos.forEach((doc) => {
+    //   const filePath = path.join(__dirname, '../../uploads', doc.imagen);
+    //   try {
+    //     const imageData = fs.readFileSync(filePath);
+    //     doc['photo64'] = `data:image/jpeg;base64,${imageData.toString('base64')}`;
+    //   } catch (e) {
+    //     console.error('Error reading image file:', e);
+    //     doc['photo64'] = null; // Si hay un error, asignamos null
+    //   }
+    // });
+
+    return mascota.documentos;
+  }
 }

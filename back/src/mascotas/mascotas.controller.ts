@@ -133,4 +133,8 @@ export class MascotasController {
   findProductosEspeciales(@Param('id') id: string) {
     return this.mascotasService.findProductosEspeciales(+id);
   }
+  @Get(':id/documentos')
+  findDocumentos(@Param('id') id: string) {
+    return this.mascotasService.findDocumentos(+id);
+  }
 }
