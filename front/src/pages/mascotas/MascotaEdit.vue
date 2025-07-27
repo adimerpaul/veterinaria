@@ -4,7 +4,7 @@
       <q-card-section>
         <div class="row">
           <div class="col-12 col-md-2 q-pa-xs">
-            <q-btn @click="$router.push({name: 'mascotas'})" label="Atrás" color="primary" icon="arrow_back" no-caps  size="10px" />
+            <q-btn @click="$router.push({name: 'mascotas'})" label="Atrás" color="primary" icon="arrow_back" no-caps  size="10px" :loading="loading" />
           </div>
           <div class="col-6 col-md-2" style="line-height: 0.8">
               <div class="text-caption text-bold">
@@ -39,33 +39,33 @@
             narrow-indicator
           >
             <q-tab name="mascota" :class="{'bg-primary text-white': tab === 'mascota'}">
-              <q-btn flat dense no-caps icon="pets" label="Mascota" :color="tab === 'mascota' ? 'white' : 'black'" />
+              <q-btn :loading="loading" flat dense no-caps icon="pets" label="Mascota" :color="tab === 'mascota' ? 'white' : 'black'" />
             </q-tab>
 <!--            tab historial-->
             <q-tab name="historial" :class="{'bg-blue text-white': tab === 'historial'}">
-              <q-btn flat dense no-caps icon="history" label="Historial clinico" :color="tab === 'historial' ? 'white' : 'black'" />
+              <q-btn :loading="loading" flat dense no-caps icon="history" label="Historial clinico" :color="tab === 'historial' ? 'white' : 'black'" />
             </q-tab>
             <q-tab name="ventas" :class="{'bg-indigo text-white': tab === 'ventas'}">
-              <q-btn flat dense no-caps icon="shopping_cart" label="Ventas" :color="tab === 'ventas' ? 'white' : 'black'" />
+              <q-btn :loading="loading" flat dense no-caps icon="shopping_cart" label="Ventas" :color="tab === 'ventas' ? 'white' : 'black'" />
             </q-tab>
             <q-tab name="complementos" :class="{'bg-green text-white': tab === 'complementos'}">
-              <q-btn flat dense no-caps icon="local_hospital" label="Complementos" :color="tab === 'complementos' ? 'white' : 'black'" />
+              <q-btn :loading="loading" flat dense no-caps icon="local_hospital" label="Complementos" :color="tab === 'complementos' ? 'white' : 'black'" />
             </q-tab>
             <q-tab name="certificados" :class="{'bg-red text-white': tab === 'certificados'}">
-              <q-btn flat dense no-caps icon="receipt" label="Certificados" :color="tab === 'certificados' ? 'white' : 'black'" />
+              <q-btn :loading="loading" flat dense no-caps icon="receipt" label="Certificados" :color="tab === 'certificados' ? 'white' : 'black'" />
             </q-tab>
             <q-tab name="laboratorios" :class="{'bg-blue text-white': tab === 'laboratorios'}">
-              <q-btn flat dense no-caps icon="local_hospital" label="Laboratorios" :color="tab === 'laboratorios' ? 'white' : 'black'" />
+              <q-btn :loading="loading" flat dense no-caps icon="local_hospital" label="Laboratorios" :color="tab === 'laboratorios' ? 'white' : 'black'" />
             </q-tab>
             <q-tab name="vacunas" :class="{'bg-black text-white': tab === 'vacunas'}">
-              <q-btn flat dense no-caps icon="vaccines" label="Vacunas" :color="tab === 'vacunas' ? 'white' : 'black'" />
+              <q-btn :loading="loading" flat dense no-caps icon="vaccines" label="Vacunas" :color="tab === 'vacunas' ? 'white' : 'black'" />
             </q-tab>
             <q-tab name="desparacitacion" :class="{'bg-indigo text-white': tab === 'desparacitacion'}">
-              <q-btn flat dense no-caps icon="pest_control" label="Desparasitación" :color="tab === 'desparacitacion' ? 'white' : 'black'" />
+              <q-btn :loading="loading" flat dense no-caps icon="pest_control" label="Desparasitación" :color="tab === 'desparacitacion' ? 'white' : 'black'" />
             </q-tab>
 <!--            btab fotografias-->
             <q-tab name="fotos" :class="{'bg-grey text-white': tab === 'fotos'}">
-              <q-btn flat dense no-caps icon="photo_camera" label="Fotografias" :color="tab === 'fotos' ? 'white' : 'black'" />
+              <q-btn :loading="loading" flat dense no-caps icon="photo_camera" label="Fotografias" :color="tab === 'fotos' ? 'white' : 'black'" />
             </q-tab>
           </q-tabs>
         </q-card>
@@ -128,6 +128,7 @@ export default {
   data() {
     return {
       tab: 'mascota',
+      loading: false,
       mascota: {
         nombre: '',
         especie: '',
@@ -159,8 +160,10 @@ export default {
   },
   methods: {
     async getMascota() {
+      this.loading = true
       const response = await this.$axios.get(`/mascotas/${this.$route.params.id}`);
       this.mascota = response.data;
+      this.loading = false
       this.mascota.photo = this.$url + 'uploads/' + this.mascota.photo;
       this.razasDisponibles = this.razas[this.mascota.especie] || [];
     },

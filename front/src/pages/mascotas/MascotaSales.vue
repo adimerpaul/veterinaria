@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="mascota.sales.length > 0">
+    <template v-if="sales.length > 0">
       <q-markup-table wrap-cells dense flat bordered>
         <thead>
         <tr class="bg-indigo text-white">
@@ -14,7 +14,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(venta,i) in mascota.sales" :key="venta.id">
+        <tr v-for="(venta,i) in sales" :key="venta.id">
           <td>
             {{ i + 1 }}
           </td>
@@ -42,7 +42,7 @@
         <tfoot>
         <tr>
           <td colspan="3" class="text-right text-bold">Total</td>
-          <td class="text-right text-bold">{{ mascota.sales.reduce((acc, venta) => acc + parseFloat(venta.total), 0).toFixed(2) }}</td>
+          <td class="text-right text-bold">{{ sales.reduce((acc, venta) => acc + parseFloat(venta.total), 0).toFixed(2) }}</td>
           <td colspan="3"></td>
         </tr>
         </tfoot>
@@ -385,6 +385,30 @@ export default {
     mascota: {
       type: Object,
       required: true,
+    },
+  },
+  data() {
+    return {
+      loading: false,
+      sales:[],
+    };
+  },
+  mounted() {
+    this.getSales();
+  },
+  methods: {
+    getSales() {
+      this.loading = true;
+      this.$axios.get(`/mascotas/${this.mascota.id}/sales`)
+        .then(response => {
+          this.sales = response.data;
+        })
+        .catch(error => {
+          this.$alert.error("Error al obtener las ventas de la mascota.");
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
   }
 }
