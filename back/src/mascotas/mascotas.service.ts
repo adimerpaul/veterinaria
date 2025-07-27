@@ -172,4 +172,26 @@ export class MascotasService {
       order: { createdAt: 'DESC' },
     });
   }
+  async findProductosEspeciales(id: number) {
+    const tipos = ['Cirugía', 'Laboratorio', 'Peluqueria', 'Tratamiento'];
+    // Obtener solo los productos que pertenecen a los tipos deseados
+    const productosEspaciales = await this.productosRepository.find({
+      where: { tipo: In(tipos) },
+    });
+
+    if (productosEspaciales.length === 0) {
+      return []; // No hay productos especiales, retornamos un array vacío
+    }
+
+    // Obtener los detalles filtrados en una sola consulta
+    const productosEspacialesMascotas = await this.detailsRepository.find({
+      where: {
+        producto: In(productosEspaciales.map((p) => p.id)), // Filtrar por los productos especiales
+        mascota: { id }, // Filtrar por la mascota específica
+      },
+      relations: ['user', 'producto'],
+    });
+
+    return productosEspacialesMascotas;
+  }
 }

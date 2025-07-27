@@ -129,4 +129,8 @@ export class MascotasController {
   findSales(@Param('id') id: string) {
     return this.mascotasService.findSales(+id);
   }
+  @Get(':id/productos-especiales')
+  findProductosEspeciales(@Param('id') id: string) {
+    return this.mascotasService.findProductosEspeciales(+id);
+  }
 }
