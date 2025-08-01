@@ -15,6 +15,11 @@ const routes = [
       { path: 'oasissales', component: () => import('pages/sales/OasisSalesPage.vue'), meta: { requiresAuth: true } },
       { path: 'oasisventas/add', component: () => import('pages/sales/OasisVentaAdd.vue'), meta: { requiresAuth: true } },
       { path: 'proximas-vacunas', component: () => import('pages/proximaVacunas/ProximaVacunas.vue'), meta: { requiresAuth: true } },
+      {
+        path: '/reportes/doctores',
+        component: () => import('pages/reportes/ReportesDoctores.vue'),
+        meta: {requiresAuth: true}
+      }
     ]
   },
   {

@@ -141,4 +141,32 @@ export class TratamientosService {
     await this.tratamientosRepository.softDelete(id);
     return 'Tratamiento eliminado';
   }
+  async reporteTratamientosPorDoctor(fecha: string) {
+    const tratamientos = await this.tratamientosRepository
+      .createQueryBuilder('tratamiento')
+      .leftJoin('tratamiento.user', 'user')
+      .leftJoin('tratamiento.historiale', 'historiale')
+      .leftJoin('historiale.mascota', 'mascota')
+      .select([
+        'user.name AS doctor',
+        'tratamiento.id AS id',
+        'historiale.id AS nroFicha',
+        'tratamiento.costo AS costo',
+        "COALESCE(tratamiento.comentario, 'Tratamiento') AS detalle",
+      ])
+      .addSelect('COUNT(*) as cantidad')
+      .where('DATE(tratamiento.fecha) = :fecha', { fecha })
+      .groupBy('user.name, tratamiento.id, historiale.id, tratamiento.costo, tratamiento.comentario')
+      .orderBy('user.name')
+      .getRawMany();
+
+    // Agrupar por doctor
+    const agrupado = {};
+    for (const row of tratamientos) {
+      if (!agrupado[row.doctor]) agrupado[row.doctor] = [];
+      agrupado[row.doctor].push(row);
+    }
+
+    return agrupado;
+  }
 }

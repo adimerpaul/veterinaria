@@ -60,7 +60,31 @@
         </q-item-label>
 
         <template v-for="link in filteredLinks" :key="link.title">
-          <q-item clickable :to="link.link" exact
+          <q-expansion-item
+            v-if="link.children"
+            :label="link.title"
+            :icon="link.icon"
+            expand-separator
+            dense
+            default-opened
+            class="text-black"
+          >
+            <template v-for="child in link.children" :key="child.title">
+              <q-item clickable :to="child.link" exact class="q-ml-md text-black" active-class="menu" v-close-popup dense>
+                <q-item-section avatar>
+                  <q-icon :name="$route.path === child.link ? 'o_' + child.icon : child.icon"
+                          :class="$route.path === child.link ? 'text-black' : ''" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label :class="$route.path === child.link ? 'text-black text-bold' : ''">
+                    {{ child.title }}
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-expansion-item>
+
+          <q-item v-else clickable :to="link.link" exact
                   class="text-black"
                   active-class="menu"
                   dense
@@ -112,6 +136,11 @@ const linksList = [
   { title: 'Crear Venta Oasis', icon: 'shopping_bag', link: '/oasisventas/add', can: 8 },
   { title: 'Ventas Oasis', icon: 'point_of_sale', link: '/oasissales', can: 9 },
   { title: 'Proxima Vacunas', icon: 'calendar_today', link: '/proximas-vacunas', can: 'Todos' },
+  { title: 'Reporte', icon: 'bar_chart', can: 'Todos', children: [
+      { title: 'Reporte Doctores', icon: 'local_hospital', link: '/reportes/doctores' },
+      { title: 'Reporte Almacén', icon: 'warehouse', link: '/reportes/almacen' }
+    ]
+  }
 ]
 
 

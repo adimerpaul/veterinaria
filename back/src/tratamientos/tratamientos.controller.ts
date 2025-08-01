@@ -55,4 +55,8 @@ export class TratamientosController {
   remove(@Param('id') id: string) {
     return this.tratamientosService.remove(+id);
   }
+  @Get('reporte-por-doctor')
+  async getReportePorDoctor(@Query('fecha') fecha: string) {
+    return this.tratamientosService.reporteTratamientosPorDoctor(fecha);
+  }
 }
