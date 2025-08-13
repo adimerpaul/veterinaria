@@ -50,9 +50,6 @@ export class Producto {
   @OneToMany(() => Detail, (detail) => detail.producto)
   details: Detail[];
 
-  @OneToMany(() => TratamientoMedicamento, (tm) => tm.producto, {
-    cascade: true,
-    eager: true,
-  })
+  @OneToMany(() => TratamientoMedicamento, (tm) => tm.producto)
   tratamientoMedicamentos: TratamientoMedicamento[];
 }
