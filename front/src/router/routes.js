@@ -12,6 +12,10 @@ const routes = [
       { name: 'mascotas-edit', path: 'mascotas/:id', component: () => import('pages/mascotas/MascotaEdit.vue'), meta: { requiresAuth: true } },
       { path: 'ventas', component: () => import('pages/sales/Sales.vue'), meta: { requiresAuth: true } },
       { path: 'ventas/add', component: () => import('pages/sales/VentaAdd.vue'), meta: { requiresAuth: true } },
+
+      { path: 'compras', component: () => import('pages/compras/Compras.vue'), meta: { requiresAuth: true } },
+      { path: 'compras/add', component: () => import('pages/compras/CompraAdd.vue'), meta: { requiresAuth: true } },
+
       { path: 'oasissales', component: () => import('pages/sales/OasisSalesPage.vue'), meta: { requiresAuth: true } },
       { path: 'oasisventas/add', component: () => import('pages/sales/OasisVentaAdd.vue'), meta: { requiresAuth: true } },
       { path: 'proximas-vacunas', component: () => import('pages/proximaVacunas/ProximaVacunas.vue'), meta: { requiresAuth: true } },
