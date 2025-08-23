@@ -21,6 +21,8 @@ import { Mascota } from '../../mascotas/entities/mascota.entity';
 import { Foto } from '../../fotos/entities/foto.entity';
 import { LaboratoriosController } from '../../laboratorios/laboratorios.controller';
 import { Laboratorio } from '../../laboratorios/entities/laboratorio.entity';
+import { Purchase } from 'src/purchase/entities/purchase.entity';
+import { PurchaseDetail } from '../../purchase-detail/entities/purchase-detail.entity';
 
 @Entity({ name: 'users' })
 @Unique(['username'])
@@ -91,4 +93,10 @@ export class User {
 
   @OneToMany(() => Laboratorio, (laboratorio) => laboratorio.user)
   laboratorios: LaboratoriosController[];
+
+  @OneToMany(() => Purchase, (purchase) => purchase.user)
+  purchases: Purchase[];
+
+  @OneToMany(() => PurchaseDetail, (purchaseDetail) => purchaseDetail.user)
+  purchaseDetails: PurchaseDetail[];
 }

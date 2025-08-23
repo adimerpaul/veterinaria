@@ -22,6 +22,9 @@ import { OasisSalesModule } from './oasis-sales/oasis-sales.module';
 import { OasisSalesDetallesModule } from './oasis-sales-detalles/oasis-sales-detalles.module';
 import { ReportesModule } from './reportes/reportes.module';
 import { LaboratoriosModule } from './laboratorios/laboratorios.module';
+// import { PurchaseModule } from './purchase/purchase.module';
+import { PurchaseDetailModule } from './purchase-detail/purchase-detail.module';
+import { PurchasesModule } from './purchase/purchase.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -57,6 +60,8 @@ import { LaboratoriosModule } from './laboratorios/laboratorios.module';
     OasisSalesDetallesModule,
     ReportesModule,
     LaboratoriosModule,
+    PurchasesModule,
+    PurchaseDetailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
