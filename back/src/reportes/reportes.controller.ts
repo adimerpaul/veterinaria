@@ -53,4 +53,105 @@ export class ReportesController {
   async almacenDia(@Query('fecha') fecha: string) {
     return this.reportesService.almacenPorDia(fecha);
   }
+
+  /**
+   * Reporte de tratamientos por doctor (día) con medicamentos usados.
+   * Devuelve: { [doctor: string]: Array<{ nroFicha, detalle, costo, medicamentos[] }> }
+   */
+  @Get('tratamientos-por-doctor')
+  async tratamientosPorDoctor(@Query('fecha') fecha?: string) {
+    // Default = hoy si no mandan fecha válida
+    if (!fecha || !/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      fecha = `${y}-${m}-${d}`;
+    }
+
+    // Query (MySQL) que trae tratamientos y sus medicamentos/productos
+    const rows: Array<{
+      doctor: string | null;
+      tid: number;
+      nroFicha: number | null;
+      detalle: string | null;
+      costo: number | string | null;
+      med_nombre: string | null;
+      med_cant: number | string | null;
+      med_precio: number | string | null;
+      med_total: number | string | null;
+      prod_nombre: string | null;
+    }> = await this.ventasRepository.query(
+      `
+      SELECT
+        COALESCE(u.name, u.username, 'Sin Doctor') AS doctor,
+        t.id AS tid,
+        t.historialeId AS nroFicha,
+        COALESCE(t.observaciones, t.comentario, '') AS detalle,
+        t.costo,
+        tm.medicamento       AS med_nombre,
+        tm.cantidad          AS med_cant,
+        tm.precio            AS med_precio,
+        tm.total             AS med_total,
+        p.nombre             AS prod_nombre
+      FROM tratamientos t
+      LEFT JOIN users u ON u.id = t.userId
+      LEFT JOIN tratamiento_medicamentos tm ON tm.tratamientoId = t.id
+      LEFT JOIN productos p ON p.id = tm.productoId
+      WHERE DATE(t.fecha) = ?
+      ORDER BY doctor ASC, t.fecha ASC, t.id ASC, tm.id ASC
+      `,
+      [fecha],
+    );
+
+    // Armamos -> doctor -> tratamientos (por tid)
+    const grouped: Record<string, Array<{
+      nroFicha: number | null;
+      detalle: string;
+      costo: number;
+      medicamentos: Array<{
+        medicamento: string | null;
+        cantidad: number;
+        precio: number;
+        total: number;
+        productoNombre: string | null;
+      }>;
+    }>> = {};
+
+    // Mapa temporal doctor->tid para agrupar meds dentro del mismo tratamiento
+    const tempMaps = new Map<string, Map<number, any>>();
+
+    for (const r of rows) {
+      const doctor = r.doctor || 'Sin Doctor';
+      if (!grouped[doctor]) {
+        grouped[doctor] = [];
+        tempMaps.set(doctor, new Map());
+      }
+      const byTid = tempMaps.get(doctor)!;
+
+      if (!byTid.has(r.tid)) {
+        const obj = {
+          nroFicha: r.nroFicha ?? null,
+          detalle: r.detalle ?? '',
+          costo: Number(r.costo ?? 0),
+          medicamentos: [] as any[],
+        };
+        byTid.set(r.tid, obj);
+        grouped[doctor].push(obj);
+      }
+
+      // Si hay medicamento, lo añadimos (puede ser null si no registraron)
+      if (r.med_nombre || r.prod_nombre) {
+        byTid.get(r.tid).medicamentos.push({
+          medicamento: r.med_nombre,
+          cantidad: Number(r.med_cant ?? 0),
+          precio: Number(r.med_precio ?? 0),
+          total: Number(r.med_total ?? 0),
+          productoNombre: r.prod_nombre ?? null,
+        });
+      }
+    }
+
+    return grouped;
+  }
 }
