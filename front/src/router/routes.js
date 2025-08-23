@@ -23,6 +23,12 @@ const routes = [
         path: '/reportes/doctores',
         component: () => import('pages/reportes/ReportesDoctores.vue'),
         meta: {requiresAuth: true}
+      },
+      // ReporteAlmacen
+      {
+        path: '/reportes/almacen',
+        component: () => import('pages/reportes/ReporteAlmacen.vue'),
+        meta: {requiresAuth: true}
       }
     ]
   },
