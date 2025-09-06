@@ -99,6 +99,7 @@ export class ReportesController {
       LEFT JOIN tratamiento_medicamentos tm ON tm.tratamientoId = t.id
       LEFT JOIN productos p ON p.id = tm.productoId
       WHERE DATE(t.fecha) = ?
+      AND t.deletedAt IS NULL
       ORDER BY doctor ASC, t.fecha ASC, t.id ASC, tm.id ASC
       `,
       [fecha],
