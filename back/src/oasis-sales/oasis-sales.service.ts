@@ -54,9 +54,9 @@ export class OasisSalesService {
 
       const detalle = new OasisSalesDetalle();
       detalle.productoName = producto.nombre;
-      detalle.precio = producto.precioVenta;
+      detalle.precio = p.precioVenta;
       detalle.cantidad = p.cantidadVenta;
-      detalle.subtotal = producto.precioVenta * p.cantidadVenta;
+      detalle.subtotal = p.precioVenta * p.cantidadVenta;
       detalle.fecha = new Date();
       detalle.oasisSale = savedVenta;
 

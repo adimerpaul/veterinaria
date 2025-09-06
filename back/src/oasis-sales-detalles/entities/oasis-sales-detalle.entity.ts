@@ -15,7 +15,7 @@ import { Producto } from '../../productos/entities/producto.entity';
 import { OasisProducto } from '../../oasis-productos/entities/oasis-producto.entity';
 import { OasisSale } from '../../oasis-sales/entities/oasis-sale.entity';
 
-@Entity('details')
+@Entity('oasissalesdetails')
 export class OasisSalesDetalle {
   @PrimaryGeneratedColumn()
   id: number;

@@ -19,21 +19,27 @@ export class OasisProductosService {
 
   async findAll(params: { filter?: string; tipo?: string; page?: number; limit?: number }) {
     const { filter = '', tipo = '', page = 1, limit = 20 } = params;
-
-    const query = this.oasisProductoRepository.createQueryBuilder('producto')
-      .where('producto.nombre LIKE :filter', { filter: `%${filter}%` });
-
-    if (tipo) query.andWhere('producto.tipo = :tipo', { tipo });
-
-    const [data, total] = await query
-      .skip((page - 1) * limit)
-      .take(limit)
-      .getManyAndCount();
-
-    return {
-      data,
-      last_page: Math.ceil(total / limit),
-    };
+    //
+    // const query = this.oasisProductoRepository.createQueryBuilder('producto')
+    //   .where('producto.nombre LIKE :filter', { filter: `%${filter}%` });
+    //
+    // if (tipo) query.andWhere('producto.tipo = :tipo', { tipo });
+    //
+    // const [data, total] = await query
+    //   .skip((page - 1) * limit)
+    //   .take(limit)
+    //   .getManyAndCount();
+    //
+    // return {
+    //   data,
+    //   last_page: Math.ceil(total / limit),
+    // };
+    return await this.oasisProductoRepository
+      .createQueryBuilder('producto')
+      .where('producto.stock > :stock', { stock: 0 })
+      .andWhere('producto.nombre LIKE :filter', { filter: `%${filter}%` })
+      .orderBy('producto.nombre', 'ASC')
+      .getMany();
   }
 
   async update(id: number, data: UpdateOasisProductoDto) {
