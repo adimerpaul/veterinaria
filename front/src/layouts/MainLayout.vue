@@ -134,7 +134,7 @@ const linksList = [
   // { path: 'compras/add', component: () => import('pages/compras/CompraAdd.vue'), meta: { requiresAuth: true } },
   { title: 'Crear Compras', icon: 'add_shopping_cart', link: '/compras/add', can: 4 },
   { title: 'Compras', icon: 'shopping_cart', link: '/compras', can: 4 },
-  { title: 'Crear compras', icon: 'add_circle', link: '/mascotas/create', can: 5 },
+  { title: 'Crear Mascota', icon: 'add_circle', link: '/mascotas/create', can: 5 },
   { title: 'Mascotas', icon: 'pets', link: '/mascotas', can: 6 },
   { title: 'Productos Oasis', icon: 'category', link: '/oasisproductos', can: 7 },
   { title: 'Crear Venta Oasis', icon: 'shopping_bag', link: '/oasisventas/add', can: 8 },

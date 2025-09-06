@@ -391,6 +391,11 @@ const dialogCrearMascota = ref(false);
 onMounted(() => {
   getProductos();
   mascotasGet();
+  mascota.value = {
+    "id": 1,
+    "nombre": "SN",
+    "propietario_nombre": "SN",
+  };
 });
 const nuevaMascota = ref({
   nombre: "",
@@ -448,6 +453,7 @@ function agregarAcarritoTratemiento(tratamiento) {
   }).catch((err) => {
     proxy.$alert.error("Error al marcar el tratamiento como pagado.");
   });
+  carrito.value = [];
 
   tratamiento.tratamientoMedicamentos.forEach((med) => {
     const existingItem = carrito.value.find(p => p.nombre === med.medicamento);
@@ -464,6 +470,16 @@ function agregarAcarritoTratemiento(tratamiento) {
       });
     }
   });
+  // mascota.value = {
+  //   "id": 1,
+  //   "nombre": "SN",
+  //   "propietario_nombre": "SN",
+  // };
+  mascota.value = {
+    id: tratamiento.historiale?.mascota?.id,
+    nombre: tratamiento.historiale?.mascota?.nombre,
+    propietario_nombre: tratamiento.historiale?.mascota?.propietario_nombre,
+  }
 
   proxy.$alert.success("Tratamiento agregado al carrito.");
   recuperarTratamientoDialog.value = false;
@@ -576,11 +592,11 @@ function realizarVenta() {
   dialogVenta.value = true;
   // venta.value = { nombre: "SN", };
   venta.value = { comentarioDoctor: "", pago: "Efectivo" };
-  mascota.value = {
-    "id": 1,
-    "nombre": "SN",
-    "propietario_nombre": "SN",
-  };
+  // mascota.value = {
+  //   "id": 1,
+  //   "nombre": "SN",
+  //   "propietario_nombre": "SN",
+  // };
 }
 function mascotasFilter(val, update) {
   if (val === '') {
@@ -618,11 +634,18 @@ function realizarVentaPost() {
     // carrito.value = [];
     // venta.value = {nombre: "", fecha: new Date().toISOString().slice(0, 10)};
     // dialogVenta.value = false;
-    proxy.$alert.success("Venta realizada con éxito", "Éxito");
-    router.push("/ventas");
+    // router.push("/ventas");
     // await getProductos();
     // buscarProducto.value = "";
     Imprimir.nota(res.data.sale);
+    mascota.value = {
+      "id": 1,
+      "nombre": "SN",
+      "propietario_nombre": "SN",
+    };
+    dialogVenta.value = false;
+    carrito.value = [];
+    proxy.$alert.success("Venta realizada con éxito", "Éxito");
   }).catch((res) => {
     proxy.$alert.error(res.response.data.message, "Error");
   }).finally(() => {
