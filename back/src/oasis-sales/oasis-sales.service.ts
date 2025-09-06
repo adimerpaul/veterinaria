@@ -59,7 +59,8 @@ export class OasisSalesService {
       detalle.subtotal = p.precioVenta * p.cantidadVenta;
       detalle.fecha = new Date();
       detalle.oasisSale = savedVenta;
-
+      detalle.oasisProducto = producto;
+      detalle.anulado = false;
       detalles.push(detalle);
     }
 
@@ -119,6 +120,21 @@ export class OasisSalesService {
 
     venta.anulado = true;
     // venta.userAnulacion = { id: userId };
+    // reautsas producto
+    const detalles = await this.oasisDetalleRepo.find({
+      where: { oasisSale: { id: venta.id } },
+      relations: ['oasisProducto'],
+    });
+    // console.log(detalles)
+    for (const detalle of detalles) {
+      const producto = await this.oasisProductoRepo.findOne({
+        where: { id: detalle.oasisProducto.id },
+      });
+      if (producto) {
+        producto.stock += detalle.cantidad;
+        await this.oasisProductoRepo.save(producto);
+      }
+    }
     await this.oasisSaleRepo.save(venta);
 
     return 'Venta anulada correctamente';
