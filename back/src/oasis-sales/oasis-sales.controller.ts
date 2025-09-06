@@ -7,6 +7,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  Query,
 } from '@nestjs/common';
 import { OasisSalesService } from './oasis-sales.service';
 import { CreateOasisSaleDto } from './dto/create-oasis-sale.dto';
@@ -27,10 +28,17 @@ export class OasisSalesController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get()
-  findAll() {
-    return this.service.findAll();
+  findAll(
+    @Query('fechaInicio') fechaInicio?: string,
+    @Query('fechaFin') fechaFin?: string,
+    @Query('user_id') userId?: string,   // viene como string del front
+  ) {
+    return this.service.findAll({
+      fechaInicio,
+      fechaFin,
+      userId: userId && userId !== '' ? Number(userId) : undefined,
+    });
   }
-
   @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   findOne(@Param('id') id: string) {

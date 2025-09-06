@@ -68,11 +68,31 @@ export class OasisSalesService {
     return { sale: savedVenta, detalles };
   }
 
-  async findAll() {
-    return this.oasisSaleRepo.find({
-      relations: ['user', 'oasisSalesDetalles'],
-      order: { fecha: 'DESC' },
-    });
+  async findAll(filters?: { fechaInicio?: string; fechaFin?: string; userId?: number }) {
+    const { fechaInicio, fechaFin, userId } = filters || {};
+
+    const qb = this.oasisSaleRepo
+      .createQueryBuilder('s')
+      .leftJoinAndSelect('s.user', 'user')
+      .leftJoinAndSelect('s.oasisSalesDetalles', 'oasisSalesDetalles')
+      .orderBy('s.fecha', 'DESC');
+
+    // ---- Filtro por fecha (inclusivo) ----
+    // Opción A (MySQL): usar DATE()
+    if (fechaInicio && fechaFin) {
+      qb.andWhere('DATE(s.fecha) BETWEEN :fi AND :ff', { fi: fechaInicio, ff: fechaFin });
+    } else if (fechaInicio) {
+      qb.andWhere('DATE(s.fecha) = :fi', { fi: fechaInicio });
+    } else if (fechaFin) {
+      qb.andWhere('DATE(s.fecha) = :ff', { ff: fechaFin });
+    }
+
+    // ---- Filtro por usuario ----
+    if (typeof userId === 'number' && !Number.isNaN(userId)) {
+      qb.andWhere('user.id = :uid', { uid: userId });
+    }
+
+    return qb.getMany();
   }
 
   async findOne(id: number) {
