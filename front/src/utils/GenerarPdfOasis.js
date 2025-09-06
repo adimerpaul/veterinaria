@@ -22,7 +22,12 @@ export function generarPdfVentaOasis(data) {
   doc.setFontSize(12);
   doc.setFont(undefined, 'bold');
   doc.text('Comprobante de Venta', 40, y, { align: 'center' });
-  y += lineSpacing * 2;
+  y += lineSpacing ;
+  // coloca el ID
+
+  doc.setFontSize(10);
+  doc.text(`N°: ${data.sale.id}`, 40, y, { align: 'center' });
+  y += lineSpacing ;
 
   // INFO CLIENTE
   doc.setFontSize(9);

@@ -197,8 +197,8 @@ export default {
         }
       })
         .then(res => {
-          this.productos = res.data.data;
-          this.totalPages = res.data.last_page;
+          this.productos = res.data;
+          // this.totalPages = res.data.last_page;
         })
         .catch(err => {
           this.$alert.error(err.response?.data?.message || 'Error al cargar');

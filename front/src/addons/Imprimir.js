@@ -223,7 +223,7 @@ Oruro</div!-->
   <div style='padding-left: 0.5cm;padding-right: 0.5cm'>
     <img src="../../logo.png" alt="logo" style="width: 50px; height: 50px; display: block; margin-left: auto; margin-right: auto;">
     <div class='titulo'>NOTA DE VENTA OASIS</div>
-    <div class='titulo2'>${env.razon}<br>${env.direccion}<br>Tel. ${env.telefono}<br>Oruro</div>
+    <div class='titulo2'><br>${env.direccion}<br>Tel. 75703582<br>Oruro</div>
     <hr>
     <table>
       <tr><td class='titder'>CLIENTE:</td><td class='contenido'>${factura.sale.nombre ?? ''}</td></tr>

@@ -30,7 +30,12 @@
               <tbody>
               <tr v-for="product in productos" :key="product.id" @click="agregarAlCarrito(product)" style="cursor: pointer">
                 <td>{{ product.codigo }}</td>
-                <td>{{ product.nombre }}</td>
+                <td>
+<!--                  wrap d 100px-->
+                  <div style="max-width: 120px; white-space: wrap;line-height: 0.9;">
+                    {{ product.nombre }}
+                  </div>
+                </td>
                 <td><q-chip dense :color="getColor(product.tipo)" size="10px">{{ product.tipo }}</q-chip></td>
                 <td class="text-right">{{ product.precioVenta }}</td>
                 <td>{{ product.stock }}</td>
@@ -133,7 +138,7 @@ function getProductos() {
   proxy.$axios.get('/oasis-productos', {
     params: { filter: buscarProducto.value }
   }).then(res => {
-    productos.value = res.data.data;
+    productos.value = res.data;
   });
 }
 
