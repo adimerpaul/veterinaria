@@ -24,6 +24,16 @@ import * as fs from 'node:fs';
 export class MascotasController {
   constructor(private readonly mascotasService: MascotasService) {}
 
+  // this.$axios.get(`/mascotas/historiales/${mascotaId}`);
+  // @Get('historiales/:id')
+  // async historial(@Query('mascotaId') mascotaId: string) {
+  //   // return this.mascotasService.historial({ mascotaId });
+  //   return 'a';
+  // }
+  @Get('historiales/:id')
+  async historial(@Param('id') id: string) {
+    return this.mascotasService.historialMascota(id);
+  }
   @Post()
   @UseInterceptors(
     FileInterceptor('photo', {

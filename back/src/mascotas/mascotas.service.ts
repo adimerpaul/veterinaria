@@ -7,6 +7,7 @@ import { Detail } from '../details/entities/detail.entity';
 import { Sale } from '../sales/entities/sale.entity';
 import * as fs from 'fs';
 import * as path from 'path';
+import { Historiale } from '../historiales/entities/historiale.entity';
 @Injectable()
 export class MascotasService {
   constructor(
@@ -18,7 +19,27 @@ export class MascotasService {
     private detailsRepository: Repository<Detail>,
     @InjectRepository(Sale)
     private salesRepository: Repository<Sale>,
+    // Historiale
+    @InjectRepository(Historiale)
+    private historialesRepository: Repository<Historiale>,
   ) {}
+  async historialMascota(mascotaId) {
+    const historiales = await this.historialesRepository.find({
+      where: { mascota: { id: mascotaId } },
+      relations: [
+        'user',
+        'tratamientos',
+        'tratamientos.tratamientoMedicamentos',
+        'tratamientos.tratamientoMedicamentos.producto',
+      ],
+      order: { id: 'ASC' },
+    });
+
+    if (!historiales) {
+      return null;
+    }
+    return historiales;
+  }
   async historial(body) {
     const mascotaId = body.mascotaId;
     //   hostorail de sale

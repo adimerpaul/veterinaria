@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="text-right">
+      <q-btn @click="mascotaHistorialGet" label="Actualizar" color="blue" icon="refresh" no-caps />
       <q-btn @click="abrirDialogoHistorial" label="Registrar Historial" color="green" icon="add_circle_outline" no-caps />
     </div>
 
@@ -119,6 +120,7 @@
       </q-markup-table>
     </template>
 <!--    <pre>{{mascota.historiales}}</pre>-->
+<!--    <pre>{{historiales}}</pre>-->
 
     <q-dialog v-model="dialog">
       <q-card style="width: 800px">
@@ -397,7 +399,8 @@ export default {
       medicamentosAll: [],
       medicamento: '',
       recognition: null,
-      activeField: null
+      activeField: null,
+      historiales: []
     }
   },
   mounted() {
@@ -427,8 +430,21 @@ export default {
     }).catch(() => {
       this.$alert.error('Error al cargar los medicamentos');
     });
+
+    // historial get
+    this.mascotaHistorialGet()
   },
   methods: {
+    mascotaHistorialGet() {
+      this.loading = true;
+      this.$axios.get(`/mascotas/historiales/${this.mascota.id}`).then(res => {
+        this.historiales = res.data;
+      }).catch(() => {
+        this.$alert.error('Error al cargar los historiales');
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
     abrirDialogoHistorial() {
       this.dialog = true;
       this.editando = false;

@@ -6,9 +6,12 @@ import { Mascota } from './entities/mascota.entity';
 import { Producto } from '../productos/entities/producto.entity';
 import { Detail } from '../details/entities/detail.entity';
 import { Sale } from '../sales/entities/sale.entity';
+import { Historiale } from '../historiales/entities/historiale.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Mascota, Producto, Detail, Sale])],
+  imports: [
+    TypeOrmModule.forFeature([Mascota, Producto, Detail, Sale, Historiale]),
+  ],
   controllers: [MascotasController],
   providers: [MascotasService],
 })
