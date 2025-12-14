@@ -1,0 +1,33 @@
+import { Sale } from '../../sales/entities/sale.entity';
+import { Documento } from '../../documentos/entities/documento.entity';
+import { UserPermiso } from '../../user-permisos/entities/user-permiso.entity';
+import { Vacuna } from '../../vacunas/entities/vacuna.entity';
+import { Desparacitacione } from '../../desparacitaciones/entities/desparacitacione.entity';
+import { Historiale } from '../../historiales/entities/historiale.entity';
+import { Tratamiento } from '../../tratamientos/entities/tratamiento.entity';
+import { Foto } from '../../fotos/entities/foto.entity';
+import { LaboratoriosController } from '../../laboratorios/laboratorios.controller';
+import { Purchase } from 'src/purchase/entities/purchase.entity';
+import { PurchaseDetail } from '../../purchase-detail/entities/purchase-detail.entity';
+export declare class User {
+    id: number;
+    name: string;
+    role: string;
+    username: string;
+    password: string;
+    agencia: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt: Date;
+    sales: Sale[];
+    documentos: Documento[];
+    userPermisos: UserPermiso[];
+    vacunas: Vacuna[];
+    historiales: Historiale[];
+    desparacitaciones: Desparacitacione[];
+    tratamientos: Tratamiento[];
+    fotos: Foto[];
+    laboratorios: LaboratoriosController[];
+    purchases: Purchase[];
+    purchaseDetails: PurchaseDetail[];
+}

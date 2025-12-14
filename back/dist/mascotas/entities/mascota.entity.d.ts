@@ -1,0 +1,38 @@
+import { Sale } from '../../sales/entities/sale.entity';
+import { Detail } from '../../details/entities/detail.entity';
+import { Documento } from '../../documentos/entities/documento.entity';
+import { Vacuna } from '../../vacunas/entities/vacuna.entity';
+import { Desparacitacione } from '../../desparacitaciones/entities/desparacitacione.entity';
+import { Historiale } from '../../historiales/entities/historiale.entity';
+import { Foto } from '../../fotos/entities/foto.entity';
+import { Laboratorio } from '../../laboratorios/entities/laboratorio.entity';
+export declare class Mascota {
+    id: number;
+    nombre: string;
+    apellido: string;
+    especie: string;
+    raza: string;
+    sexo: string;
+    fecha_nac: string;
+    edad: string;
+    senas_particulares: string;
+    photo: string;
+    color: string;
+    propietario_nombre: string;
+    propietario_ci: string;
+    propietario_direccion: string;
+    propietario_telefono: string;
+    propietario_ciudad: string;
+    propietario_celular: string;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt: Date;
+    sales: Sale[];
+    details: Detail[];
+    documentos: Documento[];
+    vacunas: Vacuna[];
+    desparacitaciones: Desparacitacione[];
+    historiales: Historiale[];
+    fotos: Foto[];
+    laboratorios: Laboratorio[];
+}

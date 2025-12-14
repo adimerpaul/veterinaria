@@ -1,0 +1,36 @@
+import { Mascota } from '../../mascotas/entities/mascota.entity';
+import { User } from '../../users/entities/user.entity';
+import { Tratamiento } from '../../tratamientos/entities/tratamiento.entity';
+export declare class Historiale {
+    id: number;
+    peso: number;
+    anamnesis: string;
+    tr: string;
+    fc: string;
+    fr: string;
+    tllc: string;
+    thc: string;
+    apetito: string;
+    pulso: string;
+    cf: string;
+    parvo: string;
+    hexa: string;
+    octa: string;
+    rabica: string;
+    triple: string;
+    moucosidada: string;
+    esterelizado: string;
+    desparacitacion: string;
+    rayox: string;
+    laboratoti: string;
+    ecografia: string;
+    diagnostico: string;
+    pronostico: string;
+    fecha: Date;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt: Date;
+    mascota: Mascota;
+    user: User;
+    tratamientos: Tratamiento[];
+}

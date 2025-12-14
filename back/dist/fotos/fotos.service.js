@@ -1,0 +1,60 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FotosService = void 0;
+const common_1 = require("@nestjs/common");
+const foto_entity_1 = require("./entities/foto.entity");
+const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_2 = require("typeorm");
+let FotosService = class FotosService {
+    fotoRepository;
+    constructor(fotoRepository) {
+        this.fotoRepository = fotoRepository;
+    }
+    async create(body) {
+        console.log('Creating foto with body:', body);
+        const { imagen, fecha, observaciones, mascotaId, userId } = body;
+        const foto = this.fotoRepository.create({
+            imagen,
+            fecha,
+            observaciones,
+            mascota: { id: mascotaId },
+            user: { id: userId },
+        });
+        return this.fotoRepository.save(foto);
+    }
+    findAll() {
+        return `This action returns all fotos`;
+    }
+    findOne(id) {
+        return `This action returns a #${id} foto`;
+    }
+    update(id, updateFotoDto) {
+        return `This action updates a #${id} foto`;
+    }
+    async remove(id) {
+        const foto = await this.fotoRepository.findOne({ where: { id } });
+        if (!foto) {
+            throw new Error(`Foto with id ${id} not found`);
+        }
+        return this.fotoRepository.remove(foto);
+    }
+};
+exports.FotosService = FotosService;
+exports.FotosService = FotosService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, typeorm_1.InjectRepository)(foto_entity_1.Foto)),
+    __metadata("design:paramtypes", [typeorm_2.Repository])
+], FotosService);
+//# sourceMappingURL=fotos.service.js.map
