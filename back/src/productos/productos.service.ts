@@ -1,15 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductoDto } from './dto/create-producto.dto';
-import { UpdateProductoDto } from './dto/update-producto.dto';
+// import { CreateProductoDto } from './dto/create-producto.dto';
+// import { UpdateProductoDto } from './dto/update-producto.dto';
 import { Producto } from './entities/producto.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { TratamientoMedicamento } from '../tratamiento-medicamentos/entities/tratamiento-medicamento.entity';
 
 @Injectable()
 export class ProductosService {
   constructor(
     @InjectRepository(Producto)
     private productosRepository: Repository<Producto>,
+    // TratamientoMedicamento,
+    @InjectRepository(TratamientoMedicamento)
+    private tratamientoMedicamentoRepository: Repository<TratamientoMedicamento>,
   ) {}
   async create(body) {
     const producto = this.productosRepository.create(body);
@@ -27,6 +31,7 @@ export class ProductosService {
 
     if (filter) {
       query.where('producto.nombre LIKE :filter', { filter: `%${filter}%` });
+      query.orWhere('producto.codigo LIKE :filter', { filter: `%${filter}%` });
     }
     if (tipo) {
       query.andWhere('producto.tipo = :tipo', { tipo });
@@ -53,6 +58,14 @@ export class ProductosService {
   }
 
   async remove(id: number) {
+    const tm = await this.tratamientoMedicamentoRepository.findOne({
+      where: { producto: { id } },
+    });
+    if (tm) {
+      throw new Error(
+        'No se puede eliminar el producto porque está asociado a un tratamiento médico',
+      );
+    }
     await this.productosRepository.softDelete(id);
     return {
       id,

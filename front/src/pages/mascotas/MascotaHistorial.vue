@@ -549,8 +549,15 @@ export default {
         // this.medicamentos = this.medicamentosAll.filter((item) => {
         //   return item.nombre.toLowerCase().indexOf(needle) > -1;
         // }); filtrar tambien por tipo
+        // this.medicamentos = this.medicamentosAll.filter((item) =>
+        //   console.log(item)
+        //   return item.nombre.toLowerCase().indexOf(needle) > -1 || item.tipo.toLowerCase().indexOf(needle) > -1;
+        // });
         this.medicamentos = this.medicamentosAll.filter((item) => {
-          return item.nombre.toLowerCase().indexOf(needle) > -1 || item.tipo.toLowerCase().indexOf(needle) > -1;
+          // console.log(item)
+          // si el nobre es nullo no buscar
+          if (!item.nombre) return false;
+          return item.nombre.toLowerCase().indexOf(needle) > -1 || (item.tipo && item.tipo.toLowerCase().indexOf(needle) > -1);
         });
       });
     },
