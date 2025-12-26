@@ -197,7 +197,7 @@
   </q-dialog>
 
   <!-- Área oculta para imprimir con printd -->
-  <div id="printArea" class="hidden"></div>
+  <div id="myElement" class="hidden"></div>
 </template>
 
 <script setup>
@@ -290,6 +290,7 @@ function filtroVentas() {
 }
 
 function imprimirVenta(venta) {
+  // console.log(venta);
   Imprimir.nota(venta);
 }
 
